@@ -1,7 +1,17 @@
 import React from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import { signInWithGoogle } from "../api/auth"; // Firebase 로그인 함수 가져오기
 
 const HomeScreen = () => {
+  const handleGoogleLogin = async () => {
+    const user = await signInWithGoogle();
+    if (!user) {
+      Alert.alert("로그인 실패", "다시 시도해주세요.");
+      return;
+    }
+    Alert.alert("로그인 성공", `${user.displayName}님 환영합니다!`);
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
@@ -11,7 +21,8 @@ const HomeScreen = () => {
         <TextInput style={styles.input} placeholder="아이디" placeholderTextColor="#7a7a7a" />
         <TextInput style={styles.input} placeholder="비밀번호" placeholderTextColor="#7a7a7a" secureTextEntry />
 
-        <TouchableOpacity style={styles.googleButton}>
+        {/* Google 로그인 버튼에 이벤트 추가 */}
+        <TouchableOpacity style={styles.googleButton} onPress={handleGoogleLogin}>
           <Text style={styles.googleButtonText}>Google 로그인</Text>
         </TouchableOpacity>
 
