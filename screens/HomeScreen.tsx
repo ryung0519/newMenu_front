@@ -1,15 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
-import { signInWithGoogle } from "../api/auth"; // Firebase 로그인 함수 가져오기
+import { useGoogleAuth } from "../api/auth"; // ✅ Google OAuth 훅 가져오기
 
 const HomeScreen = () => {
+  const [userId, setUserId] = useState<string | null>(null);
+  const { promptAsync } = useGoogleAuth(); // ✅ Google 로그인 훅 사용
+
   const handleGoogleLogin = async () => {
-    const user = await signInWithGoogle();
-    if (!user) {
-      Alert.alert("로그인 실패", "다시 시도해주세요.");
-      return;
+    try {
+      const result = await promptAsync(); // ✅ Google 로그인 실행
+      if (result?.type === "success") {
+        Alert.alert("로그인 성공", "Google 인증이 완료되었습니다!");
+      } else {
+        Alert.alert("로그인 실패", "Google 로그인에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("Google 로그인 실패:", error);
+      Alert.alert("로그인 오류", "로그인 중 문제가 발생했습니다.");
     }
-    Alert.alert("로그인 성공", `${user.displayName}님 환영합니다!`);
   };
 
   return (
@@ -21,11 +29,12 @@ const HomeScreen = () => {
         <TextInput style={styles.input} placeholder="아이디" placeholderTextColor="#7a7a7a" />
         <TextInput style={styles.input} placeholder="비밀번호" placeholderTextColor="#7a7a7a" secureTextEntry />
 
-        {/* Google 로그인 버튼에 이벤트 추가 */}
+        {/* ✅ Google 로그인 버튼 (기존 스타일 유지) */}
         <TouchableOpacity style={styles.googleButton} onPress={handleGoogleLogin}>
           <Text style={styles.googleButtonText}>Google 로그인</Text>
         </TouchableOpacity>
 
+        {/* ✅ 기존 버튼 스타일 유지 */}
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.loginButton}>
             <Text style={styles.buttonText}>로그인</Text>
@@ -39,6 +48,7 @@ const HomeScreen = () => {
   );
 };
 
+// ✅ 기존 스타일 그대로 유지
 const styles = StyleSheet.create({
   container: {
     flex: 1,
