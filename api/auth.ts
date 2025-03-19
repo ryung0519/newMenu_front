@@ -4,7 +4,6 @@ import { app } from "../services/firebaseConfig";
 import axios from "axios";
 import { useEffect } from "react";
 import * as WebBrowser from "expo-web-browser";
-import { makeRedirectUri } from "expo-auth-session";
 
 // ✅ Expo WebBrowser 자동 닫기 설정 (필수)
 WebBrowser.maybeCompleteAuthSession();
@@ -15,7 +14,7 @@ const API_BASE_URL = "http://52.79.249.48:8080/auth";
 export function useGoogleAuth() {
   const [request, response, promptAsync] = Google.useAuthRequest({
     clientId: "981339430588-glm7m7rdood03k4umvfudsd91gbo64j6.apps.googleusercontent.com", 
-    redirectUri: makeRedirectUri(), // 
+    redirectUri: "https://iot7-435d1.firebaseapp.com/__/auth/handler",
   });
 
   useEffect(() => {
