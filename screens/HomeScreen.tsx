@@ -1,26 +1,56 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../App';
+
+type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
 
 const HomeScreen = () => {
+  // 유저 아이디 상태 관리
   const [userId, setUserId] = useState<string | null>(null);
+
+  const navigation = useNavigation<HomeScreenNavigationProp>();
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
+
       <Text style={styles.subtitle}>customer</Text>
 
+      {/* 로그인 정보 입력 박스 */}
       <View style={styles.loginBox}>
-        <TextInput style={styles.input} placeholder="아이디" placeholderTextColor="#7a7a7a" />
-        <TextInput style={styles.input} placeholder="비밀번호" placeholderTextColor="#7a7a7a" secureTextEntry />
+        {/* 사용자 아이디를 입력받는 입력창 */}
+        <TextInput
+          style={styles.input}
+          placeholder="아이디"
+          placeholderTextColor="#7a7a7a"
+        />
+
+        {/* 사용자 비밀번호를 입력받는 입력창 */}
+        <TextInput
+          style={styles.input}
+          placeholder="비밀번호"
+          placeholderTextColor="#7a7a7a"
+          secureTextEntry
+        />
 
         {/* 버튼 컨테이너 */}
         <View style={styles.buttonContainer}>
+          
+          {/* 로그인 버튼 */}
           <TouchableOpacity style={styles.loginButton}>
             <Text style={styles.buttonText}>로그인</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.signupButton}>
+
+          {/* 회원가입 버튼 (SignupScreen으로 이동) */}
+          <TouchableOpacity
+            style={styles.signupButton}
+            onPress={() => navigation.navigate('Signup')} // 네비게이션 사용
+          >
             <Text style={styles.signupText}>회원가입</Text>
           </TouchableOpacity>
+
         </View>
       </View>
     </View>
