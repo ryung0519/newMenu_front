@@ -8,8 +8,8 @@ const SignupScreen = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [favoriteFood, setFavoriteFood] = useState("");
-  const [allergyFood, setAllergyFood] = useState("");
+  const [preferredFood, setPreferredFood] = useState("");
+  const [allergicFood, setAllergicFood] = useState("");
 
   const signup = async () => {
     try {
@@ -25,8 +25,8 @@ const SignupScreen = () => {
         name,
         email,
         password, // DB에 저장 용도 (암호화하여 저장 예정)
-        favoriteFood,
-        allergyFood,
+        preferredFood,  
+        allergicFood,   
       });
       Alert.alert("회원가입 완료! 환영합니다!");
     } catch (error) {
@@ -63,13 +63,13 @@ const SignupScreen = () => {
           style={styles.input}
           placeholder="선호하는 음식"
           placeholderTextColor="#7a7a7a"
-          onChangeText={setFavoriteFood}
+          onChangeText={setPreferredFood}
         />
         <TextInput
           style={styles.input}
           placeholder="못 먹는 음식 (알레르기)"
           placeholderTextColor="#7a7a7a"
-          onChangeText={setAllergyFood}
+          onChangeText={setAllergicFood}
         />
 
         <TouchableOpacity style={styles.signupButton} onPress={signup}>
