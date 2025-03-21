@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Dimensions } from "react-native";
 import { Text } from "react-native-paper";
+import { API_URL } from '@env';
 
 const { width,height } = Dimensions.get("window");
 
@@ -9,7 +10,7 @@ const CalenderScreen = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        fetch("http://192.168.0.91:8080/api/test")// Spring Boot API 주소
+        fetch(`${API_URL}/api/test`)// Spring Boot API 주소
         .then(res => res.json())
         .then(json => setData(json.message)) // 응답 데이터에서 필요한 값 추출
         .catch(err => setError(err.message));
@@ -22,7 +23,7 @@ const CalenderScreen = () => {
             {data ? (
                 <Text>서버 응답 : {JSON.stringify(data)}</Text>):(
                 <Text> 데이터 불러오는 중.......</Text>)}
-                {error && <Text style={{ color: 'red' }}>비상!!!! 오류발생!! : {error}</Text>}
+                {/* {error && <Text style={{ color: 'red' }}>비상!!!! 오류발생!! : {error}</Text>} */}
         </View>
     );
 };

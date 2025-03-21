@@ -5,6 +5,9 @@
     "package": "com.anonymous.new_menu"
   },
   "expo": {
-    "entryPoint": "./App.js"
+    "entryPoint": "./App.js",
+    "android": {
+      "package": "com.anonymous.new_menu"
+    }
   }
 }
