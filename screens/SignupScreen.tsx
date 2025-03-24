@@ -15,22 +15,39 @@ const SignupScreen = () => {
     try {
 
 
-        //회원가입 처리(파이어베이스)
+        //Firebase에서 이메일 & 비밀번호로 인증(회원가입)
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       
-      
-        //DB에 사용자 정보 저장         
-      await axios.post("http://52.79.249.48:8080/api/auth/signup", {
-        uid: userCredential.user.uid,
-        name,
-        email,
-        password, // DB에 저장 용도 (암호화하여 저장 예정)
-        preferredFood,  
-        allergicFood,   
-      });
-      Alert.alert("회원가입 완료! 환영합니다!");
+        //DB에 사용자 정보 저장  //근데 이거 내 컴퓨터 ip로했는데 ..?        
+        await fetch("http://10.20.64.112:8080/api/auth/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            uid: userCredential.user.uid,
+            name,
+            email,
+            password,      
+            preferredFood,
+            allergicFood,
+          }),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("회원가입 실패: " + response.status);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            Alert.alert("회원가입 완료! 환영합니다!");
+          })
+          .catch((error) => {
+            Alert.alert(error.message);
+          });
+        
     } catch (error) {
-      Alert.alert("가입 실패");
+      Alert.alert(error.message);
     }
   };
 
