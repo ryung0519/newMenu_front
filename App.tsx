@@ -20,23 +20,27 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
         
-        {/* 메인 화면으로 HomeScreen 보여주기 */}
+        {/* 🔐 앱 시작 시 가장 먼저 보여줄 로그인(Home) 화면 */}
         <Stack.Screen
           name="Home"
           component={HomeScreen}
-          options={{ headerShown: false }} // 상단 헤더를 숨김 처리
+          options={{ headerShown: false }} // ✅ 상단 헤더(←Home 같은 것) 안 보이게
         />
 
-        {/* 회원가입 화면으로 SignupScreen 컴포넌트를 보여주기 */}
+        {/* 📝 회원가입 화면 */}
         <Stack.Screen
           name="Signup"
           component={SignupScreen}
-          options={{ title: '회원가입' }} // 상단 헤더 제목 설정
+          options={{ title: '회원가입' }} // ✅ 회원가입만 상단 제목 보여줘도 됨!
         />
 
-        {/* 기존에 있던 BottomNav(하단 탭 네비게이션) 화면을 추가하고 싶으면 이렇게 추가해도 됨 */}
-        {/* <Stack.Screen name="BottomNav" component={BottomNav} /> */}
-
+        {/* 🧭 하단 탭 네비게이션 (BottomNav = Main, 캘린더, 마이페이지 포함) */}
+        <Stack.Screen
+          name="BottomNav"
+          component={BottomNav}
+          options={{ headerShown: false }} // ✅ 가장 중요: 상단에 "BottomNav" 안 보이게!
+        />
+        
       </Stack.Navigator>
     </NavigationContainer>
   );
