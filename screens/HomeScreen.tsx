@@ -1,62 +1,98 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../App';
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../services/firebaseConfig"; // 🔧 Firebase 설정
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
 
 const HomeScreen = () => {
-  // 유저 아이디 상태 관리
-  const [userId, setUserId] = useState<string | null>(null);
+  // 🔡 입력값 상태관리
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const navigation = useNavigation<HomeScreenNavigationProp>();
+
+  // 🔐 로그인 처리 함수
+  const handleLogin = async () => {
+    try {
+      // ✅ Firebase 로그인
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // ✅ 토큰 발급
+      const token = await user.getIdToken();
+
+      // ✅ 백엔드로 토큰 전달
+      const response = await fetch("http://10.20.64.112:8080/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token: token }),
+      });
+
+      if (!response.ok) {
+        throw new Error("서버 응답 실패");
+      }
+
+      const data = await response.json();
+      Alert.alert("로그인 성공!", `${data.userName}님 환영합니다!`);
+
+
+    } catch (error: any) {
+      console.error("로그인 실패:", error);
+      Alert.alert("로그인 실패", error.message || "이메일 또는 비밀번호를 확인해주세요.");
+    }
+  };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
-
       <Text style={styles.subtitle}>customer</Text>
 
-      {/* 로그인 정보 입력 박스 */}
       <View style={styles.loginBox}>
-        {/* 사용자 아이디를 입력받는 입력창 */}
+        {/* 🔡 이메일 입력 */}
         <TextInput
           style={styles.input}
-          placeholder="아이디"
+          placeholder="이메일"
           placeholderTextColor="#7a7a7a"
+          value={email}
+          onChangeText={setEmail}
         />
 
-        {/* 사용자 비밀번호를 입력받는 입력창 */}
+        {/* 🔐 비밀번호 입력 */}
         <TextInput
           style={styles.input}
           placeholder="비밀번호"
           placeholderTextColor="#7a7a7a"
           secureTextEntry
+          value={password}
+          onChangeText={setPassword}
         />
 
-        {/* 버튼 컨테이너 */}
         <View style={styles.buttonContainer}>
-          
-          {/* 로그인 버튼 */}
-          <TouchableOpacity style={styles.loginButton}>
+          {/* 🔘 로그인 버튼 */}
+          <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
             <Text style={styles.buttonText}>로그인</Text>
           </TouchableOpacity>
 
-          {/* 회원가입 버튼 (SignupScreen으로 이동) */}
+          {/* 🔗 회원가입 이동 */}
           <TouchableOpacity
             style={styles.signupButton}
-            onPress={() => navigation.navigate('Signup')} // 네비게이션 사용
+            onPress={() => navigation.navigate('Signup')}
           >
             <Text style={styles.signupText}>회원가입</Text>
           </TouchableOpacity>
-
         </View>
       </View>
     </View>
   );
 };
 
+// 💅 스타일 정의는 기존 그대로 유지!
 const styles = StyleSheet.create({
   container: {
     flex: 1,
