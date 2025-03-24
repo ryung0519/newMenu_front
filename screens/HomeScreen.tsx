@@ -9,7 +9,7 @@ import { auth } from "../services/firebaseConfig"; // 🔧 Firebase 설정
 type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
 
 const HomeScreen = () => {
-  // 🔡 입력값 상태관리
+  // 입력값 상태관리
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -35,11 +35,13 @@ const HomeScreen = () => {
       });
 
       if (!response.ok) {
+        const errorText = await response.text(); // 에러 본문 읽기
         throw new Error("서버 응답 실패");
       }
 
       const data = await response.json();
       Alert.alert("로그인 성공!", `${data.userName}님 환영합니다!`);
+      navigation.navigate("BottomNav"); // ✅ 그러면 MainPage 탭이 자동으로 보여짐!
 
 
     } catch (error: any) {
@@ -56,12 +58,17 @@ const HomeScreen = () => {
       <View style={styles.loginBox}>
         {/* 🔡 이메일 입력 */}
         <TextInput
-          style={styles.input}
-          placeholder="이메일"
-          placeholderTextColor="#7a7a7a"
-          value={email}
-          onChangeText={setEmail}
-        />
+        style={styles.input}
+        placeholder="이메일"
+        placeholderTextColor="#7a7a7a"
+        autoCapitalize="none"
+        autoCorrect={false}
+        value={email}
+        onChangeText={(text) => {
+        setEmail(text.toLowerCase()); // 소문자로 변환
+  }}
+/>
+
 
         {/* 🔐 비밀번호 입력 */}
         <TextInput
