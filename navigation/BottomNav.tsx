@@ -1,7 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-
 import MainScreen from '../screens/MainScreen';
 import CalenderScreen from '../screens/CalenderScreen';
 import MyPageScreen from '../screens/MyPageScreen';

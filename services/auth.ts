@@ -5,10 +5,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
 
+
+{/*인증 관련 함수들만 모아둔 곳, 전부 Firebase 인증 + 서버 연동 관련기능 */}
+
 //aws 서버 쓰는 거 아님 ~~~~~~~~~ !!!!!!!! 
 const API_BASE_URL = "http://localhost:8080/api/auth";
-
-
 
 
 // 🔹 회원가입 (Firebase 계정 생성 + 추가정보 서버 전송)
@@ -43,7 +44,7 @@ export const signUpWithEmail = async (
 
 
 
-// 🔹 로그인 (Firebase 인증 후 서버에 토큰 전달하여 사용자 정보 조회)
+// 🔹 로그인 (Firebase 인증, 서버에 토큰 전달, 사용자 정보 조회)
 export const signInWithEmail = async (email: string, password: string) => {
   try {
     const { user } = await signInWithEmailAndPassword(auth, email, password);

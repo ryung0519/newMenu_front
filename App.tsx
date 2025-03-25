@@ -2,12 +2,12 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeScreen from './screens/HomeScreen';
 import SignupScreen from './screens/SignupScreen';
 import BottomNav from './navigation/BottomNav';
+import LoginScreen from './screens/LoginScreen';
 
 export type RootStackParamList = {
-  Home: undefined;
+  Login: undefined;
   Signup: undefined;
   BottomNav: undefined; // 
 
@@ -15,15 +15,15 @@ export type RootStackParamList = {
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
+
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        
-        {/* 🔐 앱 시작 시 가장 먼저 보여줄 로그인(Home) 화면 */}
+      <Stack.Navigator initialRouteName="Login">
+                {/* 🔐 앱 시작 시 가장 먼저 보여줄 로그인 화면 */}
         <Stack.Screen
-          name="Home"
-          component={HomeScreen}
+          name="Login"
+          component={LoginScreen}
           options={{ headerShown: false }} // ✅ 상단 헤더(←Home 같은 것) 안 보이게
         />
 
