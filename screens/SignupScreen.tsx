@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, Alert, ScrollView, StyleSheet } from "react-native";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../services/firebaseConfig";
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../App'; 
 
 const SignupScreen = () => {
   const [name, setName] = useState("");
@@ -9,6 +12,9 @@ const SignupScreen = () => {
   const [password, setPassword] = useState("");
   const [preferredFood, setPreferredFood] = useState("");
   const [allergicFood, setAllergicFood] = useState("");
+
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
 
 
 
@@ -22,7 +28,7 @@ const SignupScreen = () => {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       
         //DB에 사용자 정보 저장 > url 자기 컴퓨터 ip로 바꿔줘야함!       
-        await fetch("http://10.20.64.112:8080/api/auth/register", {
+        await fetch("http://10.20.64.118:8080/api/auth/register", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -44,6 +50,8 @@ const SignupScreen = () => {
           })
           .then((data) => {
             Alert.alert("회원가입 완료! 환영합니다!");
+            navigation.navigate("BottomNav");
+
             
           })
           .catch((error) => {
