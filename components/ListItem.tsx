@@ -1,7 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
-import { View, Text, Image, Dimensions, TouchableOpacity } from 'react-native';
+import React, { NamedExoticComponent } from 'react';
+import { View, Text, Dimensions, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import type { RootStackParamList } from '../types/navigation';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 const { width, height } = Dimensions.get('window');
 
@@ -14,10 +16,10 @@ interface ListItemProps{
 }
 
 const ListItem : React.FC<ListItemProps> = ({ menu }) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList, 'Product'>>();
 
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={() => navigation.navigate('Product', { menu })}>
       <View style={{ flexDirection: 'row', alignItems: 'center', padding: width * 0.02, backgroundColor: '#FFF', marginHorizontal: width * 0.03, marginVertical: width * 0.01, borderRadius: 10, elevation: 2 }}>
         <View style={{ width: width * 0.15, height: width * 0.15, backgroundColor: '#D3D3D3', borderRadius: 10, marginRight: width * 0.03 }} />
         <View style={{ flex: 1 }}>

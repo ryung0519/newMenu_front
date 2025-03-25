@@ -1,10 +1,10 @@
 import React from 'react';
 import { AppRegistry } from 'react-native';
-import BottomNav from './navigation/BottomNav';
 import { name as appName } from './app.json';
+import MainStack from './navigation/MainStack';
 
 const App = () => {
-  return <BottomNav />;
+  return <MainStack />;
 };
 
 AppRegistry.registerComponent(appName, () => App);
