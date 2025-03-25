@@ -12,13 +12,13 @@ const Tab = createBottomTabNavigator();
 const BottomTabNavigator = (): JSX.Element => {
   return (
     <Tab.Navigator
-      id="BottomTab" // ✅ 타입스크립트 오류 방지용 id (필수는 아님, 있지만 있으면 안전)
+      id="BottomTab" // ✅ 타입스크립트 오류 방지용 id
       initialRouteName="Main" // ✅ 앱 처음 실행 시 열릴 탭 이름
-      screenOptions={{ headerShown: false }} // ✅ 각 탭 상단의 헤더(제목줄) 숨기기
+      screenOptions={{ headerShown: false }} // ✅ 각 탭 상단의 헤더(제목줄)
     >
 
 
-      
+
       {/* 🏠 메인 탭 */}
       <Tab.Screen
         name="Main" // ✅ 탭 이름 (탭 전환 시 사용하는 key)

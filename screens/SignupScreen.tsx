@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, Alert, ScrollView, StyleSheet } from "react-native";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../services/firebaseConfig";
-import axios from "axios";
 
 const SignupScreen = () => {
   const [name, setName] = useState("");
@@ -11,6 +10,10 @@ const SignupScreen = () => {
   const [preferredFood, setPreferredFood] = useState("");
   const [allergicFood, setAllergicFood] = useState("");
 
+
+
+
+
   const signup = async () => {
     try {
 
@@ -18,7 +21,7 @@ const SignupScreen = () => {
         //Firebase에서 이메일 & 비밀번호로 인증(회원가입)
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       
-        //DB에 사용자 정보 저장  //근데 이거 내 컴퓨터 ip로했는데 ..?        
+        //DB에 사용자 정보 저장 > url 자기 컴퓨터 ip로 바꿔줘야함!       
         await fetch("http://10.20.64.112:8080/api/auth/register", {
           method: "POST",
           headers: {
@@ -41,6 +44,7 @@ const SignupScreen = () => {
           })
           .then((data) => {
             Alert.alert("회원가입 완료! 환영합니다!");
+            
           })
           .catch((error) => {
             Alert.alert(error.message);
@@ -63,12 +67,17 @@ const SignupScreen = () => {
           placeholderTextColor="#7a7a7a"
           onChangeText={setName}
         />
-        <TextInput
-          style={styles.input}
+     <TextInput
+         style={styles.input}
           placeholder="이메일"
           placeholderTextColor="#7a7a7a"
-          onChangeText={setEmail}
-        />
+          autoCapitalize="none"
+          autoCorrect={false}
+          value={email}
+          onChangeText={(text) => {
+        setEmail(text.toLowerCase());
+  }}
+/>
         <TextInput
           style={styles.input}
           placeholder="비밀번호"
