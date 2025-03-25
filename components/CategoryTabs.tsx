@@ -25,7 +25,7 @@ const CategoryTabs: React.FC<CategoryTabsProps> = ({selectedCategory,setSelected
                 setSelectedCategory(response.data[0]); 
                 console.log(`✅ 첫 번째 카테고리 설정됨: ${response.data[0]}`);
                 setTimeout(() => {
-                    setSelectedCategory(response.data[0]); // ✅ 비동기 상태 업데이트 반영
+                    setSelectedCategory(response.data[0]); // 비동기 상태 업데이트 반영
                 }, 100);
             }else{
                 console.warn("카테고리 정보가 올바르지 않습니다:", response.data); 
@@ -33,6 +33,8 @@ const CategoryTabs: React.FC<CategoryTabsProps> = ({selectedCategory,setSelected
         })
         .catch(error => {
             console.error('/components/CategoryTabs 카테고리 정보 오류:', error);
+            console.log('🌐🌐🌐🌐🌐 API_URL:', API_URL);
+
         });
     }, []);
 
@@ -42,10 +44,10 @@ const CategoryTabs: React.FC<CategoryTabsProps> = ({selectedCategory,setSelected
             console.warn("selectedCategory가 올바르지 않습니다:", selectedCategory);
             return;
         }
-        console.log(`📡 Fetching menu for category: ${selectedCategory}`);
+        console.log(`📡📡📡 Fetching menu for category: ${selectedCategory}`);
 
         // if ( selectedCategory){
-            axios.get(`${API_URL}/menu/${encodeURIComponent(selectedCategory)}`) //encodeURIComponent(selectedCategory): 한글 인코딩 문제 방지
+            axios.get(`${API_URL}/menu`, { params: { category: selectedCategory } }) // path variable방식으로 요청
                 .then(response => {
                     setMenus(response.data);
                 })
