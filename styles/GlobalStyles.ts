@@ -1,10 +1,12 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
+
+const { width, height } = Dimensions.get('window');
 
 const GlobalStyles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#F5EFFF',
-        padding: 20,
+        padding: width * 0.05,
     },
     title: {
         fontSize: 20,
@@ -38,9 +40,9 @@ const GlobalStyles = StyleSheet.create({
         marginVertical: 15,
     },
     image: {
-        width: 150,
-        height: 150,
-        borderRadius: 10,
+        width: "100%",
+        height: "100%",
+        borderRadius: width * 0.02,
     },
     infoContainer: {
         alignItems: 'center',
@@ -56,9 +58,52 @@ const GlobalStyles = StyleSheet.create({
         padding: 20,
     },
     icon: {
-        width: 24,
-        height: 24,
-    }
+        fontSize: width * 0.05,
+        marginLeft: width * 0.02,
+        color: "#777",
+    },
+    card: {
+        flexDirection: 'row',
+        backgroundColor: '#FFF',
+        borderRadius: width * 0.025,
+        padding: width * 0.025,
+        marginHorizontal: width * 0.04,
+        marginVertical: height * 0.01,
+        alignItems: 'center',
+        elevation: 2,
+    },
+    imageBox: {
+        width: width * 0.18,
+        height: width * 0.18,
+        borderRadius: width * 0.02,
+        backgroundColor: "#D3D3D3",
+        marginRight: width * 0.04,
+    },
+    infoBox: {
+        flex: 1,
+        justifyContent: "center",
+    },
+    name: {
+        fontSize: width * 0.04,
+        fontWeight: 'bold',
+        marginBottom: height * 0.003,
+    },
+    price: {
+        fontSize: width * 0.04,
+        color: "#555",
+    },
+    rating: {
+        flexDirection: "row",
+        marginTop: height * 0.005,
+    },
+    heartIcon: {
+        marginLeft: 8,
+    },
+    description: {
+        fontSize: width * 0.035,
+        color: "#777",
+        marginBottom: height * 0.005,
+    },
 });
 
 export default GlobalStyles;
