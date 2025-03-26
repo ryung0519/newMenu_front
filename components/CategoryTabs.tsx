@@ -47,6 +47,7 @@ const CategoryTabs: React.FC<CategoryTabsProps> = ({ selectedCategory, setSelect
             console.warn("selectedCategory가 올바르지 않습니다:", selectedCategory);
             return;
         }
+        console.log('🚀 요청 카테고리:', selectedCategory);
         console.log(`📡📡📡 Fetching menu for category: ${selectedCategory}`);
 
         // if ( selectedCategory){
@@ -64,7 +65,7 @@ const CategoryTabs: React.FC<CategoryTabsProps> = ({ selectedCategory, setSelect
     return (
         <View>
             {/*카테고리 탭*/}
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ paddingVertical: width * 0.02, paddingLeft: width * 0.02 }}>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ paddingVertical: width * 0.02, paddingLeft: width * 0.03 }}>
                 {categories.map((category, index) => (
                     <TouchableRipple
                         key={index}
@@ -80,7 +81,7 @@ const CategoryTabs: React.FC<CategoryTabsProps> = ({ selectedCategory, setSelect
                 ))}
             </ScrollView >
             {/*선택된 카테고리 제품 목록*/}
-            <View style={{ padding: width * 0.03 }}>
+            <View>
                 {menus.length > 0 ? (
                     menus.map(menu => (
                         <ListItem key={menu.menuId} menu={menu} />

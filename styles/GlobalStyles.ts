@@ -6,7 +6,7 @@ const GlobalStyles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#F5EFFF',
-        padding: width * 0.05,
+        paddingTop: height * 0.05
     },
     title: {
         fontSize: 20,
@@ -66,9 +66,9 @@ const GlobalStyles = StyleSheet.create({
         flexDirection: 'row',
         backgroundColor: '#FFF',
         borderRadius: width * 0.025,
-        padding: width * 0.025,
+        padding: width * 0.035,
         marginHorizontal: width * 0.04,
-        marginVertical: height * 0.01,
+        marginVertical: height * 0.003,
         alignItems: 'center',
         elevation: 2,
     },
@@ -94,7 +94,6 @@ const GlobalStyles = StyleSheet.create({
     },
     rating: {
         flexDirection: "row",
-        marginTop: height * 0.005,
     },
     heartIcon: {
         marginLeft: 8,

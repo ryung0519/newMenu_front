@@ -21,27 +21,33 @@ const ListItem: React.FC<ListItemProps> = ({ menu }) => {
 
   return (
     <View style={GlobalStyles.card}>
-      <View style={GlobalStyles.imageBox}>
-        <Image source={{ uri: 'https://via.placeholder.com/100' }} style={GlobalStyles.image} />
-      </View>
+      <TouchableOpacity onPress={() => navigation.navigate('Product', { menu })}>
+        <View style={GlobalStyles.imageBox}>
+          <Image source={{ uri: 'https://via.placeholder.com/100' }} style={GlobalStyles.image} />
+        </View>
+      </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('Product', { menu })}>
         <View style={GlobalStyles.infoBox}>
-          <View style={{ flex: 1 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
             <Text style={GlobalStyles.name}>
               {menu ? `${menu.menuName}` : '메뉴없음'} </Text>
-            <Text style={GlobalStyles.price}>
-              {menu ? `${menu.price}원` : '가격정보 없음'} </Text>
+            <View style={GlobalStyles.rating}>
+              {[...Array(5)].map((_, rating = 3) => (
+                <Icon key={rating} name="star" size={width * 0.04} color="gold" />
+              ))}
+            </View>
+            <TouchableOpacity>
+              <Icon name="heart-o" size={width * 0.06} color="#777" style={{ marginLeft: width * 0.02 }} />
+            </TouchableOpacity>
+          </View>
+          <Text style={GlobalStyles.price}>
+            {menu ? `${menu.price}원` : '가격정보 없음'} </Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+
             <Text style={GlobalStyles.text}>
               Supporting line text lorem ipsum...</Text>
           </View>
-          <View style={GlobalStyles.rating}>
-            {[...Array(5)].map((_, rating = 3) => (
-              <Icon key={rating} name="star" size={width * 0.04} color="gold" />
-            ))}
-          </View>
-          <TouchableOpacity>
-            <Icon name="heart-o" size={width * 0.06} color="#777" style={{ marginLeft: width * 0.02 }} />
-          </TouchableOpacity>
+
         </View>
       </TouchableOpacity>
     </View>
