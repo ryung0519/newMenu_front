@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../App';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../services/firebaseConfig"; // 🔧 Firebase 설정
+import { API_URL } from "@env";
+import { RootStackParamList } from "../navigation/MainStack";
 
 type LoginScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
@@ -22,7 +23,7 @@ const LoginScreen = () => {
       const user = userCredential.user;
       const token = await user.getIdToken();
 
-      const response = await fetch("http://10.20.9.189:8080/api/auth/login", {
+      const response = await fetch(`${API_URL}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

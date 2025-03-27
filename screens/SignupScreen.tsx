@@ -12,7 +12,8 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../services/firebaseConfig";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../App";
+import { API_URL } from "@env";
+import { RootStackParamList } from "../navigation/MainStack";
 
 const SignupScreen = () => {
   const [name, setName] = useState("");
@@ -34,7 +35,7 @@ const SignupScreen = () => {
       );
 
       // DB에 사용자 정보 저장
-      await fetch("http://10.20.9.189:8080/api/auth/register", {
+      await fetch(`${API_URL}/api/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
