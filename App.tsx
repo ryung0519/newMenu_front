@@ -5,6 +5,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignupScreen from './screens/SignupScreen';
 import BottomNav from './navigation/BottomNav';
 import LoginScreen from './screens/LoginScreen';
+import MainStack from './navigation/MainStack';
+import { AppRegistry } from 'react-native';
+import { name as appName } from './app.json';
 
 export type RootStackParamList = {
   Login: undefined;
@@ -34,16 +37,12 @@ const App = () => {
           options={{ title: '회원가입' }} // ✅ 회원가입만 상단 제목 보여줘도 됨!
         />
 
-        {/* 🧭 하단 탭 네비게이션 (BottomNav = Main, 캘린더, 마이페이지 포함) */}
-        <Stack.Screen
-          name="BottomNav"
-          component={BottomNav}
-          options={{ headerShown: false }} // ✅ 가장 중요: 상단에 "BottomNav" 안 보이게!
-        />
         
       </Stack.Navigator>
+      <MainStack />;
     </NavigationContainer>
   );
 };
+AppRegistry.registerComponent(appName, () => App);
 
 export default App;
