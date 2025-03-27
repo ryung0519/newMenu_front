@@ -22,7 +22,7 @@ const LoginScreen = () => {
       const user = userCredential.user;
       const token = await user.getIdToken();
 
-      const response = await fetch("http://10.20.64.118:8080/api/auth/login", {
+      const response = await fetch("http://10.20.9.189:8080/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

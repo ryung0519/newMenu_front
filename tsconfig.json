@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-<<<<<<< HEAD
     "jsx": "react",
     "moduleResolution": "node16",
     "module": "Node16",
@@ -11,12 +10,4 @@
     "strict": false  // 🚀 타입 검사 엄격도 완화 (auth의 any 타입 오류 해결)
   },
   "extends": ["@react-native/typescript-config/tsconfig.json", "expo/tsconfig.base"]
-=======
-    "jsx": "react"
-  },
-  "compilerOptions": {
-    "jsx": "react"
-  },
-  "extends": "@react-native/typescript-config/tsconfig.json"
->>>>>>> 2ba4f7020b4044ed4a31792ca0f822cbbe500b46
 }
