@@ -1,9 +1,9 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import MainScreen from '../screens/MainScreen';
 import CalenderScreen from '../screens/CalenderScreen';
 import MyPageScreen from '../screens/MyPageScreen';
+import HomeScreen from '../screens/HomeScreen';
 
 // ✅ 탭 네비게이터 생성 (제네릭 타입 생략: 오류 방지용)
 const Tab = createBottomTabNavigator();
@@ -22,16 +22,6 @@ const BottomTabNavigator = (): JSX.Element => {
       screenOptions={{ headerShown: false }} // ✅ 각 탭 상단의 헤더(제목줄)
     >
 
-      {/* 🏠 메인 탭 */}
-      <Tab.Screen
-        name="Main" // ✅ 탭 이름 (탭 전환 시 사용하는 key)
-        component={MainScreen} // ✅ 이 탭을 누르면 보여줄 화면 컴포넌트
-        options={{
-          tabBarIcon: homeIcon,
-          tabBarLabel: 'Main', // ✅ 하단 탭에 보이는 글자, 추가 안할 시 name이랑 동일하게 뚬뚬
-        }}
-      />
-
       {/* 📅 캘린더 탭 */}
       <Tab.Screen
         name="Calender"
@@ -39,6 +29,15 @@ const BottomTabNavigator = (): JSX.Element => {
         options={{
           tabBarIcon: homeIcon,
           tabBarLabel: '캘린더',
+        }}
+      />
+            {/* 🏠 메인 탭 */}
+            <Tab.Screen
+        name="Main" // ✅ 탭 이름 (탭 전환 시 사용하는 key)
+        component={HomeScreen} // ✅ 이 탭을 누르면 보여줄 화면 컴포넌트
+        options={{
+          tabBarIcon: homeIcon,
+          tabBarLabel: 'Main', // ✅ 하단 탭에 보이는 글자, 추가 안할 시 name이랑 동일하게 뚬뚬
         }}
       />
 

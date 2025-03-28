@@ -35,7 +35,6 @@ const CategoryTabs: React.FC<CategoryTabsProps> = ({ selectedCategory, setSelect
                 }
             })
             .catch(error => {
-                console.error('/components/CategoryTabs 카테고리 정보 오류:', error);
                 console.log('🌐🌐🌐🌐🌐 API_URL:', API_URL);
 
             });
