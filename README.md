@@ -1,4 +1,3 @@
-
 # 📱 New Menu App - Expo 프로젝트 실행 가이드
 
 이 프로젝트는 **Expo 기반의 React Native 앱**입니다.  

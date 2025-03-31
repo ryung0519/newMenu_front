@@ -52,7 +52,6 @@ const ListItem: React.FC<ListItemProps> = ({ menu }) => {
       </TouchableOpacity>
     </View>
 
-
   );
 };
 export default ListItem;
