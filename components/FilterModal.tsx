@@ -21,12 +21,15 @@ interface FilterModalProps {
 const FilterModal: React.FC<FilterModalProps> = ({ visible, onClose, onApply }) => {
   const [selectedSort, setSelectedSort] = useState<string>(''); // ✅ 정렬 기준 (하나만 선택)
   const [ingredientKeyword, setIngredientKeyword] = useState(''); // ✅ 재료 검색 키워드
+  const [excludeKeyword, setExcludeKeyword] = useState(''); // ✅ 재료 제외 키워드
 
-  // ✅ 적용 버튼 눌렀을 때 실행
+  // ✅ 적용 버튼 눌렀을 때 실행되는 함수
   const applyFilters = () => {
-    onApply({ selectedSort, ingredientKeyword });
+    onApply({ selectedSort, ingredientKeyword,excludeKeyword});
     onClose();
   };
+
+
 
   // ✅ 정렬 기준 목록 (다이어터 제품 포함!)
   const sortOptions = [
@@ -67,13 +70,22 @@ const FilterModal: React.FC<FilterModalProps> = ({ visible, onClose, onApply }) 
             </TouchableOpacity>
           ))}
 
-          {/* ✅ 재료 키워드 입력 */}
+          {/* ✅ 재료 포함 키워드 입력 */}
           <Text style={styles.sectionTitle}>재료 포함 키워드</Text>
           <TextInput
-            placeholder="예: 초콜릿, 딸기"
+            placeholder="예: 아이러브망고"
             value={ingredientKeyword}
             onChangeText={setIngredientKeyword}
             style={styles.input}
+            />
+            
+             {/* ✅ 재료 out 키워드 입력 */}
+            <Text style={styles.sectionTitle}>이 성분은 빼고 검색해줘!</Text>
+            <TextInput
+              placeholder="예: 민트초코"
+              value={excludeKeyword}
+              onChangeText={setExcludeKeyword}
+              style={styles.input}
           />
 
           {/* ✅ 적용 버튼 */}

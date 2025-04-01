@@ -19,6 +19,7 @@ const SearchResultScreen = () => {
   const initialResults = route.params?.results || []; //🔹이전 화면(HomeScreen)에서 검색된 결과 데이터를 받아옴
   const [results, setResults] = useState(initialResults);
   const [modalVisible, setModalVisible] = useState(false); // 🔹 필터 모달 창 열고 닫는 것
+  
 
   // ✅ 검색창에서 키워드 검색 시 실행되는 함수
   const handleSearch = async (keyword: string) => {
@@ -42,6 +43,14 @@ const SearchResultScreen = () => {
     if (filters.ingredientKeyword) {
       filtered = filtered.filter((item) =>
         item.ingredients?.toLowerCase().includes(filters.ingredientKeyword.toLowerCase())
+      );
+    }
+
+
+    // ✅ 2. 재료 제외 키워드 필터링 (ex: '우유' 제외한 메뉴만 보기)
+    if (filters.excludeKeyword) {
+      filtered = filtered.filter((item) =>
+        !item.ingredients?.toLowerCase().includes(filters.excludeKeyword.toLowerCase())
       );
     }
 
