@@ -103,6 +103,52 @@ const GlobalStyles = StyleSheet.create({
         color: "#777",
         marginBottom: height * 0.005,
     },
+    scheduleItem: {
+        padding: height * 0.35,
+        marginVertical: 4,
+        borderRadius: 6,
+    },
+
+    scheduleText: {
+        fontSize: width * 0.2,
+        color: '#000',
+    },
+    CalenderListSheetContainer: {
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        flex: 1,
+      },
+      CalenderListSheetText: {
+        fontWeight: 'bold',
+        fontSize: 18,
+        marginBottom: 10,
+      },
+      header: {
+        padding: 16,
+        alignItems: 'center',
+        backgroundColor: '#fff',
+      },
+      headerText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+      },
+      modalContainer: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.3)',
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
+      pickerBox: {
+        backgroundColor: '#fff',
+        padding: 20,
+        borderRadius: 10,
+        flexDirection: 'row',
+      },
+      modalItem: {
+        padding: 10,
+        fontSize: 18,
+      },
+
 });
 
 export default GlobalStyles;

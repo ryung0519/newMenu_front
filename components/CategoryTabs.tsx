@@ -55,7 +55,7 @@ const CategoryTabs: React.FC<CategoryTabsProps> = ({ selectedCategory, setSelect
                 setMenus(response.data);
             })
             .catch(error => {
-                console.error('/components/CategoryTabs 카테고리 메뉴 오류:', error);
+                // console.error('/components/CategoryTabs 카테고리 메뉴 오류:', error);
             });
         // }
     }, [selectedCategory]);

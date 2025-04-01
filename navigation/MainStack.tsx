@@ -5,20 +5,27 @@ import SignupScreen from '../screens/SignupScreen';
 import LoginScreen from '../screens/LoginScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
+import CalenderScreen from '../screens/CalenderScreen';
 
 export type RootStackParamList = {
     Login: undefined;
     Signup: undefined;
     BottomNav: undefined;
     Product: undefined;
-  };
+
+    // 캘린더 수정중
+    Calender: undefined;
+};
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const MainStack = () => {
     return (
         <NavigationContainer>
-            {/* 혜령 id={undefined} 추가 및 app.tsx의 내용 추가가*/}
+            {/* 캘린더 수정중 */}
+            {/* <Stack.Navigator id={undefined} initialRouteName="Calender" screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Calender" component={CalenderScreen} /> */}
+
             <Stack.Navigator   id={undefined} initialRouteName="Login" screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="Login" component={LoginScreen} />
                 <Stack.Screen name="Signup" component={SignupScreen} />

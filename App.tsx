@@ -3,9 +3,15 @@ import React from 'react';
 import MainStack from './navigation/MainStack';
 import { AppRegistry } from 'react-native';
 import { name as appName } from './app.json';
+import { NavigationContainer } from '@react-navigation/native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const App = () => {
-  return <MainStack />;
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <MainStack />
+    </GestureHandlerRootView>
+  )
 };
 AppRegistry.registerComponent(appName, () => App);
 
