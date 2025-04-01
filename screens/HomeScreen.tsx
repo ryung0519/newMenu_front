@@ -4,16 +4,15 @@ import SearchBar from '../components/SearchBar';
 import Banner from '../components/Banner';
 import CategoryTabs from '../components/CategoryTabs';
 import GlobalStyles from '../styles/GlobalStyles';
-import { useNavigation } from '@react-navigation/native'; 
 import { API_URL } from '@env';
+import { useNavigation } from '@react-navigation/native';
+
 
 const HomeScreen = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('defaultCategory');
   const navigation = useNavigation(); // ✅ 페이지 이동용 navigation
 
-  // ✅ 홈화면 검색창에서 검색하고, 검색 결과 페이지로 이동
-  // SearchBar에서 받은 키워드로 API 호출
-  // 서버에서 DB 조회 후, 결과를 data로 받음
+  // ✅ 검색창에서 키워드 검색 시 실행되는 함수
   const handleSearch = async (keyword: string) => {
     try {
       const response = await fetch(`${API_URL}/menu/search?keyword=${encodeURIComponent(keyword)}`);
