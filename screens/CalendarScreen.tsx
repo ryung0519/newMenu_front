@@ -1,23 +1,27 @@
 import { API_URL } from '@env';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, Dimensions, TouchableOpacity, Modal } from 'react-native';
-import ScheduleItem from '../components/CalenderItem';
+import { View, Text, Dimensions, TouchableOpacity } from 'react-native';
 import { Calendar } from 'react-native-big-calendar';
 import dayjs from 'dayjs';
 import GlobalStyles from '../styles/GlobalStyles';
 import categoryColors from '../styles/categoryColors';
+import CalendarMonthSelect from '../components/CalendarMonthSelect';
+import CalendarDayModal from '../components/CalendarDayModal';
+import CalendarItemModel from '../components/CalendarItemModel';
+import CalendarItem from '../components/CalendarItem';
 
 const { width, height } = Dimensions.get('window');
 
 
-const CalenderScreen = () => {
+const CalendarScreen = () => {
   const today = new Date();
   const [events, setEvents] = useState([]);
   const [year, setYear] = useState(today.getFullYear());
   const [month, setMonth] = useState(today.getMonth());
   const [monthPickerVisible, setMonthPickerVisible] = useState(false);
-
+  const [selectedDate, setSeletedDate] = useState(null);
+  const [selectedEvent, setSeletedEvent] = useState(null);
 
   //백엔드에서 받아온 일정 데이터를 날짜별로 그룹화해서 캘린더에 표시
   useEffect(() => {
@@ -31,8 +35,10 @@ const CalenderScreen = () => {
             start: new Date(`${date}T10:00:00`),
             end: new Date(`${date}T11:00:00`),
             category: item.category,
-            color: categoryColors[item.category] || '#9E9E9E'
-
+            // color: categoryColors[item.category] || '#9E9E9E',
+            description: item.description,
+            price: item.price,
+            brand: item.brand,
           }
         });
         setEvents(mappedEvents);
@@ -43,13 +49,9 @@ const CalenderScreen = () => {
   }, []);
 
 
-  const selectYear = (y) => {
-    setYear(y);
-  };
-  const selectMonth = (m) => {
-    setMonth(m - 1); // JavaScript month: 0-11
-    setMonthPickerVisible(false);
-  };
+  const filteredEvents = selectedDate
+    ? events.filter(e => dayjs(e.start).isSame(selectedDate, 'day'))
+    : [];
 
   return (
     <View style={GlobalStyles.container}>
@@ -64,49 +66,45 @@ const CalenderScreen = () => {
         mode="month"
         weekStartsOn={0}
         date={new Date(year, month, dayjs().date())}
-        eventCellStyle={(event) => ({
-          backgroundColor: event.color,
-          padding: 2,
-          borderRadius: 4,
-          height: 30,
-        })}
+        onPressCell={(date) => {
+          setSeletedDate(date);
+          setSeletedEvent(null);
+        }}
+        onPressEvent={(event) => {
+          setSeletedEvent(event);
+          setSeletedDate(null);
+        }}
         // @ts-ignore : 라이브러리에 타입 정의 누락되어 있어서 무시함
         eventRenderer={(event, touchableOpacityProps) => (
-          <TouchableOpacity {...touchableOpacityProps}>
-            <Text numberOfLines={1} ellipsizeMode="tail" style={{ color: 'white', fontSize: 11 }}>
-              {event.title}
-            </Text>
-          </TouchableOpacity>
+          <CalendarItem item={event} {...touchableOpacityProps} />
         )}
       />
-      <Modal visible={monthPickerVisible} transparent animationType="fade">
-        <View style={GlobalStyles.modalContainer}>
-          <View style={GlobalStyles.pickerBox}>
-            <FlatList
-              data={Array.from({ length: 10 }, (_, i) => 2020 + i)}
-              renderItem={({ item }) => (
-                <TouchableOpacity onPress={() => selectYear(item)}>
-                  <Text style={GlobalStyles.modalItem}>{item}년</Text>
-                </TouchableOpacity>
-              )}
-              keyExtractor={(item) => `y-${item}`}
-            />
-            <FlatList
-              data={Array.from({ length: 12 }, (_, i) => i + 1)}
-              renderItem={({ item }) => (
-                <TouchableOpacity onPress={() => selectMonth(item)}>
-                  <Text style={GlobalStyles.modalItem}>{item}월</Text>
-                </TouchableOpacity>
-              )}
-              keyExtractor={(item) => `m-${item}`}
-            />
-          </View>
-        </View>
-      </Modal>
+      <CalendarMonthSelect
+        visible={monthPickerVisible}
+        selectedYear={year}
+        selectedMonth={month + 1}
+        selectYear={(y) => {
+          setYear(y);
+          setMonthPickerVisible(false);
+        }}
+        selectMonth={(m) => {
+          setMonth(m - 1);
+          setMonthPickerVisible(false);
+        }} onClose={undefined} />
+      <CalendarDayModal
+        visible={!!selectedDate}
+        date={selectedDate}
+        event={filteredEvents}
+        onClose={() => setSeletedDate(null)} />
+      <CalendarItemModel
+        visible={!!selectedEvent}
+        item={selectedEvent}
+        // event={selectedEvent}
+        onClose={() => setSeletedEvent(null)} />
     </View>
   );
 };
 
-export default CalenderScreen;
+export default CalendarScreen;
 
 

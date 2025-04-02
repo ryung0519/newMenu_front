@@ -73,8 +73,8 @@ const GlobalStyles = StyleSheet.create({
         elevation: 2,
     },
     imageBox: {
-        width: width * 0.18,
-        height: width * 0.18,
+        width: width * 0.3,
+        height: width * 0.3,
         borderRadius: width * 0.02,
         backgroundColor: "#D3D3D3",
         marginRight: width * 0.04,
@@ -104,7 +104,7 @@ const GlobalStyles = StyleSheet.create({
         marginBottom: height * 0.005,
     },
     scheduleItem: {
-        padding: height * 0.35,
+        padding: height * 0.2,
         marginVertical: 4,
         borderRadius: 6,
     },
@@ -113,12 +113,12 @@ const GlobalStyles = StyleSheet.create({
         fontSize: width * 0.2,
         color: '#000',
     },
-    CalenderListSheetContainer: {
+    CalendarListSheetContainer: {
         paddingHorizontal: 20,
         paddingVertical: 10,
         flex: 1,
       },
-      CalenderListSheetText: {
+      CalendarListSheetText: {
         fontWeight: 'bold',
         fontSize: 18,
         marginBottom: 10,
@@ -126,7 +126,7 @@ const GlobalStyles = StyleSheet.create({
       header: {
         padding: 16,
         alignItems: 'center',
-        backgroundColor: '#fff',
+        backgroundColor: '#F5EFFF',
       },
       headerText: {
         fontSize: 20,
@@ -139,7 +139,7 @@ const GlobalStyles = StyleSheet.create({
         alignItems: 'center',
       },
       pickerBox: {
-        backgroundColor: '#fff',
+        backgroundColor: '#F5EFFF',
         padding: 20,
         borderRadius: 10,
         flexDirection: 'row',
@@ -147,6 +147,49 @@ const GlobalStyles = StyleSheet.create({
       modalItem: {
         padding: 10,
         fontSize: 18,
+      },
+      modalOverlay: {
+        flex: 1,
+        justifyContent: 'flex-end',
+        backgroundColor: 'rgba(0,0,0,0.3)',
+      },
+      modalContent: {
+        backgroundColor: '#F5EFFF',
+        padding: 20,
+        height: '60%',
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+      },
+      modalTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 10,
+      },
+      modalText: {
+        fontSize: 18,
+        marginBottom: 10,
+      },
+      scheduleRow: {
+        backgroundColor: '#e9dbff',
+        padding: height * 0.009,
+        borderRadius: width * 0.02,
+        flexDirection: 'row', 
+        alignItems: 'center', 
+        marginVertical: height * 0.0035, 
+      },
+      titleText: {
+        fontSize: 15,
+        fontWeight: '500',
+      },
+      closeButton: {
+        marginTop: 12,
+        textAlign: 'center',
+        color: '#000',
+      },   
+      buttonText: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 16,
       },
 
 });

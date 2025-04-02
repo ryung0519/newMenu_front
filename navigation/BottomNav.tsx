@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import CalenderScreen from '../screens/CalenderScreen';
+import CalendarScreen from '../screens/CalendarScreen';
 import MyPageScreen from '../screens/MyPageScreen';
 import HomeScreen from '../screens/HomeScreen';
 
@@ -24,8 +24,8 @@ const BottomTabNavigator = (): JSX.Element => {
 
       {/* 📅 캘린더 탭 */}
       <Tab.Screen
-        name="Calender"
-        component={CalenderScreen}
+        name="Calendar"
+        component={CalendarScreen}
         options={{
           tabBarIcon: homeIcon,
           tabBarLabel: '캘린더',
