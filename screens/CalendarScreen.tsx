@@ -80,6 +80,11 @@ const CalendarScreen = () => {
         mode="month"
         weekStartsOn={0}
         date={currentDate}
+        onChangeDate={([startDate]) => {
+          if (startDate) {
+            updateCurrentDate(startDate);
+          }
+        }}
         onPressCell={date => {
           setSelectedDate(date);
           setSelectedEvent(null);
