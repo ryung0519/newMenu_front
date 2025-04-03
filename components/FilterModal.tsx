@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Modal,
   View,
@@ -9,10 +9,12 @@ import {
   Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { API_URL } from '@env';
+
 
 const { height } = Dimensions.get('window');
 
-interface FilterModalProps {
+interface FilterModalProps { //Props는 부모
   visible: boolean; // 모달 보이기 여부
   onClose: () => void; // 모달 닫기 함수
   onApply: (filters: any) => void; // 필터 적용 함수
@@ -20,15 +22,15 @@ interface FilterModalProps {
 
 const FilterModal: React.FC<FilterModalProps> = ({ visible, onClose, onApply }) => {
   const [selectedSort, setSelectedSort] = useState<string>(''); // ✅ 정렬 기준 (하나만 선택)
-  const [ingredientKeyword, setIngredientKeyword] = useState(''); // ✅ 재료 검색 키워드
-  const [excludeKeyword, setExcludeKeyword] = useState(''); // ✅ 재료 제외 키워드
+  const [ingredientKeyword, setIngredientKeyword] = useState(''); // ✅ 포함할 재료 키워드
+  const [excludeKeyword, setExcludeKeyword] = useState(''); // ✅ 제외할 재료 키워드
+
 
   // ✅ 적용 버튼 눌렀을 때 실행되는 함수
   const applyFilters = () => {
     onApply({ selectedSort, ingredientKeyword,excludeKeyword});
     onClose();
   };
-
 
 
   // ✅ 정렬 기준 목록 (다이어터 제품 포함!)
@@ -50,6 +52,8 @@ const FilterModal: React.FC<FilterModalProps> = ({ visible, onClose, onApply }) 
             <TouchableOpacity onPress={onClose}>
               <Icon name="close" size={24} color="#333" />
             </TouchableOpacity>
+
+            
           </View>
 
           {/* ✅ 정렬 기준 영역 */}
@@ -69,6 +73,7 @@ const FilterModal: React.FC<FilterModalProps> = ({ visible, onClose, onApply }) 
               <Text>{option}</Text>
             </TouchableOpacity>
           ))}
+
 
           {/* ✅ 재료 포함 키워드 입력 */}
           <Text style={styles.sectionTitle}>재료 포함 키워드</Text>
