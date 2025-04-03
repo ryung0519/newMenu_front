@@ -24,10 +24,11 @@ const CalendarScreen = () => {
   const [selectedDate, setSeletedDate] = useState(null);
   const [selectedEvent, setSeletedEvent] = useState(null);
  
+  ///// 캘린더에 표시되는 년과 월이 바뀌는 부분(currentDate 상태를 기준으로 year와 month를 계산하는 부분)
   const year = dayjs(currentDate).year();
   const month = dayjs(currentDate).month();
 
-  //백엔드에서 받아온 일정 데이터를 날짜별로 그룹화해서 캘린더에 표시 (API호출출)
+  //백엔드에서 받아온 일정 데이터를 날짜별로 그룹화해서 캘린더에 표시 (API호출)
   useEffect(() => {
     axios.get(`${API_URL}/calendar/menus`)
       .then(res => {
@@ -67,7 +68,7 @@ const CalendarScreen = () => {
           <Text style={GlobalStyles.title}>{year}년 {month + 1}월</Text>
         </TouchableOpacity>
       </View>
-      {/* 캘린더 UI */}
+      {/* 캘린더 UI /////*/}
       <Calendar
         events={events}
         height={height * 0.8}
@@ -105,6 +106,7 @@ const CalendarScreen = () => {
         }}
       />
       {/* 연/월 선택 */}
+      {/* selectYear={(y), selectMonth={(m): CalendarScreen에서 currentDate 설정 */}
       <CalendarMonthSelect
         visible={monthPickerVisible}
         selectedYear={year}
@@ -125,7 +127,7 @@ const CalendarScreen = () => {
         date={selectedDate}
         event={filteredEvents}
         onClose={() => setSeletedDate(null)} />
-        {/* 이벤트(신메뉴 출시시) 클릭 시 상세일정 */}
+        {/* 이벤트(신메뉴 출시) 클릭 시 상세일정 */}
       <CalendarItemModel
         visible={!!selectedEvent}
         item={selectedEvent}
