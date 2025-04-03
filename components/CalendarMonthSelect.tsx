@@ -31,30 +31,13 @@ const CalendarMonthSelect = ({ visible, onClose, selectYear, selectMonth, select
     return () => backHandler.remove();
   }, [visible]);
 
-  //모달이 열릴 때(visible이 true) 선택된 연도/월이 리스트 중간에 보이도록 자동 스크롤
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     if (yearListRef.current && selectedYear) {
-  //       const index = allYear.indexOf(selectedYear);
-  //       if (index >= 0) {
-  //         yearListRef.current.scrollToIndex({ index, animated: false });
-  //       }
-  //     }
-  //     if (monthListRef.current && selectedMonth) {
-  //       const index = allMonth.indexOf(selectedMonth);
-  //       if (index >= 0) {
-  //         monthListRef.current.scrollToIndex({ index, animated: false });
-  //       }
-  //     }
-  //   }, 10);
-  // }, [visible]);
   return (
     <Modal visible={visible} transparent animationType="fade">
       <TouchableWithoutFeedback onPress={onClose}>
         <View style={[GlobalStyles.modalContainer, { flex: 1 }]}>
           <TouchableWithoutFeedback onPress={() => { }}>
             <View style={[GlobalStyles.pickerBox, { height: '60%' }]}>
-              {/* /////연도 선택 리스트 */}
+              {/* 연도 선택 리스트 */}
               <FlatList
                 ref={yearListRef}
                 data={allYear}
@@ -66,7 +49,6 @@ const CalendarMonthSelect = ({ visible, onClose, selectYear, selectMonth, select
                 initialScrollIndex={allYear.indexOf(selectedYear)}
                 showsVerticalScrollIndicator={false}
                 renderItem={({ item: year }) => (
-                  // 연도 클릭 이벤트
                   <TouchableOpacity onPress={() => selectYear(year)}>
                     <Text style={[
                       GlobalStyles.modalItem,
@@ -77,12 +59,11 @@ const CalendarMonthSelect = ({ visible, onClose, selectYear, selectMonth, select
                 )}
                 keyExtractor={(year) => `y-${year}`}
               />
-              {/*///// 월 선택 리스트  */}
+              {/* 월 선택 리스트  */}
               <FlatList
                 data={allMonth}
                 showsVerticalScrollIndicator={false}
                 renderItem={({ item: month }) => (
-                  // 월 클릭 이벤트
                   <TouchableOpacity onPress={() => {
                     selectMonth(month);
                     onClose();
