@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { Modal, View, Text, Pressable } from "react-native";
+import { Modal, View, Text, Pressable, BackHandler } from "react-native";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import GlobalStyles from "../styles/GlobalStyles";
 
@@ -11,6 +11,21 @@ const CalendarMonthSelect = ({ visible, onClose, selectYear, selectMonth, select
   const allYear = Array.from({ length: 200 }, (_, i) => 1900 + i);
   const allMonth = Array.from({ length: 12 }, (_, i) => i + 1);
 
+      // 뒤로가기 버튼튼
+      useEffect(() => {
+          const backHandler = BackHandler.addEventListener(
+              'hardwareBackPress',
+              () => {
+                  if (visible) {
+                      onClose(); //뒤로 가기누르면 닫힘힘
+                      return true;
+                  }
+                  return false;
+              }
+          );
+          return () => backHandler.remove();
+      }, [visible]);
+  
   useEffect(() => {
     setTimeout(() => {
       if (yearListRef.current && selectedYear) {

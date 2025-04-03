@@ -2,7 +2,7 @@ import { API_URL } from '@env';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { View, Text, Dimensions, TouchableOpacity } from 'react-native';
-import { Calendar } from 'react-native-big-calendar';
+import { Calendar, isToday } from 'react-native-big-calendar';
 import dayjs from 'dayjs';
 import GlobalStyles from '../styles/GlobalStyles';
 import categoryColors from '../styles/categoryColors';
@@ -17,29 +17,36 @@ const { width, height } = Dimensions.get('window');
 const CalendarScreen = () => {
   const today = new Date();
   const [events, setEvents] = useState([]);
-  const [year, setYear] = useState(today.getFullYear());
-  const [month, setMonth] = useState(today.getMonth());
+  const [currentDate, setCurrentDate] = useState(today);
+  // const [year, setYear] = useState(today.getFullYear());
+  // const [month, setMonth] = useState(today.getMonth());
   const [monthPickerVisible, setMonthPickerVisible] = useState(false);
   const [selectedDate, setSeletedDate] = useState(null);
   const [selectedEvent, setSeletedEvent] = useState(null);
+ 
+  const year = dayjs(currentDate).year();
+  const month = dayjs(currentDate).month();
 
-  //백엔드에서 받아온 일정 데이터를 날짜별로 그룹화해서 캘린더에 표시
+  //백엔드에서 받아온 일정 데이터를 날짜별로 그룹화해서 캘린더에 표시 (API호출출)
   useEffect(() => {
     axios.get(`${API_URL}/calendar/menus`)
       .then(res => {
         const rawData = res.data;
         const mappedEvents = rawData.map(item => {
           const date = dayjs(item.regDate).format('YYYY-MM-DD');
+          const category = item.category;
+          const color = categoryColors[category] ?.backgroundColor || '#9E9E9E';
+        
           return {
             title: item.menuName,
             start: new Date(`${date}T10:00:00`),
             end: new Date(`${date}T11:00:00`),
             category: item.category,
-            // color: categoryColors[item.category] || '#9E9E9E',
+            color,
             description: item.description,
             price: item.price,
             brand: item.brand,
-          }
+          };
         });
         setEvents(mappedEvents);
       })
@@ -48,7 +55,7 @@ const CalendarScreen = () => {
       });
   }, []);
 
-
+  // 날짜 필터링(선택한 날짜 이벤트만 표시)
   const filteredEvents = selectedDate
     ? events.filter(e => dayjs(e.start).isSame(selectedDate, 'day'))
     : [];
@@ -60,12 +67,21 @@ const CalendarScreen = () => {
           <Text style={GlobalStyles.title}>{year}년 {month + 1}월</Text>
         </TouchableOpacity>
       </View>
+      {/* 캘린더 UI */}
       <Calendar
         events={events}
         height={height * 0.8}
         mode="month"
         weekStartsOn={0}
-        date={new Date(year, month, dayjs().date())}
+        date = {currentDate}
+        onChangeDate={(date) => {
+          if(Array.isArray(date) && date.length >0) {
+            const newDate = new Date(date[0]);
+              if(!dayjs(currentDate).isSame(newDate, 'month')) {
+                setCurrentDate(newDate);
+              }
+          }
+        }}
         onPressCell={(date) => {
           setSeletedDate(date);
           setSeletedEvent(null);
@@ -78,28 +94,41 @@ const CalendarScreen = () => {
         eventRenderer={(event, touchableOpacityProps) => (
           <CalendarItem item={event} {...touchableOpacityProps} />
         )}
+        dateContentStyle ={(date) => {
+          const isToday = dayjs(date).isSame(dayjs(), 'day');
+          const isSunday = dayjs(date).day() === 0;
+          // const isHoliday = isToday || isCustomHoliday(date); //휴일 설정 시 사용 -> 아래에 이 코드도 추가 {/*: isHoliday ? 'red'*/}
+
+          return {
+            color: isToday ? 'purple' : isSunday ? 'red' : 'black',
+          };
+        }}
       />
+      {/* 연/월 선택 */}
       <CalendarMonthSelect
         visible={monthPickerVisible}
         selectedYear={year}
         selectedMonth={month + 1}
         selectYear={(y) => {
-          setYear(y);
+          const newDate = dayjs(currentDate).year(y).toDate();
+          setCurrentDate(newDate);
           setMonthPickerVisible(false);
         }}
         selectMonth={(m) => {
-          setMonth(m - 1);
+          const newDate = dayjs(currentDate).month(m - 1).toDate();
+          setCurrentDate(newDate);
           setMonthPickerVisible(false);
-        }} onClose={undefined} />
+        }} onClose={() => setMonthPickerVisible(false)} />
+        {/* 날짜 클릭 시 상세일정 */}
       <CalendarDayModal
         visible={!!selectedDate}
         date={selectedDate}
         event={filteredEvents}
         onClose={() => setSeletedDate(null)} />
+        {/* 이벤트(신메뉴 출시시) 클릭 시 상세일정 */}
       <CalendarItemModel
         visible={!!selectedEvent}
         item={selectedEvent}
-        // event={selectedEvent}
         onClose={() => setSeletedEvent(null)} />
     </View>
   );

@@ -11,12 +11,13 @@ import type { RootStackParamList } from '../navigation/MainStack';
 const CalendarDayModal = ({ visible, date, event, onClose }) => {
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
+    // 뒤로가기 버튼튼
     useEffect(() => {
         const backHandler = BackHandler.addEventListener(
             'hardwareBackPress',
             () => {
                 if (visible) {
-                    onClose();
+                    onClose(); //뒤로 가기누르면 닫힘힘
                     return true;
                 }
                 return false;
@@ -33,7 +34,9 @@ const CalendarDayModal = ({ visible, date, event, onClose }) => {
                     {/* 내부 터치 막음 */}
                     <TouchableWithoutFeedback onPress={() => { }}>
                         <View style={GlobalStyles.modalContent}>
+                            {/* 날짜 제목 표시시 */}
                             <Text style={GlobalStyles.modalTitle}> {date && dayjs(date).format('YYYY-MM-DD')}</Text>
+                            {/* 일정 리스트 */}
                             <FlatList
                                 data={event}
                                 keyExtractor={(item, index) => index.toString()}
