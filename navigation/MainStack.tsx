@@ -1,18 +1,18 @@
 import React from 'react';
-import ProductDetailScreen from '../screens/ProductDetailScreen';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import BottomNav from './BottomNav';
 import SignupScreen from '../screens/SignupScreen';
 import LoginScreen from '../screens/LoginScreen';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NavigationContainer} from '@react-navigation/native';
 import CalendarScreen from '../screens/CalendarScreen';
-
+import ProductDetailScreen from '../screens/ProductDetailScreen';
+import SearchResultScreen from '../screens/SearchResultScreen';
 export type RootStackParamList = {
   Login: undefined;
   Signup: undefined;
   BottomNav: undefined;
   Product: {item: any};
-
+  SearchResult: {results: any};
   // 캘린더 수정중
   Calendar: undefined;
 };
@@ -34,6 +34,7 @@ const MainStack = () => {
         <Stack.Screen name="Signup" component={SignupScreen} />
         <Stack.Screen name="BottomNav" component={BottomNav} />
         <Stack.Screen name="Product" component={ProductDetailScreen} />
+        <Stack.Screen name="SearchResult" component={SearchResultScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
