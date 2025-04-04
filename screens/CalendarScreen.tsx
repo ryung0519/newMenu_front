@@ -30,7 +30,7 @@ const CalendarScreen = () => {
   };
   useEffect(() => {
     console.log('📅 currentDate changed:', currentDate);
-  }, [currentDate]);
+  }, []);
   useEffect(() => {
     const fetchEvents = async () => {
       console.log('Fetching events from API:', API_URL);
@@ -81,7 +81,7 @@ const CalendarScreen = () => {
         weekStartsOn={0}
         date={currentDate}
         onChangeDate={([startDate]) => {
-          if (startDate) {
+          if (startDate && !dayjs(startDate).isSame(currentDate, 'day')) {
             updateCurrentDate(startDate);
           }
         }}
