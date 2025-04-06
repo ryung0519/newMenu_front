@@ -29,8 +29,8 @@ const CalendarScreen = () => {
     setCurrentMonth(dayjs(newDate).month());
   };
   useEffect(() => {
-    // console.log('📅 currentDate changed:', currentDate);
-  }, [currentDate]);
+    console.log('📅 currentDate changed:', currentDate);
+  }, []);
   useEffect(() => {
     const fetchEvents = async () => {
       console.log('Fetching events from API:', API_URL);
