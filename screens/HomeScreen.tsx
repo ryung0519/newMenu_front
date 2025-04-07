@@ -1,5 +1,11 @@
-import React, {useState} from 'react';
-import {ScrollView} from 'react-native';
+import React, {useState, useLayoutEffect} from 'react';
+import {
+  ScrollView,
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native'; // ✅ 필요한 컴포넌트 추가
 import SearchBar from '../components/mainpage/SearchBar';
 import Banner from '../components/mainpage/Banner';
 import CategoryTabs from '../components/mainpage/CategoryTabs';
@@ -8,6 +14,7 @@ import {API_URL} from '@env';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from '../types/navigation';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -30,10 +37,27 @@ const HomeScreen = () => {
       console.error('검색 중 오류 발생:', error);
     }
   };
+
   return (
     <ScrollView style={GlobalStyles.container}>
+      {/* ✅ 로그인 버튼 - 검색창 위 오른쪽 정렬 */}
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'flex-end',
+          paddingHorizontal: 16,
+          marginTop: 16,
+        }}>
+        <TouchableOpacity
+          style={styles.loginButton}
+          onPress={() => navigation.navigate('Login')}>
+          <Text style={styles.loginButtonText}>Login</Text>
+        </TouchableOpacity>
+      </View>
+
       {/* ✅ 검색 기능 연결 */}
       <SearchBar onSearch={handleSearch} />
+
       <Banner />
       <CategoryTabs
         selectedCategory={selectedCategory}
@@ -42,5 +66,19 @@ const HomeScreen = () => {
     </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  loginButton: {
+    backgroundColor: '#8000FF',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+  },
+  loginButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 14,
+  },
+});
 
 export default HomeScreen;
