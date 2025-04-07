@@ -7,6 +7,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import CalendarScreen from '../screens/CalendarScreen';
 import ProductDetailScreen from '../screens/ProductDetailScreen';
 import SearchResultScreen from '../screens/SearchResultScreen';
+import HomeScreen from '../screens/HomeScreen';
 export type RootStackParamList = {
   Login: undefined;
   Signup: undefined;
@@ -28,7 +29,7 @@ const MainStack = () => {
 
       <Stack.Navigator
         id={undefined}
-        initialRouteName="Login"
+        initialRouteName="BottomNav"
         screenOptions={{headerShown: false}}>
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Signup" component={SignupScreen} />
