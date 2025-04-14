@@ -63,7 +63,7 @@ const CalendarScreen = () => {
           description: item.description,
           price: item.price,
           brand: item.brand,
-          ImageUrl: item.imageUrl,
+          image: item.imageUrl,
         }));
         // console.log('Mapped events:', mappedEvents);
         setEvents(mappedEvents);
