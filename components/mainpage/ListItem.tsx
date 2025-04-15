@@ -10,6 +10,7 @@ const {width, height} = Dimensions.get('window');
 
 interface ListItemProps {
   menu: {
+    description: any;
     menuId: number;
     menuName: string;
     price: number;
@@ -37,28 +38,42 @@ const ListItem: React.FC<ListItemProps> = ({menu}) => {
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'space-between',
+              width: '87%',
             }}>
-            <Text style={GlobalStyles.name}>
+            {/* 왼쪽: 메뉴 이름 */}
+            <Text
+              style={GlobalStyles.name}
+              numberOfLines={1}
+              ellipsizeMode="tail">
               {menu ? `${menu.menuName}` : '메뉴없음'}{' '}
             </Text>
-            <View style={GlobalStyles.rating}>
+            {/* 오른쪽: 별점 + 하트 */}
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'flex-end',
+                flexShrink: 0, // 오른쪽 아이콘 줄어들지 않게
+                marginLeft: 10,
+              }}>
               {[...Array(5)].map((_, rating = 3) => (
                 <Icon
                   key={rating}
                   name="star"
-                  size={width * 0.04}
+                  size={width * 0.035}
                   color="gold"
+                  style={{marginLeft: 0}}
                 />
               ))}
+              <TouchableOpacity>
+                <Icon
+                  name="heart-o"
+                  size={width * 0.05}
+                  color="#777"
+                  style={{marginLeft: width * 0.015}}
+                />
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity>
-              <Icon
-                name="heart-o"
-                size={width * 0.06}
-                color="#777"
-                style={{marginLeft: width * 0.02}}
-              />
-            </TouchableOpacity>
           </View>
           <Text style={GlobalStyles.price}>
             {menu ? `${menu.price}원` : '가격정보 없음'}{' '}
@@ -70,7 +85,7 @@ const ListItem: React.FC<ListItemProps> = ({menu}) => {
               alignItems: 'center',
             }}>
             <Text style={GlobalStyles.text}>
-              Supporting line text lorem ipsum...
+              {menu ? `${menu.description}` : '설명 없음'}
             </Text>
           </View>
         </View>
