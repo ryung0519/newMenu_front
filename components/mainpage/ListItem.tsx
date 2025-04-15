@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {NamedExoticComponent} from 'react';
+import React, {useState} from 'react';
 import {View, Text, Dimensions, TouchableOpacity, Image} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import type {RootStackParamList} from '../../types/navigation';
@@ -10,6 +10,7 @@ const {width, height} = Dimensions.get('window');
 
 interface ListItemProps {
   menu: {
+    rating: number;
     description: any;
     menuId: number;
     menuName: string;
@@ -20,6 +21,21 @@ interface ListItemProps {
 const ListItem: React.FC<ListItemProps> = ({menu}) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList, 'Product'>>();
+
+  const [isLiked, setIsLiked] = React.useState(false);
+  //  좋아요 요청 보내는 API로 확장 시
+  // const toggleLike = async () => {
+  //   const next = !isLiked;
+  //   setIsLiked(next);
+  //   try {
+  //     await axios.post(`${API_URL}/menu/${menu.menuId}/like`, {
+  //       liked: next,
+  //     });
+  //   } catch (err) {
+  //     console.error('좋아요 토글 실패', err);
+  //     setIsLiked(!next); // 실패 시 롤백
+  //   }
+  // };
 
   return (
     <View style={GlobalStyles.card}>
@@ -59,17 +75,17 @@ const ListItem: React.FC<ListItemProps> = ({menu}) => {
               {[...Array(5)].map((_, rating = 3) => (
                 <Icon
                   key={rating}
-                  name="star"
-                  size={width * 0.035}
+                  name={rating < (menu?.rating ?? 0) ? 'star' : 'star-o'}
+                  size={width * 0.038}
                   color="gold"
                   style={{marginLeft: 0}}
                 />
               ))}
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => setIsLiked(prev => !prev)}>
                 <Icon
-                  name="heart-o"
+                  name={isLiked ? 'heart' : 'heart-o'}
                   size={width * 0.05}
-                  color="#777"
+                  color={isLiked ? 'red' : '#777'}
                   style={{marginLeft: width * 0.015}}
                 />
               </TouchableOpacity>

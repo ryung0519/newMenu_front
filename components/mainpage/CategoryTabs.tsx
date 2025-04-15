@@ -26,6 +26,7 @@ const CategoryTabs: React.FC<CategoryTabsProps> = ({
       price: number;
       imageUrl: string;
       description: string;
+      rating: number;
     }[]
   >([]);
 
