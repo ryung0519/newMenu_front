@@ -49,15 +49,11 @@ const GlobalStyles = StyleSheet.create({
   infoContainer: {
     alignItems: 'center',
   },
-  reviewContainer: {
-    padding: 20,
-  },
-  reviewText: {
-    fontSize: 20,
-    marginTop: 5,
-  },
   sectionContainer: {
-    padding: 20,
+    // flex: 1,
+    backgroundColor: '#F5EFFF',
+    width: width,
+    height: height * 0.06,
   },
   icon: {
     fontSize: width * 0.05,
@@ -73,10 +69,11 @@ const GlobalStyles = StyleSheet.create({
     marginVertical: height * 0.003,
     alignItems: 'center',
     elevation: 2,
+    height: height * 0.1,
   },
   imageBox: {
-    width: width * 0.3,
-    height: width * 0.3,
+    width: width * 0.18,
+    height: width * 0.18,
     borderRadius: width * 0.02,
     backgroundColor: '#D3D3D3',
     marginRight: width * 0.04,
@@ -96,6 +93,7 @@ const GlobalStyles = StyleSheet.create({
   },
   rating: {
     flexDirection: 'row',
+    alignItems: 'center',
   },
   heartIcon: {
     marginLeft: 8,
