@@ -39,7 +39,6 @@ const MainStack = () => {
             <Stack.Screen name="Calendar" component={CalendarScreen} /> */}
 
       <Stack.Navigator
-        id={undefined}
         initialRouteName="BottomNav"
         screenOptions={{headerShown: false}}>
         <Stack.Screen name="Login" component={LoginScreen} />
@@ -51,7 +50,7 @@ const MainStack = () => {
         <Stack.Screen name="BrandMenuList" component={BrandMenuListScreen} />
       </Stack.Navigator>
     </NavigationContainer>
-  );
+  ) as any;
 };
 
 export default MainStack;

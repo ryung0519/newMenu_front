@@ -1,4 +1,4 @@
-import React, {useState, useLayoutEffect, useContext} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   ScrollView,
   View,
@@ -15,7 +15,6 @@ import {API_URL} from '@env';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from '../types/navigation';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {AuthContext} from '../contexts/AuthContext';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
