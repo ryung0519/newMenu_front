@@ -26,6 +26,8 @@ const CalendarDayModal = ({visible, date, event, onClose, onItemSelect}) => {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       () => {
+        console.log('뒤로가기 버튼');
+
         if (visible) {
           onClose(); //뒤로 가기누르면 닫힘
           return true;
@@ -85,7 +87,7 @@ const CalendarDayModal = ({visible, date, event, onClose, onItemSelect}) => {
                             GlobalStyles.titleText,
                             {fontSize: 15, fontWeight: 'bold'},
                           ]}>
-                          {item.title}
+                          {item.menuName || item.title}
                         </Text>
                         <Text
                           style={[

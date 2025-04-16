@@ -33,6 +33,8 @@ const CalendarItemModel = ({
     rating: number;
   } | null;
 }) => {
+  console.log('넘어온 menu:', menu);
+
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList, 'Product'>>();
 
@@ -50,9 +52,7 @@ const CalendarItemModel = ({
                 메뉴 이름 : {menu.menuName}
               </Text>
               <Image
-                source={{
-                  uri: menu.imageUrl || 'https://via.placeholder.com/100',
-                }}
+                source={{uri: menu.imageUrl}}
                 style={GlobalStyles.imageBox}
               />
               <Text style={GlobalStyles.modalText}>브랜드 : {menu.brand} </Text>
