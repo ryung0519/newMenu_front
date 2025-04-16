@@ -6,8 +6,11 @@ import type {RootStackParamList} from '../../types/navigation';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import GlobalStyles from '../../styles/GlobalStyles';
 
+/* 메인 화면에서 제품 카드 하나하나를 보여주는 컴포넌트 파일 */
+
 const {width, height} = Dimensions.get('window');
 
+//✅ List는 menu props를 받음
 interface ListItemProps {
   menu: {
     rating: number;
@@ -15,10 +18,13 @@ interface ListItemProps {
     menuId: number;
     menuName: string;
     price: number;
+    imageUrl?: string; // ✅ 이미지 URL 포함()
   } | null; // 메뉴가 없을 경우 null 허용
 }
 
+// ✅ ListItem 컴포넌트 정의 - 각 메뉴 카드 컴포넌트
 const ListItem: React.FC<ListItemProps> = ({menu}) => {
+  // ✅ navigation 객체 생성
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList, 'Product'>>();
 
@@ -39,16 +45,28 @@ const ListItem: React.FC<ListItemProps> = ({menu}) => {
 
   return (
     <View style={GlobalStyles.card}>
-      <TouchableOpacity onPress={() => navigation.navigate('Product', {menu})}>
+      {/* ✅ 메뉴 이미지 - 클릭 시 상세페이지로 이동 */}
+      <TouchableOpacity
+        onPress={() =>
+          menu && navigation.navigate('Product', {menuId: menu.menuId})
+        }>
         <View style={GlobalStyles.imageBox}>
           <Image
-            source={{uri: 'https://via.placeholder.com/100'}}
+            source={{
+              uri: menu?.imageUrl || 'https://via.placeholder.com/100', // ✅ 이미지 연동위해 추가
+            }}
             style={GlobalStyles.image}
           />
         </View>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('Product', {menu})}>
+
+      {/* ✅ 메뉴 정보 영역 (텍스트 부분) - 클릭 시 상세페이지로 이동 */}
+      <TouchableOpacity
+        onPress={() =>
+          menu && navigation.navigate('Product', {menuId: menu.menuId})
+        }>
         <View style={GlobalStyles.infoBox}>
+          {/* ✅ 상단: 메뉴 이름 + 별점 + 찜 아이콘 */}
           <View
             style={{
               flexDirection: 'row',
@@ -91,9 +109,11 @@ const ListItem: React.FC<ListItemProps> = ({menu}) => {
               </TouchableOpacity>
             </View>
           </View>
+          {/* ✅ 가격 표시 */}
           <Text style={GlobalStyles.price}>
             {menu ? `${menu.price}원` : '가격정보 없음'}{' '}
           </Text>
+          {/* ✅ 하단 보조 텍스트 (현재는 고정 텍스트) */}
           <View
             style={{
               flexDirection: 'row',
@@ -109,4 +129,5 @@ const ListItem: React.FC<ListItemProps> = ({menu}) => {
     </View>
   );
 };
+
 export default ListItem;
