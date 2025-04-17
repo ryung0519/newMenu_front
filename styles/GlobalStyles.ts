@@ -144,10 +144,10 @@ const GlobalStyles = StyleSheet.create({
     borderRadius: 10,
     flexDirection: 'row',
   },
-  modalItem: {
-    padding: 10,
-    fontSize: 18,
-  },
+  // modalItem: {
+  //   padding: 10,
+  //   fontSize: 18,
+  // },
   modalOverlay: {
     flex: 1,
     justifyContent: 'flex-end',

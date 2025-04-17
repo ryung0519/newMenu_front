@@ -33,8 +33,6 @@ const CalendarItemModel = ({
     rating: number;
   } | null;
 }) => {
-  console.log('넘어온 menu:', menu);
-
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList, 'Product'>>();
 
@@ -42,8 +40,12 @@ const CalendarItemModel = ({
 
   return (
     <Modal visible={visible} transparent>
-      <TouchableWithoutFeedback onPress={onClose}>
-        <View style={GlobalStyles.modalOverlay} pointerEvents="box-none">
+      <TouchableWithoutFeedback
+        onPress={() => {
+          console.log('모달 외부 클릭 닫혀버리기!!!!!');
+          onClose();
+        }}>
+        <View style={GlobalStyles.modalOverlay} /*pointerEvents="box-none"*/>
           {/* <View style={{flex: 1}} /> */}
           <TouchableWithoutFeedback onPress={() => {}}>
             {/* <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={GlobalStyles.modalContent}> */}
