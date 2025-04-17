@@ -10,7 +10,9 @@ const CalendarItem = ({item, menu, style, ...touchableOpacityProps}) => {
 
   return (
     // 캘린더에 보일 박스 UI
-    <TouchableOpacity {...touchableOpacityProps} style={GlobalStyles.modalItem}>
+    <TouchableOpacity
+      {...touchableOpacityProps}
+      style={GlobalStyles.modalTitle}>
       <Text
         // 이벤트 텍스트 너무 길면 자름 (ellipsizeMode까지지)
         numberOfLines={1}

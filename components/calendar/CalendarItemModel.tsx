@@ -26,42 +26,47 @@ const CalendarItemModel = ({
   menu: {
     menuId: number;
     menuName: string;
-    imageUrl?: string;
+    imageUrl: string;
     price: number;
     brand: string;
     description: string;
     rating: number;
   } | null;
 }) => {
-  console.log('넘어온 menu:', menu);
-
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList, 'Product'>>();
 
   if (!visible || !menu) return null;
+  console.log('이미지 URL:', menu.imageUrl);
 
   return (
     <Modal visible={visible} transparent>
-      <TouchableWithoutFeedback onPress={onClose}>
-        <View style={GlobalStyles.modalOverlay} pointerEvents="box-none">
-          {/* <View style={{flex: 1}} /> */}
+      <TouchableWithoutFeedback
+        onPress={() => {
+          onClose();
+        }}>
+        <View style={GlobalStyles.modalOverlay} /*pointerEvents="box-none"*/>
           <TouchableWithoutFeedback onPress={() => {}}>
-            {/* <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={GlobalStyles.modalContent}> */}
-            <View style={GlobalStyles.modalContent} pointerEvents="box-none">
-              <Text style={GlobalStyles.modalTitle}>
-                메뉴 이름 : {menu.menuName}
-              </Text>
-              <Image
-                source={{uri: menu.imageUrl}}
-                style={GlobalStyles.imageBox}
-              />
-              <Text style={GlobalStyles.modalText}>브랜드 : {menu.brand} </Text>
-              <Text style={GlobalStyles.modalText}>가격 : {menu.price}</Text>
-              <Text style={GlobalStyles.titleText}>
-                설명 : {menu.description}
-              </Text>
+            <View style={GlobalStyles.modalContent}>
+              <View style={{flex: 1}}>
+                <Text style={GlobalStyles.modalTitle}>
+                  메뉴 이름 : {menu.menuName}
+                </Text>
+                <Image
+                  source={{uri: menu.imageUrl}}
+                  style={GlobalStyles.imageBox}
+                />
+                <Text style={GlobalStyles.modalText}>
+                  브랜드 : {menu.brand}{' '}
+                </Text>
+                <Text style={GlobalStyles.modalText}>가격 : {menu.price}</Text>
+                <Text style={GlobalStyles.titleText}>
+                  설명 : {menu.description}
+                </Text>
+              </View>
+
               <TouchableOpacity
-                style={GlobalStyles.button_light}
+                style={[GlobalStyles.button_light, {marginBottom: 10}]}
                 onPress={() => {
                   console.log('상세보기 클릭됨', menu.menuId);
                   onClose();
@@ -69,7 +74,6 @@ const CalendarItemModel = ({
                 }}>
                 <Text style={GlobalStyles.buttonText_dark}>상세보기</Text>
               </TouchableOpacity>
-              {/* </KeyboardAvoidingView> */}
             </View>
           </TouchableWithoutFeedback>
         </View>
