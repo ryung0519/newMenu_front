@@ -26,7 +26,7 @@ const CalendarItemModel = ({
   menu: {
     menuId: number;
     menuName: string;
-    imageUrl?: string;
+    imageUrl: string;
     price: number;
     brand: string;
     description: string;
@@ -37,6 +37,7 @@ const CalendarItemModel = ({
     useNavigation<NativeStackNavigationProp<RootStackParamList, 'Product'>>();
 
   if (!visible || !menu) return null;
+  console.log('이미지 URL:', menu.imageUrl);
 
   return (
     <Modal visible={visible} transparent>
@@ -46,9 +47,7 @@ const CalendarItemModel = ({
           onClose();
         }}>
         <View style={GlobalStyles.modalOverlay} /*pointerEvents="box-none"*/>
-          {/* <View style={{flex: 1}} /> */}
           <TouchableWithoutFeedback onPress={() => {}}>
-            {/* <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={GlobalStyles.modalContent}> */}
             <View style={GlobalStyles.modalContent} pointerEvents="box-none">
               <Text style={GlobalStyles.modalTitle}>
                 메뉴 이름 : {menu.menuName}
@@ -71,7 +70,6 @@ const CalendarItemModel = ({
                 }}>
                 <Text style={GlobalStyles.buttonText_dark}>상세보기</Text>
               </TouchableOpacity>
-              {/* </KeyboardAvoidingView> */}
             </View>
           </TouchableWithoutFeedback>
         </View>

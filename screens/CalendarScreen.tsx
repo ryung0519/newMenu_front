@@ -23,7 +23,7 @@ interface EventType {
   description: string;
   price: number;
   brand: string;
-  imageUrl?: string;
+  imageUrl: string;
   rating: number;
 }
 
