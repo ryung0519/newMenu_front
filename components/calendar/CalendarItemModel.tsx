@@ -43,26 +43,30 @@ const CalendarItemModel = ({
     <Modal visible={visible} transparent>
       <TouchableWithoutFeedback
         onPress={() => {
-          console.log('모달 외부 클릭 닫혀버리기!!!!!');
           onClose();
         }}>
         <View style={GlobalStyles.modalOverlay} /*pointerEvents="box-none"*/>
           <TouchableWithoutFeedback onPress={() => {}}>
-            <View style={GlobalStyles.modalContent} pointerEvents="box-none">
-              <Text style={GlobalStyles.modalTitle}>
-                메뉴 이름 : {menu.menuName}
-              </Text>
-              <Image
-                source={{uri: menu.imageUrl}}
-                style={GlobalStyles.imageBox}
-              />
-              <Text style={GlobalStyles.modalText}>브랜드 : {menu.brand} </Text>
-              <Text style={GlobalStyles.modalText}>가격 : {menu.price}</Text>
-              <Text style={GlobalStyles.titleText}>
-                설명 : {menu.description}
-              </Text>
+            <View style={GlobalStyles.modalContent}>
+              <View style={{flex: 1}}>
+                <Text style={GlobalStyles.modalTitle}>
+                  메뉴 이름 : {menu.menuName}
+                </Text>
+                <Image
+                  source={{uri: menu.imageUrl}}
+                  style={GlobalStyles.imageBox}
+                />
+                <Text style={GlobalStyles.modalText}>
+                  브랜드 : {menu.brand}{' '}
+                </Text>
+                <Text style={GlobalStyles.modalText}>가격 : {menu.price}</Text>
+                <Text style={GlobalStyles.titleText}>
+                  설명 : {menu.description}
+                </Text>
+              </View>
+
               <TouchableOpacity
-                style={GlobalStyles.button_light}
+                style={[GlobalStyles.button_light, {marginBottom: 10}]}
                 onPress={() => {
                   console.log('상세보기 클릭됨', menu.menuId);
                   onClose();

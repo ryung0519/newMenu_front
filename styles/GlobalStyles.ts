@@ -159,6 +159,7 @@ const GlobalStyles = StyleSheet.create({
     height: '60%',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
+    justifyContent: 'space-between',
   },
   modalTitle: {
     fontSize: 20,
