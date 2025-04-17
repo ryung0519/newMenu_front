@@ -63,7 +63,9 @@ const HomeScreen = () => {
   };
 
   return (
-    <ScrollView style={GlobalStyles.container}>
+    // <ScrollView style={GlobalStyles.container}>
+
+    <View style={GlobalStyles.container}>
       {/* ✅ 로그인/로그아웃 버튼 - 검색창 위 오른쪽 정렬 */}
       <View
         style={{
@@ -94,7 +96,8 @@ const HomeScreen = () => {
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
       />
-    </ScrollView>
+    </View>
+    // </ScrollView>
   );
 };
 
