@@ -43,6 +43,7 @@ const MainStack = () => {
       <Stack.Navigator
         initialRouteName="BottomNav"
         screenOptions={{headerShown: false}}>
+        <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Signup" component={SignupScreen} />
         <Stack.Screen name="BottomNav" component={BottomNav} />

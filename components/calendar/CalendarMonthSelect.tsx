@@ -28,7 +28,7 @@ const CalendarMonthSelect = ({
 }) => {
   const yearListRef = useRef(null);
   const monthListRef = useRef(null);
-  // 연도 & 월 리스트 생성
+  // 연도 & 월 리스트 생성 및 보여줄 값계산산
   const allYear = Array.from({length: 55}, (_, i) => 1980 + i);
   const allMonth = Array.from({length: 12}, (_, i) => i + 1);
 
@@ -46,6 +46,7 @@ const CalendarMonthSelect = ({
     );
     return () => backHandler.remove();
   }, [visible]);
+  console.log('✅ allYear 값:', allYear);
 
   return (
     <Modal visible={visible} transparent animationType="fade">
@@ -56,7 +57,7 @@ const CalendarMonthSelect = ({
               {/* 연도 선택 리스트 */}
               <FlatList
                 ref={yearListRef}
-                data={allYear}
+                data={allYear} //리스트에 표시할 모든 연도 배열해해
                 getItemLayout={(_, index) => ({
                   length: 50,
                   offset: 50 * index,
@@ -68,7 +69,7 @@ const CalendarMonthSelect = ({
                   <TouchableOpacity onPress={() => selectYear(year)}>
                     <Text
                       style={[
-                        GlobalStyles.modalItem,
+                        GlobalStyles.monthModalTitle,
                         year === selectedYear && {
                           color: '#4A0072',
                           fontWeight: 'bold',
@@ -92,7 +93,7 @@ const CalendarMonthSelect = ({
                     }}>
                     <Text
                       style={[
-                        GlobalStyles.modalItem,
+                        GlobalStyles.monthModalTitle,
                         month === selectedMonth && {
                           color: '#4A0072',
                           fontWeight: 'bold',

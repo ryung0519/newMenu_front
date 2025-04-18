@@ -166,6 +166,11 @@ const GlobalStyles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
   },
+  monthModalTitle: {
+    fontSize: 20,
+    // fontWeight: 'bold',
+    marginBottom: 10,
+  },
   modalText: {
     fontSize: 18,
     marginBottom: 10,

@@ -77,7 +77,7 @@ const ListItem: React.FC<ListItemProps> = ({menu}) => {
             }}>
             {/* 왼쪽: 메뉴 이름 */}
             <TextTicker
-              style={GlobalStyles.name}
+              style={[GlobalStyles.name, {maxWidth: width * 0.5}]}
               // numberOfLines={1}
               // ellipsizeMode="tail"
               duration={5000} // 텍스트가 이동하는 속도
@@ -120,7 +120,7 @@ const ListItem: React.FC<ListItemProps> = ({menu}) => {
           <Text style={GlobalStyles.price}>
             {menu ? `${menu.price}원` : '가격정보 없음'}{' '}
           </Text>
-          {/* ✅ 하단 보조 텍스트 (현재는 고정 텍스트) */}
+          {/* ✅ 메뉴 설명 */}
           <View
             style={{
               flexDirection: 'row',
@@ -128,7 +128,7 @@ const ListItem: React.FC<ListItemProps> = ({menu}) => {
               alignItems: 'center',
             }}>
             <Text
-              style={GlobalStyles.text}
+              style={[GlobalStyles.text, {maxWidth: width * 0.66}]}
               numberOfLines={2}
               ellipsizeMode="tail">
               {menu ? `${menu.description}` : '설명 없음'}
