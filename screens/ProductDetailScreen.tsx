@@ -32,7 +32,6 @@ const ProductDetailScreen = () => {
 
   const [menuDetail, setMenuDetail] = useState<any>(null); // ✅ 상품 정보 저장 state
   const [isLiked, setIsLiked] = useState(false); // ✅ 찜하기 상태 저장 (하트 눌렀는지)
-
   // ✅ 상세정보 API 호출
   useEffect(() => {
     const fetchMenuDetail = async () => {
@@ -87,11 +86,25 @@ const ProductDetailScreen = () => {
         </TouchableOpacity>
 
         {/* ✅ 제품 이름 + 별점 (가로 정렬) */}
-        <View style={styles.nameAndStar}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: 4,
+          }}>
           <Text style={styles.menuName}>{menuDetail.menuName}</Text>
-          <Text style={styles.stars}>
-            ⭐ {menuDetail.averageRating?.toFixed(1)}
-          </Text>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('ReviewWrite', {
+                menuId: menuId,
+                menuName: menuDetail.menuName,
+              })
+            }>
+            <Text style={styles.stars}>
+              ⭐ {menuDetail.averageRating?.toFixed(1)}
+            </Text>
+          </TouchableOpacity>
         </View>
 
         {/* ✅ 제품 설명 */}
