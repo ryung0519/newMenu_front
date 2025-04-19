@@ -100,6 +100,7 @@ const ProductDetailScreen = () => {
               navigation.navigate('ReviewWrite', {
                 menuId: menuId,
                 menuName: menuDetail.menuName,
+                imageUrl: menuDetail.imageUrl,
               })
             }>
             <Text style={styles.stars}>
