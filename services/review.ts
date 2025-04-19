@@ -9,6 +9,7 @@ interface ReviewPayload {
   taste: string;
   amount: string;
   wouldVisitAgain: string;
+  imageUrls: string[];
 }
 
 export const submitReview = async (payload: ReviewPayload) => {

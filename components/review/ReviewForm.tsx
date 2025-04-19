@@ -1,14 +1,14 @@
-// components/ReviewForm.tsx
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import StarTapRating from './StarDragRating';
-import {Image} from 'react-native';
+import ReviewImageUploader from './PhotoUpload';
 
 interface Props {
   menuName: string;
@@ -23,6 +23,8 @@ interface Props {
   setAmount: (val: string) => void;
   wouldVisitAgain: string;
   setWouldVisitAgain: (val: string) => void;
+  imageUrls: string[];
+  setImageUrls: (urls: string[]) => void;
   onSubmit: () => void;
 }
 
@@ -39,6 +41,8 @@ const ReviewForm = ({
   setAmount,
   wouldVisitAgain,
   setWouldVisitAgain,
+  imageUrls, // ✅ 상태 공유
+  setImageUrls,
   onSubmit,
 }: Props) => {
   const renderChoiceGroup = (
@@ -66,18 +70,15 @@ const ReviewForm = ({
 
   return (
     <View>
-      <Text style={styles.title}>📝 {menuName} 리뷰 작성</Text>
+      {/* 메뉴 대표 이미지 */}
       <Image
         source={{uri: imageUrl}}
-        style={{
-          width: '100%',
-          aspectRatio: 1.5, // ✅ 비율 유지 (가로:세로 = 3:2)
-          borderRadius: 10,
-          backgroundColor: '#eee',
-          marginBottom: 20,
-        }}
-        resizeMode="contain" // ✅ 이미지가 잘리지 않고 내부에 맞게
+        style={styles.menuImage}
+        resizeMode="cover"
       />
+
+      <Text style={styles.title}>📝 {menuName} 리뷰 작성</Text>
+
       <StarTapRating rating={rating} setRating={setRating} />
 
       {renderChoiceGroup('맛은 어땠나요?', taste, setTaste)}
@@ -94,6 +95,9 @@ const ReviewForm = ({
         placeholder="리뷰를 작성해 주세요"
       />
 
+      <Text style={styles.label}>포토</Text>
+      <ReviewImageUploader imageUrls={imageUrls} setImageUrls={setImageUrls} />
+
       <TouchableOpacity style={styles.button} onPress={onSubmit}>
         <Text style={styles.buttonText}>리뷰 등록</Text>
       </TouchableOpacity>
@@ -102,6 +106,13 @@ const ReviewForm = ({
 };
 
 const styles = StyleSheet.create({
+  menuImage: {
+    width: '100%',
+    height: 200,
+    borderRadius: 10,
+    marginBottom: 20,
+    backgroundColor: '#eee',
+  },
   title: {fontSize: 24, fontWeight: 'bold', marginBottom: 24},
   label: {fontSize: 16, marginTop: 12, marginBottom: 8},
   input: {

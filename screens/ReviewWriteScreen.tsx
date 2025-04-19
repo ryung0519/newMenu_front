@@ -25,6 +25,7 @@ const ReviewWriteScreen = () => {
   const [taste, setTaste] = useState('');
   const [amount, setAmount] = useState('');
   const [wouldVisitAgain, setWouldVisitAgain] = useState('');
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
 
   const handleSubmit = async () => {
     const userData = await getStoredUserData();
@@ -33,6 +34,9 @@ const ReviewWriteScreen = () => {
       Alert.alert('로그인이 필요합니다.');
       return;
     }
+
+    // ✅ 이미지 URL 로그 확인
+    console.log('✅ 등록되는 이미지 URL 목록:', imageUrls);
 
     try {
       await submitReview({
@@ -43,6 +47,7 @@ const ReviewWriteScreen = () => {
         taste,
         amount,
         wouldVisitAgain,
+        imageUrls, // ✅ 서버로 전송
       });
 
       Alert.alert('리뷰가 등록되었습니다!');
@@ -73,6 +78,8 @@ const ReviewWriteScreen = () => {
             setAmount={setAmount}
             wouldVisitAgain={wouldVisitAgain}
             setWouldVisitAgain={setWouldVisitAgain}
+            imageUrls={imageUrls}
+            setImageUrls={setImageUrls}
             onSubmit={handleSubmit}
           />
         </ScrollView>
