@@ -8,9 +8,11 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import StarTapRating from './StarDragRating';
+import {Image} from 'react-native';
 
 interface Props {
   menuName: string;
+  imageUrl: string;
   rating: number;
   setRating: (val: number) => void;
   content: string;
@@ -26,6 +28,7 @@ interface Props {
 
 const ReviewForm = ({
   menuName,
+  imageUrl,
   rating,
   setRating,
   content,
@@ -64,7 +67,17 @@ const ReviewForm = ({
   return (
     <View>
       <Text style={styles.title}>📝 {menuName} 리뷰 작성</Text>
-
+      <Image
+        source={{uri: imageUrl}}
+        style={{
+          width: '100%',
+          aspectRatio: 1.5, // ✅ 비율 유지 (가로:세로 = 3:2)
+          borderRadius: 10,
+          backgroundColor: '#eee',
+          marginBottom: 20,
+        }}
+        resizeMode="contain" // ✅ 이미지가 잘리지 않고 내부에 맞게
+      />
       <StarTapRating rating={rating} setRating={setRating} />
 
       {renderChoiceGroup('맛은 어땠나요?', taste, setTaste)}
