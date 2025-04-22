@@ -10,6 +10,7 @@ import SearchResultScreen from '../screens/SearchResultScreen';
 import HomeScreen from '../screens/HomeScreen';
 import BrandMenuListScreen from '../screens/BrandMenuListScreen';
 import ReviewWriteScreen from '../screens/ReviewWriteScreen';
+import ReviewListScreen from '../screens/ReviewListScreen';
 /*이름(name)과 컴포넌트(component)를 연결해서 
 /*앱에서 화면 간 이동이 가능하게 만들어주는 파일 */
 /* Login = LoginSceen 이라 등록해놓으면 navigate할때 Login이라고만 명시해도됨! */
@@ -28,6 +29,12 @@ export type RootStackParamList = {
 
   //SearchResult: {results: any};
   ReviewWrite: {menuId: number; menuName: string; imageUrl: string};
+
+  ReviewList: {
+    menuId: number;
+    menuName: string;
+    imageUrl: string;
+  };
 
   //캘린더 수정중
   Calendar: undefined;
@@ -54,6 +61,7 @@ const MainStack = () => {
         <Stack.Screen name="SearchResult" component={SearchResultScreen} />
         <Stack.Screen name="BrandMenuList" component={BrandMenuListScreen} />
         <Stack.Screen name="ReviewWrite" component={ReviewWriteScreen} />
+        <Stack.Screen name="ReviewList" component={ReviewListScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   ) as any;
