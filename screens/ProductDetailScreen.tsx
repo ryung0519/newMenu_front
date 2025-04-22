@@ -7,39 +7,38 @@ import {
   Image,
   TouchableOpacity,
   FlatList,
+  Dimensions,
+  Linking,
 } from 'react-native';
 import {useRoute, RouteProp, useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from '../navigation/MainStack';
 import {API_URL} from '@env';
 import {Ionicons} from '@expo/vector-icons';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {Dimensions} from 'react-native';
-import {Linking} from 'react-native';
 import MapView, {Marker} from 'react-native-maps';
 import * as Location from 'expo-location';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
-// ✅ 변하지않는 const값은 밖에 적어줌
+// ✅ 화면 폭, 블로그 카드 폭 정의
 const {width} = Dimensions.get('window');
-const ITEM_WIDTH = width * 0.4; // 블로그 리뷰 개수 조정
+const ITEM_WIDTH = width * 0.4;
 const SPACING = 10;
 
-// ✅ 타입 지정
+// ✅ 라우트 및 네비게이션 타입 정의
 type ProductRouteProp = RouteProp<RootStackParamList, 'Product'>;
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
-// ✅ 상품 상세 페이지
 const ProductDetailScreen = () => {
-  type Navigation = NativeStackNavigationProp<RootStackParamList>; // ✅ 네비 타입 지정
-  const navigation = useNavigation<Navigation>(); // ✅ 네비 타입 가져오기
+  const navigation = useNavigation<NavigationProp>(); // ✅ 타입 명확히 지정
   const route = useRoute<ProductRouteProp>();
-  const {menuId} = route.params; // ✅ menuId 받아오기
-  const [nearestStores, setNearestStores] = useState([]); // ✅ 가까운 매장
-  const [userLocation, setUserLocation] = useState(null); // ✅ 내 위치
-  const mapRef = useRef(null); // ✅ 지도 ref 만들기
+  const {menuId} = route.params;
 
-  const [menuDetail, setMenuDetail] = useState<any>(null); // ✅ 상품 정보 저장 state
-  const [isLiked, setIsLiked] = useState(false); // ✅ 찜하기 상태 저장 (하트 눌렀는지)
-  // ✅ 상세정보 API 호출
+  const [menuDetail, setMenuDetail] = useState<any>(null);
+  const [isLiked, setIsLiked] = useState(false);
+  const [userLocation, setUserLocation] = useState<any>(null);
+  const [nearestStores, setNearestStores] = useState<any[]>([]);
+  const mapRef = useRef<MapView | null>(null);
+
   useEffect(() => {
     const fetchMenuDetail = async () => {
       try {
@@ -53,30 +52,23 @@ const ProductDetailScreen = () => {
     fetchMenuDetail();
   }, [menuId]);
 
-  // ✅ 현재 내 위치 + 가까운 매장 API 요청
   useEffect(() => {
     const fetchNearestStores = async () => {
       try {
-        // 1. 위치 권한 요청
         const {status} = await Location.requestForegroundPermissionsAsync();
-        if (status !== 'granted') {
-          console.warn('위치 권한이 거부되었습니다');
-          return;
-        }
+        if (status !== 'granted') return;
 
-        // 2. 현재 위치 가져오기
         const location = await Location.getCurrentPositionAsync({});
         const {latitude, longitude} = location.coords;
         setUserLocation({latitude, longitude});
 
-        // 3. 가까운 매장 API 요청
         const response = await fetch(
           `${API_URL}/pos/nearest?brandName=${encodeURIComponent(
             menuDetail.businessName,
           )}&userLat=${latitude}&userLng=${longitude}`,
         );
         const data = await response.json();
-        setNearestStores(data); // ✅ 가까운 매장 목록 저장
+        setNearestStores(data);
       } catch (error) {
         console.error('가까운 매장 조회 오류:', error);
       }
@@ -91,16 +83,13 @@ const ProductDetailScreen = () => {
 
   return (
     <SafeAreaView style={styles.wrapper}>
-      {/* ✅ 상단 헤더 영역 - 뒤로가기 버튼 */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
       </View>
 
-      {/* ✅ 전체 내용을 스크롤할 수 있도록 감쌈 */}
       <ScrollView contentContainerStyle={styles.container}>
-        {/* ✅ 상품 이미지 + 찜하기 버튼 (우측 상단 하트) */}
         <View style={styles.imageWrapper}>
           <Image source={{uri: menuDetail.imageUrl}} style={styles.mainImage} />
           <TouchableOpacity
@@ -114,7 +103,6 @@ const ProductDetailScreen = () => {
           </TouchableOpacity>
         </View>
 
-        {/* ✅ 브랜드명 표시 */}
         <TouchableOpacity
           onPress={() =>
             navigation.navigate('BrandMenuList', {
@@ -126,18 +114,11 @@ const ProductDetailScreen = () => {
           </Text>
         </TouchableOpacity>
 
-        {/* ✅ 제품 이름 + 별점 (가로 정렬) */}
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: 4,
-          }}>
+        <View style={styles.nameAndStar}>
           <Text style={styles.menuName}>{menuDetail.menuName}</Text>
           <TouchableOpacity
             onPress={() =>
-              navigation.navigate('ReviewWrite', {
+              navigation.navigate('ReviewList', {
                 menuId: menuId,
                 menuName: menuDetail.menuName,
                 imageUrl: menuDetail.imageUrl,
@@ -149,10 +130,8 @@ const ProductDetailScreen = () => {
           </TouchableOpacity>
         </View>
 
-        {/* ✅ 제품 설명 */}
         <Text style={styles.description}>{menuDetail.description}</Text>
 
-        {/* ✅ 요약 정보 테이블: 가격, 칼로리,중량, 출시일 */}
         <View style={styles.summaryTable}>
           <View style={styles.tableRow}>
             <Text style={styles.tableHeader}>가격</Text>
@@ -168,7 +147,6 @@ const ProductDetailScreen = () => {
           </View>
         </View>
 
-        {/* ✅ 이 브랜드의 인기상품 */}
         <Text style={styles.sectionTitle}>이 브랜드의 인기상품</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View style={styles.horizontalCards}>
@@ -178,7 +156,6 @@ const ProductDetailScreen = () => {
           </View>
         </ScrollView>
 
-        {/* ✅ 다른 추천 메뉴 */}
         <Text style={styles.sectionTitle}>다른 추천 메뉴</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View style={styles.horizontalCards}>
@@ -188,17 +165,16 @@ const ProductDetailScreen = () => {
           </View>
         </ScrollView>
 
-        {/* ✅ 블로그존 ✅ */}
         <Text style={styles.sectionTitle}>블로그 리뷰</Text>
-        {menuDetail.blogPosts && menuDetail.blogPosts.length > 0 ? (
+        {menuDetail.blogPosts?.length > 0 ? (
           <FlatList
             data={menuDetail.blogPosts}
             horizontal
             pagingEnabled
-            showsHorizontalScrollIndicator={false}
             snapToInterval={ITEM_WIDTH + SPACING}
             decelerationRate="fast"
-            keyExtractor={(item, index) => index.toString()}
+            keyExtractor={(_, index) => index.toString()}
+            showsHorizontalScrollIndicator={false}
             contentContainerStyle={{paddingHorizontal: 10}}
             renderItem={({item}) => (
               <TouchableOpacity
@@ -221,16 +197,15 @@ const ProductDetailScreen = () => {
           <Text style={{color: '#999'}}>블로그 리뷰가 없습니다.</Text>
         )}
 
-        {/* ✅ 유튜브존 ✅ */}
         <Text style={styles.sectionTitle}>유튜브 리뷰</Text>
-        {menuDetail.youtubeVideos && menuDetail.youtubeVideos.length > 0 ? (
+        {menuDetail.youtubeVideos?.length > 0 ? (
           <FlatList
             data={menuDetail.youtubeVideos}
             horizontal
             pagingEnabled
             snapToInterval={width * 0.6 + 11}
             decelerationRate="fast"
-            keyExtractor={(item, index) => index.toString()}
+            keyExtractor={(_, index) => index.toString()}
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{paddingHorizontal: 10}}
             renderItem={({item}) => (
@@ -255,7 +230,6 @@ const ProductDetailScreen = () => {
           <Text style={{color: '#999'}}>유튜브 리뷰가 없습니다.</Text>
         )}
 
-        {/* ✅ 가까운 매장 지도 표시 */}
         <Text style={styles.sectionTitle}>가까운 매장 위치</Text>
         {userLocation && nearestStores.length > 0 ? (
           <View>
@@ -291,7 +265,6 @@ const ProductDetailScreen = () => {
               ))}
             </MapView>
 
-            {/* ✅ 내 위치로 되돌아가는 버튼 */}
             <TouchableOpacity
               onPress={() => {
                 if (mapRef.current && userLocation) {
