@@ -28,12 +28,17 @@ export type RootStackParamList = {
   SearchResult: {results: any[]};
 
   //SearchResult: {results: any};
-  ReviewWrite: {menuId: number; menuName: string; imageUrl: string};
-
+  ReviewWrite: {
+    menuId: number;
+    menuName: string;
+    imageUrl: string;
+    brandName: string;
+  };
   ReviewList: {
     menuId: number;
     menuName: string;
     imageUrl: string;
+    brandName: string;
   };
 
   //캘린더 수정중

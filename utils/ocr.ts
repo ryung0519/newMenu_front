@@ -60,10 +60,10 @@ export const analyzeReceiptOCR = async (
   }
 };
 
-export const extractDaisoReceiptInfo = (texts: string[]) => {
-  const containsDaiso = texts.some(text => text.includes('다이소'));
-  if (!containsDaiso) {
-    console.warn('❌ 다이소 영수증이 아닙니다.');
+export const extractReceiptInfo = (texts: string[], storeName: string) => {
+  const storeMatch = texts.some(text => text.includes(storeName));
+  if (!storeMatch) {
+    console.warn(`❌ ${storeName} 매장이 아닙니다.`);
     return null;
   }
 
@@ -108,7 +108,7 @@ export const extractDaisoReceiptInfo = (texts: string[]) => {
   }
 
   return {
-    storeName: '다이소',
+    storeName,
     products,
   };
 };

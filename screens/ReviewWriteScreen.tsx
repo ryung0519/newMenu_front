@@ -5,6 +5,9 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicator,
+  View,
+  TouchableOpacity,
 } from 'react-native';
 import {useNavigation, useRoute, RouteProp} from '@react-navigation/native';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -13,8 +16,8 @@ import {submitReview} from '../services/review';
 import ReviewForm from '../components/review/ReviewForm';
 import {RootStackParamList} from '../navigation/MainStack';
 import * as ImagePicker from 'expo-image-picker';
-import {analyzeReceiptOCR, extractDaisoReceiptInfo} from '../utils/ocr';
-
+import {analyzeReceiptOCR, extractReceiptInfo} from '../utils/ocr';
+import {Ionicons} from '@expo/vector-icons';
 const uploadToCloudinary = async (fileUri: string) => {
   const data = new FormData();
   data.append('file', {
@@ -43,7 +46,7 @@ type ReviewWriteRouteProp = RouteProp<RootStackParamList, 'ReviewWrite'>;
 const ReviewWriteScreen = () => {
   const navigation = useNavigation();
   const route = useRoute<ReviewWriteRouteProp>();
-  const {menuId, menuName, imageUrl} = route.params;
+  const {menuId, menuName, imageUrl, brandName} = route.params;
 
   const [rating, setRating] = useState(5);
   const [content, setContent] = useState('');
@@ -51,6 +54,7 @@ const ReviewWriteScreen = () => {
   const [amount, setAmount] = useState('');
   const [wouldVisitAgain, setWouldVisitAgain] = useState('');
   const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -60,20 +64,28 @@ const ReviewWriteScreen = () => {
 
     if (!result.canceled && result.assets.length > 0) {
       const localUri = result.assets[0].uri;
+      setLoading(true); // 로딩 시작
 
-      // OCR 수행
-      const ocrTexts = await analyzeReceiptOCR(localUri);
-      const info = extractDaisoReceiptInfo(ocrTexts);
+      try {
+        const ocrTexts = await analyzeReceiptOCR(localUri);
+        const info = extractReceiptInfo(ocrTexts, brandName);
 
-      if (info) {
-        console.log('✅ 매장:', info.storeName);
-        console.log('🛒 상품 목록:', info.products);
+        if (info) {
+          console.log('✅ 매장:', info.storeName);
+          console.log('🛒 상품 목록:', info.products);
+        } else {
+          Alert.alert('영수증에 해당 매장명이 없습니다.');
+        }
+
+        const cloudinaryRes = await uploadToCloudinary(localUri);
+        const uploadedUrl = cloudinaryRes.secure_url;
+        setImageUrls(prev => [...prev, uploadedUrl]);
+      } catch (error) {
+        console.error('OCR 처리 중 오류:', error);
+        Alert.alert('OCR 처리 실패');
+      } finally {
+        setLoading(false); // 로딩 종료
       }
-
-      // 이미지 업로드
-      const cloudinaryRes = await uploadToCloudinary(localUri);
-      const uploadedUrl = cloudinaryRes.secure_url;
-      setImageUrls(prev => [...prev, uploadedUrl]);
     }
   };
 
@@ -110,6 +122,11 @@ const ReviewWriteScreen = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}>
       <SafeAreaView style={styles.container}>
+        <View style={styles.backHeader}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Ionicons name="arrow-back" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
         <ScrollView contentContainerStyle={styles.scrollContent}>
           <ReviewForm
             menuName={menuName}
@@ -130,6 +147,13 @@ const ReviewWriteScreen = () => {
             onPickImage={pickImage}
           />
         </ScrollView>
+
+        {/* 🔥 로딩 오버레이 */}
+        {loading && (
+          <View style={styles.loadingOverlay}>
+            <ActivityIndicator size="large" color="#fff" />
+          </View>
+        )}
       </SafeAreaView>
     </KeyboardAvoidingView>
   );
@@ -138,6 +162,21 @@ const ReviewWriteScreen = () => {
 const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: '#fff'},
   scrollContent: {padding: 20, paddingBottom: 40},
+  loadingOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 10,
+  },
+  backHeader: {
+    paddingHorizontal: 16,
+    paddingTop: 12,
+  },
 });
 
 export default ReviewWriteScreen;
