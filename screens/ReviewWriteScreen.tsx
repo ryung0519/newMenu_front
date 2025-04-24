@@ -12,6 +12,31 @@ import {getStoredUserData} from '../services/auth';
 import {submitReview} from '../services/review';
 import ReviewForm from '../components/review/ReviewForm';
 import {RootStackParamList} from '../navigation/MainStack';
+import * as ImagePicker from 'expo-image-picker';
+import {analyzeReceiptOCR, extractDaisoReceiptInfo} from '../utils/ocr';
+
+const uploadToCloudinary = async (fileUri: string) => {
+  const data = new FormData();
+  data.append('file', {
+    uri: fileUri,
+    type: 'image/jpeg',
+    name: 'receipt.jpg',
+  } as any);
+  data.append('upload_preset', 'menu_image');
+
+  const res = await fetch(
+    'https://api.cloudinary.com/v1_1/dfb4meubq/image/upload',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      body: data,
+    },
+  );
+
+  return await res.json();
+};
 
 type ReviewWriteRouteProp = RouteProp<RootStackParamList, 'ReviewWrite'>;
 
@@ -27,16 +52,37 @@ const ReviewWriteScreen = () => {
   const [wouldVisitAgain, setWouldVisitAgain] = useState('');
   const [imageUrls, setImageUrls] = useState<string[]>([]);
 
+  const pickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
+    });
+
+    if (!result.canceled && result.assets.length > 0) {
+      const localUri = result.assets[0].uri;
+
+      // OCR 수행
+      const ocrTexts = await analyzeReceiptOCR(localUri);
+      const info = extractDaisoReceiptInfo(ocrTexts);
+
+      if (info) {
+        console.log('✅ 매장:', info.storeName);
+        console.log('🛒 상품 목록:', info.products);
+      }
+
+      // 이미지 업로드
+      const cloudinaryRes = await uploadToCloudinary(localUri);
+      const uploadedUrl = cloudinaryRes.secure_url;
+      setImageUrls(prev => [...prev, uploadedUrl]);
+    }
+  };
+
   const handleSubmit = async () => {
     const userData = await getStoredUserData();
-
     if (!userData) {
       Alert.alert('로그인이 필요합니다.');
       return;
     }
-
-    // ✅ 이미지 URL 로그 확인
-    console.log('✅ 등록되는 이미지 URL 목록:', imageUrls);
 
     try {
       await submitReview({
@@ -47,7 +93,7 @@ const ReviewWriteScreen = () => {
         taste,
         amount,
         wouldVisitAgain,
-        imageUrls, // ✅ 서버로 전송
+        imageUrls,
       });
 
       Alert.alert('리뷰가 등록되었습니다!');
@@ -81,6 +127,7 @@ const ReviewWriteScreen = () => {
             imageUrls={imageUrls}
             setImageUrls={setImageUrls}
             onSubmit={handleSubmit}
+            onPickImage={pickImage}
           />
         </ScrollView>
       </SafeAreaView>
@@ -89,14 +136,8 @@ const ReviewWriteScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  scrollContent: {
-    padding: 20,
-    paddingBottom: 40,
-  },
+  container: {flex: 1, backgroundColor: '#fff'},
+  scrollContent: {padding: 20, paddingBottom: 40},
 });
 
 export default ReviewWriteScreen;
