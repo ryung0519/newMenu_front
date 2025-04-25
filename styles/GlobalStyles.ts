@@ -202,6 +202,86 @@ const GlobalStyles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
   },
+
+  bannerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#c7c7c7',
+    padding: 16,
+    borderRadius: 12,
+    marginHorizontal: 8,
+    width: width * 0.9,
+  },
+  bannerTitle: {
+    color: '#805ef7',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  bannerSubtitle: {
+    color: '#ae9af5',
+    fontSize: 12,
+    marginTop: 4,
+  },
+  bannerImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#87c9ff',
+  },
+  modalBox: {
+    width: width * 0.8,
+    borderRadius: 12,
+    overflow: 'hidden',
+    backgroundColor: '#fff',
+  },
+  modalBackgroundImage: {
+    width: '100%',
+    height: height * 0.5,
+    resizeMode: 'cover',
+  },
+  alertCloseButton: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+  },
+  closeIcon: {
+    width: 20,
+    height: 20,
+  },
+  modalTextContainer: {
+    position: 'absolute',
+    bottom: 80,
+    left: 16,
+    right: 16,
+  },
+  alertModalTitle: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+    textShadowColor: '#000',
+    textShadowOffset: {width: 1, height: 1},
+    textShadowRadius: 3,
+    marginBottom: 8,
+  },
+  alertModalSubTitle: {
+    color: '#fff',
+    fontSize: 14,
+    textShadowColor: '#000',
+    textShadowOffset: {width: 1, height: 1},
+    textShadowRadius: 2,
+  },
+  alertModalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingVertical: 16,
+    backgroundColor: '#fff',
+  },
+  alertModalButton: {
+    color: '#333',
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
 });
 
 export default GlobalStyles;
