@@ -18,28 +18,8 @@ import {RootStackParamList} from '../navigation/MainStack';
 import * as ImagePicker from 'expo-image-picker';
 import {analyzeReceiptOCR, extractReceiptInfo} from '../utils/ocr';
 import {Ionicons} from '@expo/vector-icons';
-const uploadToCloudinary = async (fileUri: string) => {
-  const data = new FormData();
-  data.append('file', {
-    uri: fileUri,
-    type: 'image/jpeg',
-    name: 'receipt.jpg',
-  } as any);
-  data.append('upload_preset', 'menu_image');
-
-  const res = await fetch(
-    'https://api.cloudinary.com/v1_1/dfb4meubq/image/upload',
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-      body: data,
-    },
-  );
-
-  return await res.json();
-};
+import {uploadToCloudinary} from '../utils/cloudinary';
+import {useImagePicker} from '../hooks/useImagePicker';
 
 type ReviewWriteRouteProp = RouteProp<RootStackParamList, 'ReviewWrite'>;
 
@@ -56,38 +36,7 @@ const ReviewWriteScreen = () => {
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const pickImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      quality: 1,
-    });
-
-    if (!result.canceled && result.assets.length > 0) {
-      const localUri = result.assets[0].uri;
-      setLoading(true); // 로딩 시작
-
-      try {
-        const ocrTexts = await analyzeReceiptOCR(localUri);
-        const info = extractReceiptInfo(ocrTexts, brandName);
-
-        if (info) {
-          console.log('✅ 매장:', info.storeName);
-          console.log('🛒 상품 목록:', info.products);
-        } else {
-          Alert.alert('영수증에 해당 매장명이 없습니다.');
-        }
-
-        const cloudinaryRes = await uploadToCloudinary(localUri);
-        const uploadedUrl = cloudinaryRes.secure_url;
-        setImageUrls(prev => [...prev, uploadedUrl]);
-      } catch (error) {
-        console.error('OCR 처리 중 오류:', error);
-        Alert.alert('OCR 처리 실패');
-      } finally {
-        setLoading(false); // 로딩 종료
-      }
-    }
-  };
+  const {pickImage} = useImagePicker();
 
   const handleSubmit = async () => {
     const userData = await getStoredUserData();
