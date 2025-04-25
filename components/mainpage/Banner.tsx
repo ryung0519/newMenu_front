@@ -3,11 +3,13 @@ import {View, Text, Dimensions, Image, FlatList} from 'react-native';
 import GlobalStyles from '../../styles/GlobalStyles';
 import {API_URL} from '@env';
 import * as Location from 'expo-location';
+import ImageColors from 'react-native-image-colors';
 
 const {width, height} = Dimensions.get('window');
 
-const Banner = ({city, menuName}) => {
+const Banner = ({item, menuName}) => {
   const [bannerItems, setBannerItems] = useState([]);
+  const [bgColor, setBgColor] = useState('#ffffff');
 
   //위치기반 메뉴 불러오기
   useEffect(() => {
@@ -45,6 +47,38 @@ const Banner = ({city, menuName}) => {
       .then(data => setBannerItems(data))
       .catch(err => console.error('베너 데이터 불러오기 실패:', err));
   }, []);
+
+  //제품 색상에 따라 배경색 변경
+  useEffect(() => {
+    const fetchColors = async () => {
+      const result = await ImageColors.getColors(item.imageUrl, {
+        fallback: '#ffffff',
+        cache: true,
+        key: item.menuId?.toString(),
+      });
+
+      //어울리는 색상이 없을 경우를 대비해 기본값정의
+      let color = '#ffffff';
+
+      switch (result.platform) {
+        case 'android':
+          color = result.dominant ?? '#fce1e1';
+          break;
+        case 'ios':
+          color = result.background ?? '#fce1e1';
+          break;
+        case 'web':
+          color = result.vibrant ?? '#fce1e1';
+          break;
+        default:
+          color = '#fce1e1';
+      }
+      setBgColor(color);
+    };
+
+    fetchColors();
+  }, [item.imageUrl]);
+
   return (
     <FlatList
       data={bannerItems}
