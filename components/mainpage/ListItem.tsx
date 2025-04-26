@@ -128,8 +128,8 @@ const ListItem: React.FC<ListItemProps> = ({menu}) => {
               alignItems: 'center',
             }}>
             <Text
-              style={[GlobalStyles.text, {maxWidth: width * 0.66}]}
-              numberOfLines={2}
+              style={[GlobalStyles.text, {maxWidth: width * 0.63}]}
+              numberOfLines={1}
               ellipsizeMode="tail">
               {menu ? `${menu.description}` : '설명 없음'}
             </Text>

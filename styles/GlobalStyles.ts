@@ -282,6 +282,53 @@ const GlobalStyles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
   },
+  slide: {
+    flex: 1,
+    borderRadius: 16,
+    padding: 20,
+    justifyContent: 'center',
+  },
+  textContainer: {
+    position: 'absolute',
+    left: 20,
+    top: 30,
+  },
+  wrapper: {
+    height: height * 0.2,
+  },
+  banner: {
+    flex: 1,
+    borderRadius: 20,
+    overflow: 'hidden',
+    padding: 20,
+    justifyContent: 'center',
+  },
+  textBox: {
+    maxWidth: '60%',
+    marginTop: height * 0.08,
+  },
+  brand: {
+    fontSize: 14,
+    color: '#fff',
+  },
+  badge: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    backgroundColor: '#142b82',
+    borderRadius: 20,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+  },
+  badgeText: {
+    color: 'white',
+    fontSize: 12,
+  },
+  pageIndicator: {
+    textAlign: 'center',
+    marginTop: 8,
+    color: '#666',
+  },
 });
 
 export default GlobalStyles;
