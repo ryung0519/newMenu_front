@@ -34,6 +34,7 @@ const Banner = () => {
 
         // city를 주입해서 저장
         const enrichedData = data.map(menu => ({
+          //스프레드 연산자(menu 객체 안에 있는 모든 속성들을 복사)
           ...menu,
           city, // 도시명 추가
         }));
@@ -71,12 +72,16 @@ const Banner = () => {
                   '{item.city}'에서만 먹을 수 있는 메뉴!
                 </Text>
                 <Text style={GlobalStyles.subtitle}>
-                  '{item.brand}'에서 파는 '{item.menuName}'는 어떠신가요?
+                  '{item.brand}'에서 파는{' '}
+                  <Text style={GlobalStyles.highlightedMenuName}>
+                    '{item.menuName}'
+                  </Text>
+                  는 어떠신가요?
                 </Text>
               </View>
               <Image
                 source={{uri: item.imageUrl}}
-                style={GlobalStyles.image}
+                style={GlobalStyles.bannerImage}
                 resizeMode="contain"
               />
             </View>

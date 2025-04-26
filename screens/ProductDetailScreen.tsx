@@ -15,14 +15,12 @@ import {RootStackParamList} from '../navigation/MainStack';
 import {API_URL} from '@env';
 import {Ionicons} from '@expo/vector-icons';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import MapView, {Marker} from 'react-native-maps';
+import MapView, {Marker, MapMarker} from 'react-native-maps';
 import * as Location from 'expo-location';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import styles, {ITEM_WIDTH, SPACING} from '../styles/ProductDetailStyles';
 
-// ✅ 화면 폭, 블로그 카드 폭 정의
 const {width} = Dimensions.get('window');
-const ITEM_WIDTH = width * 0.4;
-const SPACING = 10;
 
 // ✅ 라우트 및 네비게이션 타입 정의
 type ProductRouteProp = RouteProp<RootStackParamList, 'Product'>;
@@ -32,13 +30,18 @@ const ProductDetailScreen = () => {
   const navigation = useNavigation<NavigationProp>(); // ✅ 타입 명확히 지정
   const route = useRoute<ProductRouteProp>();
   const {menuId} = route.params;
+  const [popularMenus, setPopularMenus] = useState<any[]>([]);
 
   const [menuDetail, setMenuDetail] = useState<any>(null);
   const [isLiked, setIsLiked] = useState(false);
   const [userLocation, setUserLocation] = useState<any>(null);
   const [nearestStores, setNearestStores] = useState<any[]>([]);
+  const [currentStoreIndex, setCurrentStoreIndex] = useState(0);
   const mapRef = useRef<MapView | null>(null);
+  const markerRefs = useRef<(MapMarker | null)[]>([]); // ✅ 지도 말풍선 자동 표시
+  const userMarkerRef = useRef<MapMarker | null>(null);
 
+  // ✅ 1. 상세 메뉴 정보 받아오기
   useEffect(() => {
     const fetchMenuDetail = async () => {
       try {
@@ -52,6 +55,7 @@ const ProductDetailScreen = () => {
     fetchMenuDetail();
   }, [menuId]);
 
+  // ✅ 2.  내 위치 + 가까운 매장 불러오기
   useEffect(() => {
     const fetchNearestStores = async () => {
       try {
@@ -79,16 +83,100 @@ const ProductDetailScreen = () => {
     }
   }, [menuDetail]);
 
+  // ✅ 3. 클릭수 기준 인기 메뉴 API 호출
+  useEffect(() => {
+    const fetchPopularMenus = async () => {
+      try {
+        const response = await fetch(
+          `${API_URL}/click/popular?brandName=${encodeURIComponent(
+            menuDetail.businessName,
+          )}`,
+        );
+        const data = await response.json();
+        const filtered = data.filter((item: any) => item.menuId !== menuId);
+        setPopularMenus(filtered); // 자기 자신 제외
+      } catch (error) {
+        console.error('인기 상품 불러오기 오류:', error);
+      }
+    };
+
+    if (menuDetail?.businessName) {
+      fetchPopularMenus();
+    }
+  }, [menuDetail]);
+
+  // ✅ 4. 첫 번째 가까운 매장 말풍선 자동 표시
+  useEffect(() => {
+    if (nearestStores.length === 0) return;
+
+    const tryShowFirstCallout = () => {
+      const marker = markerRefs.current[0];
+      if (marker && marker.showCallout) {
+        marker.showCallout(); // ✅ 말풍선 띄움
+      } else {
+        // 아직 등록 안 됐을 경우, 재시도 (100ms 후에 또 시도)
+        setTimeout(tryShowFirstCallout, 100);
+      }
+    };
+
+    setTimeout(tryShowFirstCallout, 800);
+  }, [nearestStores]);
+
+  // ✅ 5. 현재 매장 바뀔 때 말풍선 띄우기
+  useEffect(() => {
+    const targetMarker = markerRefs.current[currentStoreIndex];
+    if (targetMarker) {
+      setTimeout(() => {
+        targetMarker.showCallout();
+      }, 500);
+    }
+  }, [currentStoreIndex]);
+
+  // ✅ 6. 말풍선 고정할수있는 기능! - 리엑트 map엔 없어서 강제 재실행해서 띄워놈
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const marker = markerRefs.current[currentStoreIndex];
+      if (marker?.showCallout) {
+        marker.showCallout(); // 반복적으로 띄움
+      }
+    }, 15000); // 5초마다 재실행
+
+    return () => clearInterval(interval); // 컴포넌트 unmount 시 정리
+  }, [currentStoreIndex]);
+
   if (!menuDetail) return <Text style={styles.loading}>로딩중...</Text>;
+
+  // ✅ 7. 선택된 매장에서 다음 매장으로 지도 이동
+  const goToNextStore = () => {
+    if (nearestStores.length === 0) return; //  // 매장이 없으면 아무것도 안 함
+
+    const nextIndex = (currentStoreIndex + 1) % nearestStores.length;
+    setCurrentStoreIndex(nextIndex); // 다음 인덱스로 이동 (끝나면 다시 처음으로 순환)
+
+    const nextStore = nearestStores[nextIndex];
+    if (mapRef.current) {
+      mapRef.current.animateToRegion(
+        {
+          latitude: nextStore.latitude,
+          longitude: nextStore.longitude,
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
+        },
+        1000,
+      );
+    }
+  };
 
   return (
     <SafeAreaView style={styles.wrapper}>
+      {/* 📍뒤로가기📍 */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
       </View>
 
+      {/* 📍대표 이미지 + 찜 버튼 📍*/}
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.imageWrapper}>
           <Image source={{uri: menuDetail.imageUrl}} style={styles.mainImage} />
@@ -103,6 +191,7 @@ const ProductDetailScreen = () => {
           </TouchableOpacity>
         </View>
 
+        {/*📍브랜드명 클릭 → 브랜드 메뉴로 이동📍*/}
         <TouchableOpacity
           onPress={() =>
             navigation.navigate('BrandMenuList', {
@@ -113,7 +202,7 @@ const ProductDetailScreen = () => {
             {menuDetail.businessName} 브랜드 &gt;
           </Text>
         </TouchableOpacity>
-
+        {/*📍메뉴명 + 별점 📍*/}
         <View style={styles.nameAndStar}>
           <Text style={styles.menuName}>{menuDetail.menuName}</Text>
           <TouchableOpacity
@@ -122,6 +211,7 @@ const ProductDetailScreen = () => {
                 menuId: menuId,
                 menuName: menuDetail.menuName,
                 imageUrl: menuDetail.imageUrl,
+                brandName: menuDetail.businessName,
               })
             }>
             <Text style={styles.stars}>
@@ -132,6 +222,7 @@ const ProductDetailScreen = () => {
 
         <Text style={styles.description}>{menuDetail.description}</Text>
 
+        {/* 📍정보📍 */}
         <View style={styles.summaryTable}>
           <View style={styles.tableRow}>
             <Text style={styles.tableHeader}>가격</Text>
@@ -147,15 +238,33 @@ const ProductDetailScreen = () => {
           </View>
         </View>
 
+        {/* 📍클릭수 기준 인기상품📍 */}
         <Text style={styles.sectionTitle}>이 브랜드의 인기상품</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <View style={styles.horizontalCards}>
-            {[...Array(6)].map((_, idx) => (
-              <View key={idx} style={styles.card} />
-            ))}
-          </View>
-        </ScrollView>
 
+        {popularMenus.length > 0 ? (
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <View style={styles.horizontalCards}>
+              {popularMenus.map((item, idx) => (
+                <TouchableOpacity
+                  key={item.menuId}
+                  onPress={() =>
+                    navigation.navigate('Product', {menuId: item.menuId})
+                  }
+                  style={styles.card}>
+                  <View style={styles.imageFrame}>
+                    <Image
+                      source={{uri: item.imageUrl}}
+                      style={styles.zoomedImage}
+                    />
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </ScrollView>
+        ) : (
+          <Text style={{color: '#888'}}>인기 상품이 없습니다.</Text>
+        )}
+        {/*📍추천메뉴 (임시 박스)📍 */}
         <Text style={styles.sectionTitle}>다른 추천 메뉴</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View style={styles.horizontalCards}>
@@ -164,10 +273,10 @@ const ProductDetailScreen = () => {
             ))}
           </View>
         </ScrollView>
-
+        {/*📍블로그 리뷰📍 */}
         <Text style={styles.sectionTitle}>블로그 리뷰</Text>
         {menuDetail.blogPosts?.length > 0 ? (
-          <FlatList
+          <FlatList // 가로 스크롤 카드 형식으로 출력
             data={menuDetail.blogPosts}
             horizontal
             pagingEnabled
@@ -197,6 +306,7 @@ const ProductDetailScreen = () => {
           <Text style={{color: '#999'}}>블로그 리뷰가 없습니다.</Text>
         )}
 
+        {/* 📍유튜브 리뷰📍 */}
         <Text style={styles.sectionTitle}>유튜브 리뷰</Text>
         {menuDetail.youtubeVideos?.length > 0 ? (
           <FlatList
@@ -233,41 +343,62 @@ const ProductDetailScreen = () => {
         <Text style={styles.sectionTitle}>가까운 매장 위치</Text>
         {userLocation && nearestStores.length > 0 ? (
           <View>
-            <MapView
-              ref={mapRef}
-              style={{
-                width: '100%',
-                height: 300,
-                marginTop: 10,
-                borderRadius: 10,
-              }}
-              initialRegion={{
-                latitude: userLocation.latitude,
-                longitude: userLocation.longitude,
-                latitudeDelta: 0.01,
-                longitudeDelta: 0.01,
-              }}>
-              <Marker
-                coordinate={userLocation}
-                title="내 위치"
-                pinColor="blue"
-              />
-              {nearestStores.map((store, idx) => (
+            {userLocation.latitude && userLocation.longitude && (
+              <MapView
+                ref={mapRef}
+                style={{
+                  width: '100%',
+                  height: 300,
+                  marginTop: 10,
+                  borderRadius: 10,
+                }}
+                initialRegion={{
+                  // 첫 번째 매장 기준으로 지도 처음 위치 설정
+                  latitude:
+                    nearestStores[0]?.latitude ||
+                    userLocation?.latitude ||
+                    37.5665,
+                  longitude:
+                    nearestStores[0]?.longitude ||
+                    userLocation?.longitude ||
+                    126.978,
+                  latitudeDelta: 0.01,
+                  longitudeDelta: 0.01,
+                }}
+                // ✅ 맵이 준비되면 내 위치 말풍선 자동 띄우기
+                onMapReady={() => {
+                  setTimeout(() => {
+                    userMarkerRef.current?.showCallout(); // ✅ 말풍선 표시
+                  }, 500); // 렌더 완료 후 약간의 시간 차 줌
+                }}>
                 <Marker
-                  key={idx}
-                  coordinate={{
-                    latitude: store.latitude,
-                    longitude: store.longitude,
-                  }}
-                  title={`${store.businessName} ${store.location}`}
-                  description="가까운 매장"
+                  ref={userMarkerRef} // ✅ ref 추가
+                  coordinate={userLocation}
+                  title="내 위치"
+                  pinColor="blue"
                 />
-              ))}
-            </MapView>
+                {nearestStores.map((store, idx) => (
+                  <Marker
+                    key={idx}
+                    ref={ref => (markerRefs.current[idx] = ref)} // ✅ ref 저장
+                    coordinate={{
+                      latitude: store.latitude,
+                      longitude: store.longitude,
+                    }}
+                    title={store.location} // ✅ 위치 (말풍선 제목)
+                    description={store.businessName} // ✅ 브랜드명 (말풍선 설명)
+                  />
+                ))}
+              </MapView>
+            )}
 
+            {/*📍내 위치로 이동 버튼📍 */}
             <TouchableOpacity
               onPress={() => {
                 if (mapRef.current && userLocation) {
+                  // ✅ 현재 매장 인덱스 초기화
+                  setCurrentStoreIndex(0);
+
                   mapRef.current.animateToRegion(
                     {
                       latitude: userLocation.latitude,
@@ -290,6 +421,25 @@ const ProductDetailScreen = () => {
               }}>
               <Ionicons name="locate" size={36} color="#007aff" />
             </TouchableOpacity>
+
+            {/* 📍다음 매장으로 이동 버튼📍 */}
+            <TouchableOpacity
+              onPress={goToNextStore}
+              style={{
+                position: 'absolute',
+                bottom: 70,
+                right: 10,
+                backgroundColor: 'white',
+                borderRadius: 30,
+                padding: 8,
+                elevation: 5,
+              }}>
+              <Ionicons
+                name="chevron-forward-circle"
+                size={36}
+                color="#28a745"
+              />
+            </TouchableOpacity>
           </View>
         ) : (
           <Text style={{color: '#999'}}>
@@ -300,193 +450,5 @@ const ProductDetailScreen = () => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  wrapper: {flex: 1, backgroundColor: '#fff'},
-  loading: {
-    marginTop: 100,
-    textAlign: 'center',
-    fontSize: 16,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 12,
-  },
-  container: {
-    paddingHorizontal: 20,
-    paddingBottom: 40,
-  },
-  imageWrapper: {
-    position: 'relative',
-    marginBottom: 12,
-  },
-  mainImage: {
-    width: '100%',
-    height: 300,
-    borderRadius: 10,
-    backgroundColor: '#eee',
-  },
-  heartButton: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
-    padding: 6,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    elevation: 3,
-  },
-  brandText: {
-    color: '#777',
-    marginBottom: 6,
-  },
-  nameAndStar: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 4,
-  },
-  menuName: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    flex: 1,
-    marginRight: 10,
-  },
-  stars: {
-    fontSize: 16,
-    color: '#f1c40f',
-  },
-  description: {
-    fontSize: 14,
-    color: '#444',
-    marginBottom: 4,
-  },
-  summaryTable: {
-    marginVertical: 12,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 6,
-    padding: 10,
-  },
-  tableRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  tableHeader: {
-    fontWeight: 'bold',
-    fontSize: 14,
-    flex: 1,
-    textAlign: 'center',
-  },
-  tableCell: {
-    fontSize: 14,
-    flex: 1,
-    textAlign: 'center',
-    paddingVertical: 4,
-  },
-  reviewBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 16,
-    gap: 10,
-  },
-  avatar: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: '#ccc',
-  },
-  reviewText: {
-    fontSize: 14,
-  },
-  reviewDate: {
-    fontSize: 12,
-    color: '#aaa',
-  },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginTop: 24,
-    marginBottom: 8,
-  },
-  rowCards: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  card: {
-    width: 90,
-    height: 90,
-    backgroundColor: '#ddd',
-    borderRadius: 8,
-  },
-  horizontalCards: {
-    flexDirection: 'row',
-    gap: 10,
-    paddingVertical: 4,
-    paddingRight: 10,
-    // 가로 스크롤 위해 추가로 넣어준 코드
-    flexWrap: 'nowrap',
-    alignItems: 'flex-start',
-  },
-  blogTitle: {
-    fontSize: 16, // 제목 크기 (조정 가능)
-    fontWeight: 'bold',
-    color: '#333',
-  },
-
-  blogDesc: {
-    fontSize: 14, // 설명 크기 (조정 가능)
-    color: '#666',
-    lineHeight: 20, // 줄 간격 (옵션)
-  },
-
-  blogImage: {
-    width: 64, // 이미지 크기 설정
-    height: 64, // 이미지 크기 설정
-    borderRadius: 8, // 이미지 모서리 둥글게
-    backgroundColor: '#ccc', // 이미지 배경색
-  },
-  blogCard: {
-    width: width * 0.4,
-    backgroundColor: '#F5EBFF',
-    borderRadius: 10,
-    padding: 12,
-    marginRight: 12,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  blogDate: {
-    fontSize: 12,
-    color: '#aaa',
-    marginTop: 4,
-  },
-  youtubeCard: {
-    width: width * 0.6,
-    marginRight: 12,
-    backgroundColor: '#FFFCF3',
-    borderRadius: 10,
-    padding: 10,
-    elevation: 2,
-  },
-  youtubeThumbnail: {
-    width: '100%',
-    height: 120,
-    borderRadius: 8,
-    marginBottom: 6,
-  },
-  youtubeTitle: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    marginBottom: 4,
-    color: '#333',
-  },
-  youtubeLink: {
-    fontSize: 12,
-    color: '#007aff',
-    textAlign: 'right',
-  },
-});
 
 export default ProductDetailScreen;

@@ -16,6 +16,10 @@ const GlobalStyles = StyleSheet.create({
     fontSize: 16,
     color: '#888',
   },
+  highlightedMenuName: {
+    fontWeight: 'bold', // 굵게
+    color: '#b861ff', // 오렌지 색상 (원하면 바꿔도 됨)
+  },
   text: {
     fontSize: 14,
     color: '#333',
@@ -45,6 +49,11 @@ const GlobalStyles = StyleSheet.create({
     width: '100%',
     height: '100%',
     borderRadius: width * 0.02,
+  },
+  bannerImage: {
+    height: '100%', // 배너 높이에 맞추기
+    width: height * 0.17, // 비율에 맞춰 폭 설정
+    resizeMode: 'contain',
   },
   infoContainer: {
     alignItems: 'center',
@@ -223,12 +232,6 @@ const GlobalStyles = StyleSheet.create({
     fontSize: 12,
     marginTop: 4,
   },
-  bannerImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#87c9ff',
-  },
   modalBox: {
     width: width * 0.8,
     borderRadius: 12,
@@ -304,6 +307,7 @@ const GlobalStyles = StyleSheet.create({
     justifyContent: 'center',
   },
   textBox: {
+    flex: 1,
     maxWidth: '60%',
     marginTop: height * 0.08,
   },
