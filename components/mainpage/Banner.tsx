@@ -57,14 +57,14 @@ const Banner = () => {
     <View style={GlobalStyles.wrapper}>
       <Carousel
         width={width}
-        height={height * 0.17}
+        height={height * 0.18}
         autoPlay
         autoPlayInterval={3000}
         data={menus}
         scrollAnimationDuration={800}
         onSnapToItem={setCurrentIndex}
         renderItem={({item}) => {
-          const bgColor = bgColors[item.menuId] ?? '#f5f5f5';
+          const bgColor = bgColors[item.menuId] ?? '#ffffff';
           return (
             <View style={[GlobalStyles.banner, {backgroundColor: bgColor}]}>
               <View style={GlobalStyles.textBox}>

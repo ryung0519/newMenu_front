@@ -301,15 +301,15 @@ const GlobalStyles = StyleSheet.create({
   },
   banner: {
     flex: 1,
-    borderRadius: 20,
     overflow: 'hidden',
     padding: 20,
-    justifyContent: 'center',
+    flexDirection: 'row', // ⭐⭐ 추가: 텍스트 + 이미지 옆으로
+    alignItems: 'center', // 세로 가운데 정렬
+    justifyContent: 'space-between', // 텍스트-이미지 양쪽 정렬
   },
   textBox: {
     flex: 1,
     maxWidth: '60%',
-    marginTop: height * 0.08,
   },
   brand: {
     fontSize: 14,
