@@ -29,8 +29,8 @@ const Banner = () => {
             city,
           )}`,
         );
-        const data = await res.json();
-        setMenus(data);
+        const rawData = await res.json(); // 이름을 rawData로 바꿈
+        const data = Array.isArray(rawData) ? rawData : []; // ✅ 배열 아니면 빈 배열로!
 
         // city를 주입해서 저장
         const enrichedData = data.map(menu => ({
