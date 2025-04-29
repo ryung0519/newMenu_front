@@ -74,9 +74,9 @@ const Banner = () => {
                 <Text style={GlobalStyles.subtitle}>
                   '{item.brand}'에서 파는{' '}
                   <Text style={GlobalStyles.highlightedMenuName}>
-                    '{item.menuName}'
+                    '{item.menuName}'{' '}
                   </Text>
-                  는 어떠신가요?
+                  어떠신가요?
                 </Text>
               </View>
               <Image
