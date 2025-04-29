@@ -12,7 +12,9 @@ export const AuthProvider = ({children}) => {
   useEffect(() => {
     const loadUser = async () => {
       try {
-        const storedUser = await AsyncStorage.getItem('user');
+        const storedUser = await AsyncStorage.getItem('userData');
+        console.log('✅ 저장된 유저 데이터:', storedUser); // 🔥 여기!
+
         if (storedUser) setUser(JSON.parse(storedUser));
       } catch (e) {
         console.error('유저 로딩 오류:', e);
