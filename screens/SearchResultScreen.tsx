@@ -26,7 +26,6 @@ const SearchResultScreen = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const initialResults = route.params.results; //🔹이전 화면(HomeScreen)에서 받은 검색 결과
-  const [originResults, setOriginResults] = useState(initialResults); //초기 데이터값 저장
   const [results, setResults] = useState(initialResults);
   const [modalVisible, setModalVisible] = useState(false); //🔹필터 모달 창 여닫기
   const [brandModalVisible, setBrandModalVisible] = useState(false); //🔹브랜드 모달 상태 추가
@@ -46,9 +45,8 @@ const SearchResultScreen = () => {
         `${API_URL}/menu/search?keyword=${encodeURIComponent(keyword)}`,
       );
       let data = await response.json();
-      setOriginResults(data); // 🔥 초기 전체 결과도 갱신
-      setAllSearchResults(data); // 검색어 전체 저장
-      setResults(data); // 검색 시 기존 필터 적용 없이 리셋
+      setAllSearchResults(data); // 🔹 전체 검색 결과 저장
+      setResults(data); // 🔹 검색 결과 반영
     } catch (error) {
       console.error('검색 중 오류:', error);
     }
@@ -56,7 +54,7 @@ const SearchResultScreen = () => {
 
   // ✅ 필터 조건에 따라 결과 목록 정렬하는 함수
   const handleApplyFilter = async (filters: any) => {
-    let filtered = [...originResults]; //originResults(초기 검색 결과)  기준으로 필터링 시작
+    let filtered = [...allSearchResults]; // 🔥 항상 최신 전체 결과 기준으로 필터링
 
     // ✅ 1. 재료 키워드 필터링 (ex: '우유' 포함된 메뉴만 보기)
     if (filters.ingredientKeyword) {
@@ -108,38 +106,12 @@ const SearchResultScreen = () => {
   };
 
   // ✅ 4. 브랜드 선택 시 메뉴 필터링 ( ex: 메가커피, 빽다방, CU)
-  const handleBrandSelect = async (brandName: string) => {
-    try {
-      setSelectedBrand(brandName); // 🔹 선택한 브랜드 저장
-      setBrandModalVisible(false); // 🔹 모달 닫기
+  const handleBrandSelect = (brandName: string) => {
+    setSelectedBrand(brandName); // 🔹 선택한 브랜드 저장
+    setBrandModalVisible(false); // 🔹 모달 닫기
 
-      // ✅ 브랜드 이름으로 백엔드에 요청 보내기
-      const response = await fetch(
-        `${API_URL}/menu/brand?brandName=${encodeURIComponent(brandName)}`,
-      );
-      let data = await response.json();
-
-      // 🔥 [1] 브랜드 메뉴 받아온 다음
-      // 🔥 [2] 현재 검색어(searchKeyword)가 존재하면 그걸로 추가 필터링
-      if (searchKeyword.trim() !== '') {
-        data = data.filter(item => {
-          const keyword = searchKeyword.toLowerCase();
-          const menuNameMatch = item.menuName?.toLowerCase().includes(keyword);
-          const ingredientMatch = item.ingredients
-            ?.toLowerCase()
-            .includes(keyword);
-          const descriptionMatch = item.description
-            ?.toLowerCase()
-            .includes(keyword);
-
-          return menuNameMatch || ingredientMatch || descriptionMatch; // ✅ 하나라도 맞으면 통과
-        });
-      }
-      setAllSearchResults(data); // 🔹 받아온 결과를 전체 검색 결과로 저장
-      setResults(data); // 🔹 현재 검색 결과에도 반영
-    } catch (error) {
-      console.error('브랜드별 메뉴 가져오기 실패:', error);
-    }
+    const filtered = allSearchResults.filter(item => item.brand === brandName);
+    setResults(filtered);
   };
 
   return (
@@ -178,7 +150,7 @@ const SearchResultScreen = () => {
         </View>
       </View>
 
-      {/*✅ 상세페이지 이동 추가 */}
+      {/*✅ 상세페이지 이동 추가*/}
       <View style={{padding: 16}}>
         {Array.isArray(results) && results.length > 0 ? (
           results.map((menu, idx) => (
