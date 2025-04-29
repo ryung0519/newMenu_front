@@ -181,9 +181,9 @@ const SearchResultScreen = () => {
                 shadowOffset: {width: 0, height: 1},
               }}>
               {/* ✅ 이미지 보여주기 */}
-              {menu.image ? (
+              {menu.imageUrl ? (
                 <Image
-                  source={{uri: menu.image}}
+                  source={{uri: menu.imageUrl}}
                   style={{width: 70, height: 70, borderRadius: 6}}
                   resizeMode="cover"
                 />
