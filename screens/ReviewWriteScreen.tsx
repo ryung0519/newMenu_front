@@ -33,13 +33,14 @@ const ReviewWriteScreen = () => {
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [verified, setVerified] = useState(false);
+  const [receiptVerified, setReceiptVerified] = useState(0);
 
   const {pickImage} = useImagePicker(
     brandName,
     menuName,
     setLoading,
     setImageUrls,
-    setVerified,
+    () => setReceiptVerified(1),
   );
 
   const handleSubmit = async () => {
@@ -59,6 +60,7 @@ const ReviewWriteScreen = () => {
         amount,
         wouldVisitAgain,
         imageUrls,
+        receiptVerified: receiptVerified,
       });
 
       Alert.alert('리뷰가 등록되었습니다!');
@@ -98,7 +100,7 @@ const ReviewWriteScreen = () => {
             setImageUrls={setImageUrls}
             onSubmit={handleSubmit}
             onPickImage={pickImage}
-            verified={verified}
+            verified={receiptVerified === 1}
           />
         </ScrollView>
 
