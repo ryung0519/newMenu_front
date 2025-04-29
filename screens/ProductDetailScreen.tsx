@@ -196,6 +196,7 @@ const ProductDetailScreen = () => {
           onPress={() =>
             navigation.navigate('BrandMenuList', {
               brandName: menuDetail.businessName,
+              businessId: menuDetail.businessId, // ← 이게 꼭 필요해
             })
           }>
           <Text style={styles.brandText}>
