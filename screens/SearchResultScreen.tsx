@@ -77,9 +77,7 @@ const SearchResultScreen = () => {
 
     // 브랜드 필터링도 함께 적용 (브랜드 선택된 경우)
     if (selectedBrand) {
-      filtered = filtered.filter(
-        item => item.businessUser?.businessName === selectedBrand,
-      );
+      filtered = filtered.filter(item => item.brand === selectedBrand);
     }
 
     // ✅ 3. 정렬 필터링 ( ex: 인기순, 신상순, 다이어트 순)
