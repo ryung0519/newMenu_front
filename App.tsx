@@ -10,7 +10,6 @@ import {RootSiblingParent} from 'react-native-root-siblings'; // ✅ 추가!
 const App = () => {
   return (
     <RootSiblingParent>
-      {' '}
       <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
         <GestureHandlerRootView style={{flex: 1}}>
           <AuthProvider>

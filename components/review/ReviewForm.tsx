@@ -27,6 +27,7 @@ interface Props {
   setImageUrls: (urls: string[]) => void;
   onSubmit: () => void;
   onPickImage: () => void;
+  verified: boolean;
 }
 
 const ReviewForm = ({
@@ -46,6 +47,7 @@ const ReviewForm = ({
   setImageUrls,
   onSubmit,
   onPickImage,
+  verified,
 }: Props) => {
   const renderChoiceGroup = (
     label: string,
@@ -99,7 +101,10 @@ const ReviewForm = ({
 
       <Text style={styles.label}>포토</Text>
       <ReviewImageUploader imageUrls={imageUrls} setImageUrls={setImageUrls} />
-      <TouchableOpacity style={styles.secondaryButton} onPress={onPickImage}>
+      <TouchableOpacity
+        style={styles.secondaryButton}
+        disabled={verified}
+        onPress={onPickImage}>
         <Text style={styles.buttonText}>영수증 인증</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={onSubmit}>

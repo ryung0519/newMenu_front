@@ -15,10 +15,7 @@ import {getStoredUserData} from '../services/auth';
 import {submitReview} from '../services/review';
 import ReviewForm from '../components/review/ReviewForm';
 import {RootStackParamList} from '../navigation/MainStack';
-import * as ImagePicker from 'expo-image-picker';
-import {analyzeReceiptOCR, extractReceiptInfo} from '../utils/ocr';
 import {Ionicons} from '@expo/vector-icons';
-import {uploadToCloudinary} from '../utils/cloudinary';
 import {useImagePicker} from '../hooks/useImagePicker';
 
 type ReviewWriteRouteProp = RouteProp<RootStackParamList, 'ReviewWrite'>;
@@ -35,8 +32,16 @@ const ReviewWriteScreen = () => {
   const [wouldVisitAgain, setWouldVisitAgain] = useState('');
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const [verified, setVerified] = useState(false);
+  const [receiptVerified, setReceiptVerified] = useState(0);
 
-  const {pickImage} = useImagePicker();
+  const {pickImage} = useImagePicker(
+    brandName,
+    menuName,
+    setLoading,
+    setImageUrls,
+    () => setReceiptVerified(1),
+  );
 
   const handleSubmit = async () => {
     const userData = await getStoredUserData();
@@ -55,6 +60,7 @@ const ReviewWriteScreen = () => {
         amount,
         wouldVisitAgain,
         imageUrls,
+        receiptVerified: receiptVerified,
       });
 
       Alert.alert('리뷰가 등록되었습니다!');
@@ -94,6 +100,7 @@ const ReviewWriteScreen = () => {
             setImageUrls={setImageUrls}
             onSubmit={handleSubmit}
             onPickImage={pickImage}
+            verified={receiptVerified === 1}
           />
         </ScrollView>
 
