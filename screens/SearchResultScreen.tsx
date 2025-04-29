@@ -77,9 +77,7 @@ const SearchResultScreen = () => {
 
     // 브랜드 필터링도 함께 적용 (브랜드 선택된 경우)
     if (selectedBrand) {
-      filtered = filtered.filter(
-        item => item.businessUser?.businessName === selectedBrand,
-      );
+      filtered = filtered.filter(item => item.brand === selectedBrand);
     }
 
     // ✅ 3. 정렬 필터링 ( ex: 인기순, 신상순, 다이어트 순)
@@ -108,17 +106,22 @@ const SearchResultScreen = () => {
   };
 
   // ✅ 4. 브랜드 선택 시 메뉴 필터링 ( ex: 메가커피, 빽다방, CU)
-  const handleBrandSelect = (brandName: string) => {
-    setSelectedBrand(brandName); // 🔹 선택한 브랜드 저장
+  const handleBrandSelect = async (brandName: string) => {
+    try {
+      setSelectedBrand(brandName); // 🔹 선택한 브랜드 저장
+      setBrandModalVisible(false); // 🔹 모달 닫기
 
-    const filtered = allSearchResults.filter(
-      item =>
-        item.businessUser?.businessName === brandName &&
-        item.businessUser?.businessType === '본점',
-    );
+      // ✅ 브랜드 이름으로 백엔드에 요청 보내기
+      const response = await fetch(
+        `${API_URL}/menu/brand?brandName=${encodeURIComponent(brandName)}`,
+      );
+      const data = await response.json();
 
-    setResults(filtered);
-    setBrandModalVisible(false);
+      setAllSearchResults(data); // 🔹 받아온 결과를 전체 검색 결과로 저장
+      setResults(data); // 🔹 현재 검색 결과에도 반영
+    } catch (error) {
+      console.error('브랜드별 메뉴 가져오기 실패:', error);
+    }
   };
 
   return (
@@ -181,9 +184,9 @@ const SearchResultScreen = () => {
                 shadowOffset: {width: 0, height: 1},
               }}>
               {/* ✅ 이미지 보여주기 */}
-              {menu.image ? (
+              {menu.imageUrl ? (
                 <Image
-                  source={{uri: menu.image}}
+                  source={{uri: menu.imageUrl}}
                   style={{width: 70, height: 70, borderRadius: 6}}
                   resizeMode="cover"
                 />
