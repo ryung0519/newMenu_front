@@ -15,6 +15,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {AuthContext} from '../contexts/AuthContext';
 import {useContext} from 'react';
+import Toast from 'react-native-root-toast';
 
 // ✅ 전달된 값들에 접근하기 위한 타입 정의
 type BrandRouteProp = RouteProp<RootStackParamList, 'BrandMenuList'>;
@@ -36,7 +37,11 @@ const BrandMenuListScreen = () => {
   const handleSubscribe = async () => {
     console.log('✅ 하트 눌림');
 
-    if (!user) return;
+    if (!user) {
+      console.log('❗ 로그인 필요');
+      navigation.navigate('Login'); // ✅ 로그인 화면으로 이동
+      return;
+    }
 
     try {
       const response = await fetch(`${API_URL}/api/subscribe`, {
@@ -55,6 +60,29 @@ const BrandMenuListScreen = () => {
       if (response.ok) {
         const result = await response.json(); //백엔드에서 받은 boolean(true or false)
         setIsSubscribed(result); // true면 구독 상태, false면 구독 취소 상태
+
+        // ✅ 구독 알림창 띄우기
+        Toast.show(
+          result ? '즐겨찾기에 추가했어요' : '즐겨찾기에서 제거했어요',
+          {
+            duration: Toast.durations.SHORT,
+            position: Toast.positions.BOTTOM,
+            shadow: true,
+            animation: true,
+            hideOnPress: true,
+            backgroundColor: '#222', //
+            textColor: '#fff',
+            containerStyle: {
+              marginBottom: 20,
+              width: '90%', // 또는 고정값: width: 320
+              paddingVertical: 12,
+              paddingHorizontal: 20,
+              alignSelf: 'center', // ⭐ 가운데 정렬
+              minWidth: 350,
+            },
+          },
+        );
+
         console.log(result ? '구독 등록 성공!' : '구독 취소 성공!');
       } else {
         console.log('구독 실패!');
@@ -63,6 +91,25 @@ const BrandMenuListScreen = () => {
       console.error('구독 에러:', error);
     }
   };
+
+  // ✅ 브랜드 진입시 유저 구독상태 확인하는 함수
+  useEffect(() => {
+    const checkSubscribe = async () => {
+      if (!user) return;
+
+      try {
+        const res = await fetch(
+          `${API_URL}/api/subscribe/check?userId=${user.userId}&businessId=${businessId}`,
+        );
+        const result = await res.json();
+        setIsSubscribed(result); // true면 핑크 하트, false면 회색 하트
+      } catch (error) {
+        console.error('구독 상태 확인 실패:', error);
+      }
+    };
+
+    checkSubscribe();
+  }, [user, businessId]);
 
   // ✅ 컴포넌트 처음 실행시 브랜드 메뉴 받아오기
   useEffect(() => {
