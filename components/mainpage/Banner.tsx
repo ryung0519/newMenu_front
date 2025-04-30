@@ -44,7 +44,19 @@ const Banner = () => {
     fetchBannerMenu();
   }, []);
   if (menus.length === 0) {
-    return <ActivityIndicator size="large" color="#666" />;
+    // return <ActivityIndicator size="large" color="#666" />;
+    return (
+      <View
+        style={[
+          GlobalStyles.banner,
+          {justifyContent: 'center', backgroundColor: '#fff8de'},
+        ]}>
+        <Image
+          style={GlobalStyles.bannerImage}
+          source={require('../../asserts/images/logo.png')}
+        />
+      </View>
+    );
   }
 
   // useEffect(() => {
