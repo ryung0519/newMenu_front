@@ -25,7 +25,7 @@ const Banner = () => {
       // 현재 위치 기반 메뉴 목록 menu배열 안에 저장
       if (city) {
         const res = await fetch(
-          `${API_URL}/api/menus/by-location?keyword=${encodeURIComponent(
+          `${API_URL}/api/menus/only-location?keyword=${encodeURIComponent(
             city,
           )}`,
         );
