@@ -69,10 +69,10 @@ const LocalMenuAlert = ({visible, setVisible, onHideToday, onNeverShow}) => {
           <TouchableOpacity
             style={GlobalStyles.alertCloseButton}
             onPress={() => setVisible(false)}>
-            <Image
-              source={require('../assets/close-x.png')}
+            {/* <Image
+              source={require('')}
               style={GlobalStyles.closeIcon}
-            />
+            /> */}
           </TouchableOpacity>
 
           {/* ✅ 지역 기반 신상 메뉴 알림 텍스트 */}
