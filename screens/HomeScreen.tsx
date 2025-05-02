@@ -1,5 +1,11 @@
 import React, {useState, useContext} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Dimensions,
+} from 'react-native';
 import {Alert} from 'react-native';
 import SearchBar from '../components/mainpage/SearchBar';
 import Banner from '../components/mainpage/Banner';
@@ -12,6 +18,8 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {AuthContext} from '../contexts/AuthContext';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
+
+const {height} = Dimensions.get('window');
 
 const HomeScreen = () => {
   const [selectedCategory, setSelectedCategory] =
@@ -98,7 +106,7 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   loginButton: {
     backgroundColor: '#8000FF',
-    paddingVertical: 8,
+    paddingVertical: 8, //height * 0.01
     paddingHorizontal: 16,
     borderRadius: 20,
   },
