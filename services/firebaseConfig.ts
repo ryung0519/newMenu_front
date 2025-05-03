@@ -1,4 +1,3 @@
-// services/firebaseConfig.ts
 import {initializeApp} from 'firebase/app';
 import {getAuth} from 'firebase/auth';
 
@@ -12,5 +11,8 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-export const getFirebaseAuth = () => getAuth(app);
-export {app};
+const auth = getAuth(app);
+
+
+
+export {app, auth};

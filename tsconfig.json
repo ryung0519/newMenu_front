@@ -7,6 +7,6 @@
     "moduleResolution": "bundler", // ✅ 핵심: 이걸로 바꿔야 customConditions 에러 사라짐
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
   }
 }

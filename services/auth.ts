@@ -1,12 +1,16 @@
+// auth.ts
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from 'firebase/auth';
-import {getFirebaseAuth} from '../services/firebaseConfig';
+import {auth} from '../services/firebaseConfig';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import {API_URL} from '@env';
 
+// 인증 관련 함수들만 모아둔 곳, 전부 Firebase 인증 + 서버 연동 관련기능
+
+// 🔹 회원가입 (Firebase 계정 생성 + 추가정보 서버 전송)
 export const signUpWithEmail = async (
   name: string,
   email: string,
@@ -14,8 +18,6 @@ export const signUpWithEmail = async (
   preferredFood: string,
   allergicFood: string,
 ) => {
-  const auth = getFirebaseAuth(); // ✅ 지연 호출
-
   try {
     const {user} = await createUserWithEmailAndPassword(auth, email, password);
     const token = await user.getIdToken();
@@ -28,8 +30,13 @@ export const signUpWithEmail = async (
       allergicFood,
     });
 
+    // 회원가입 후 자동 로그인 처리 (토큰 저장)
     await AsyncStorage.setItem('userToken', token);
+    console.log('✅ 토큰 저장 완료:', token);
+
     await AsyncStorage.setItem('userData', JSON.stringify(data));
+    console.log('✅ 유저 정보 저장 완료:', data);
+
     return {success: true, user: data};
   } catch (error: any) {
     console.error('회원가입 실패:', error);
@@ -40,9 +47,8 @@ export const signUpWithEmail = async (
   }
 };
 
+// 🔹 로그인 (Firebase 인증, 서버에 토큰 전달, 사용자 정보 조회)
 export const signInWithEmail = async (email: string, password: string) => {
-  const auth = getFirebaseAuth(); // ✅ 지연 호출
-
   try {
     const {user} = await signInWithEmailAndPassword(auth, email, password);
     const token = await user.getIdToken();
@@ -50,7 +56,9 @@ export const signInWithEmail = async (email: string, password: string) => {
     const {data} = await axios.post(`${API_URL}/api/auth/login`, {token});
 
     await AsyncStorage.setItem('userToken', token);
+    console.log('✅ 토큰 저장 완료:', token);
     await AsyncStorage.setItem('userData', JSON.stringify(data));
+    console.log('✅ 유저 정보 저장 완료:', data);
     return {success: true, user: data};
   } catch (error: any) {
     console.error('로그인 실패:', error);
@@ -61,6 +69,7 @@ export const signInWithEmail = async (email: string, password: string) => {
   }
 };
 
+// 🔹 로그아웃 (저장된 데이터 제거)
 export const signOut = async () => {
   try {
     await AsyncStorage.clear();
@@ -71,6 +80,7 @@ export const signOut = async () => {
   }
 };
 
+// 🔹 저장된 사용자 데이터 불러오기
 export const getStoredUserData = async () => {
   const data = await AsyncStorage.getItem('userData');
   return data ? JSON.parse(data) : null;
