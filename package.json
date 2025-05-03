@@ -29,16 +29,13 @@
     "expo-image-picker": "~16.1.4",
     "expo-location": "~18.1.4",
     "firebase": "^11.0.0",
-    "metro": "^0.82.0",
-    "metro-config": "^0.82.2",
-    "metro-resolver": "^0.82.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-native": "0.79.2",
     "react-native-big-calendar": "4.1.0",
     "react-native-calendars": "^1.1310.0",
     "react-native-dotenv": "^3.4.11",
-    "react-native-gesture-handler": "~2.25.0",
+    "react-native-gesture-handler": "~2.24.0",
     "react-native-image-colors": "^2.4.0",
     "react-native-maps": "1.20.1",
     "react-native-paper": "^5.13.1",
@@ -77,5 +74,10 @@
   },
   "engines": {
     "node": ">=18"
+  },
+  "overrides": {
+    "metro": "0.82.2",
+    "metro-config": "0.82.2",
+    "metro-resolver": "0.82.2"
   }
 }
