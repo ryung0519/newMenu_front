@@ -7,7 +7,8 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import {useRoute, RouteProp, useNavigation} from '@react-navigation/native';
+import {RouteProp} from '@react-navigation/native';
+import {useRoute, useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from '../navigation/MainStack';
 import {API_URL} from '@env';
 import {Ionicons} from '@expo/vector-icons';

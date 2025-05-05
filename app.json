@@ -1,11 +1,12 @@
 {
-  "name": "new_menu",
-  "displayName": "new_menu",
-  "android": {
-    "package": "com.anonymous.new_menu"
-  },
   "expo": {
-    "entryPoint": "./App.js",
+    "name": "new_menu",
+    "slug": "new_menu",
+    "version": "1.0.0",
+    "sdkVersion": "53.0.0",
+    "android": {
+      "package": "com.anonymous.new_menu"
+    },
     "web": {
       "config": {
         "redirectUri": "https://iot7-435d1.firebaseapp.com/__/auth/handler"

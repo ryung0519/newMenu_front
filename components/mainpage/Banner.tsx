@@ -51,10 +51,10 @@ const Banner = () => {
           GlobalStyles.banner,
           {justifyContent: 'center', backgroundColor: '#fff8de'},
         ]}>
-        <Image
+        {/* <Image
           style={GlobalStyles.bannerImage}
           source={require('../../asserts/images/logo.png')}
-        />
+        /> */}
       </View>
     );
   }
