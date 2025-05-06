@@ -9,7 +9,9 @@ interface ReviewPayload {
   amount: string;
   wouldVisitAgain: string;
   imageUrls: string[];
-  receiptVerified: number; // ✅ 추가
+  receiptVerified: number;
+  pairedMenuId?: number;
+  combinationContent?: string;
 }
 
 export const submitReview = async (payload: ReviewPayload) => {
