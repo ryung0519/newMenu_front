@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Alert,
   StyleSheet,
@@ -17,7 +17,7 @@ import ReviewForm from '../components/review/ReviewForm';
 import {RootStackParamList} from '../navigation/MainStack';
 import {Ionicons} from '@expo/vector-icons';
 import {useImagePicker} from '../hooks/useImagePicker';
-import {useEffect} from 'react';
+
 type ReviewWriteRouteProp = RouteProp<RootStackParamList, 'ReviewWrite'>;
 
 interface ReviewFormErrors {
@@ -55,22 +55,16 @@ const ReviewWriteScreen = () => {
     () => setReceiptVerified(1),
   );
 
-  const handleSubmit = async () => {
-    const newErrors: ReviewFormErrors = {
+  useEffect(() => {
+    setErrors({
       taste: !taste,
       amount: !amount,
       wouldVisitAgain: !wouldVisitAgain,
-    };
-    setErrors(newErrors);
+    });
+  }, [taste, amount, wouldVisitAgain]);
 
-    useEffect(() => {
-      setErrors({
-        taste: taste === '',
-        amount: amount === '',
-        wouldVisitAgain: wouldVisitAgain === '',
-      });
-    }, [taste, amount, wouldVisitAgain]);
-    const hasError = Object.values(newErrors).some(Boolean);
+  const handleSubmit = async () => {
+    const hasError = Object.values(errors).some(Boolean);
     if (hasError) return;
 
     const userData = await getStoredUserData();

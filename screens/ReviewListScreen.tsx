@@ -23,32 +23,52 @@ const ReviewListScreen = () => {
   const {menuId, menuName, imageUrl, brandName} = route.params;
 
   const [reviews, setReviews] = useState([]);
+  const [order, setOrder] = useState<'desc' | 'asc'>('desc'); // 최신순 기본
+
+  const fetchReviews = async () => {
+    try {
+      const res = await fetch(
+        `${API_URL}/api/reviews/menu/${menuId}?order=${order}`,
+      );
+      const data = await res.json();
+      setReviews(data);
+    } catch (error) {
+      console.error('리뷰 목록 불러오기 오류:', error);
+    }
+  };
 
   useEffect(() => {
-    const fetchReviews = async () => {
-      try {
-        const res = await fetch(`${API_URL}/api/reviews/menu/${menuId}`);
-        const data = await res.json();
-        setReviews(data);
-      } catch (error) {
-        console.error('리뷰 목록 불러오기 오류:', error);
-      }
-    };
-
     fetchReviews();
-  }, [menuId]);
+  }, [menuId, order]);
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* 상단 영역 */}
+      {/* 뒤로가기 */}
       <View style={styles.backHeader}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
       </View>
+
+      {/* 메뉴 정보 */}
       <View style={styles.header}>
         <Image source={{uri: imageUrl}} style={styles.image} />
         <Text style={styles.title}>{menuName}</Text>
+      </View>
+
+      {/* 정렬 탭 */}
+      <View style={styles.tabContainer}>
+        <TouchableOpacity onPress={() => setOrder('desc')}>
+          <Text style={[styles.tab, order === 'desc' && styles.tabSelected]}>
+            최신순
+          </Text>
+        </TouchableOpacity>
+        <Text style={styles.separator}>|</Text>
+        <TouchableOpacity onPress={() => setOrder('asc')}>
+          <Text style={[styles.tab, order === 'asc' && styles.tabSelected]}>
+            오래된순
+          </Text>
+        </TouchableOpacity>
       </View>
 
       {/* 리뷰 목록 */}
@@ -62,7 +82,7 @@ const ReviewListScreen = () => {
                 <Text style={styles.rating}>⭐ {item.reviewRating}</Text>
                 <Text style={styles.content}>{item.reviewContent}</Text>
               </View>
-              {item.imageUrls.length > 0 && (
+              {item.imageUrls?.length > 0 && (
                 <View style={styles.imageGroup}>
                   {item.imageUrls
                     .slice(0, 2)
@@ -110,19 +130,29 @@ const ReviewListScreen = () => {
 
 const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: '#fff'},
-  header: {
-    alignItems: 'center',
-    padding: 16,
-  },
-  image: {
-    width: 100,
-    height: 100,
-    borderRadius: 12,
+  backHeader: {paddingHorizontal: 16, paddingTop: 12},
+  header: {alignItems: 'center', padding: 16},
+  image: {width: 100, height: 100, borderRadius: 12, marginBottom: 8},
+  title: {fontSize: 20, fontWeight: 'bold'},
+  tabContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
     marginBottom: 8,
+    gap: 12,
   },
-  title: {
-    fontSize: 20,
+  tab: {
+    fontSize: 14,
+    color: '#666',
+  },
+  tabSelected: {
     fontWeight: 'bold',
+    color: '#000',
+    textDecorationLine: 'underline',
+  },
+  separator: {
+    color: '#ccc',
+    fontSize: 14,
+    marginHorizontal: 4,
   },
   reviewItem: {
     padding: 16,
@@ -158,27 +188,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  backHeader: {
-    paddingHorizontal: 16,
-    paddingTop: 12,
-  },
   imageGroup: {
     flexDirection: 'row',
     gap: 6,
   },
   reviewImage: {
-    width: 80, // 기존: 60
+    width: 80,
     height: 80,
     borderRadius: 8,
-    marginLeft: 8, // 더 여유 있게
+    marginLeft: 8,
     backgroundColor: '#eee',
   },
   topRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center', // 기존: flex-start
+    alignItems: 'center',
   },
-
   ratingAndContent: {
     flex: 1,
     paddingRight: 8,
