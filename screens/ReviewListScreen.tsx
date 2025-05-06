@@ -136,9 +136,10 @@ const styles = StyleSheet.create({
   title: {fontSize: 20, fontWeight: 'bold'},
   tabContainer: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'flex-start', // ✅ 오른쪽 정렬
     marginBottom: 8,
-    gap: 12,
+    gap: 1,
+    paddingHorizontal: 16, // 선택 (오른쪽 여백 추가)
   },
   tab: {
     fontSize: 14,
