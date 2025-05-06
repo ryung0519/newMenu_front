@@ -1,4 +1,3 @@
-// screens/ReviewListScreen.tsx
 import React, {useEffect, useState} from 'react';
 import {
   View,
@@ -17,6 +16,7 @@ import {Ionicons} from '@expo/vector-icons';
 
 type ReviewListRouteProp = RouteProp<RootStackParamList, 'ReviewList'>;
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
+
 const ReviewListScreen = () => {
   const navigation = useNavigation<NavigationProp>();
   const route = useRoute<ReviewListRouteProp>();
@@ -57,19 +57,38 @@ const ReviewListScreen = () => {
         keyExtractor={(item, index) => index.toString()}
         renderItem={({item}) => (
           <View style={styles.reviewItem}>
-            <Text style={styles.rating}>⭐ {item.reviewRating}</Text>
-            <Text style={styles.content}>{item.reviewContent}</Text>
+            <View style={styles.topRow}>
+              <View style={styles.ratingAndContent}>
+                <Text style={styles.rating}>⭐ {item.reviewRating}</Text>
+                <Text style={styles.content}>{item.reviewContent}</Text>
+              </View>
+              {item.imageUrls.length > 0 && (
+                <View style={styles.imageGroup}>
+                  {item.imageUrls
+                    .slice(0, 2)
+                    .map((url: string, idx: number) => (
+                      <Image
+                        key={idx}
+                        source={{uri: url}}
+                        style={styles.reviewImage}
+                        resizeMode="cover"
+                      />
+                    ))}
+                </View>
+              )}
+            </View>
             <Text style={styles.sub}>
               맛: {item.taste} / 양: {item.amount} / 재방문:{' '}
               {item.wouldVisitAgain}
+              {item.pairedMenuName ? ` / 콤보: ${item.pairedMenuName}` : ''}
             </Text>
           </View>
         )}
         ListEmptyComponent={
           <Text style={styles.empty}>아직 리뷰가 없습니다.</Text>
         }
-        style={{flex: 1}} // ✅ FlatList가 스크롤 가능한 영역을 차지하게
-        contentContainerStyle={{paddingBottom: 80}} // ✅ 버튼과 겹치지 않게
+        style={{flex: 1}}
+        contentContainerStyle={{paddingBottom: 80}}
       />
 
       {/* 리뷰 작성 버튼 */}
@@ -142,6 +161,27 @@ const styles = StyleSheet.create({
   backHeader: {
     paddingHorizontal: 16,
     paddingTop: 12,
+  },
+  imageGroup: {
+    flexDirection: 'row',
+    gap: 6,
+  },
+  reviewImage: {
+    width: 80, // 기존: 60
+    height: 80,
+    borderRadius: 8,
+    marginLeft: 8, // 더 여유 있게
+    backgroundColor: '#eee',
+  },
+  topRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center', // 기존: flex-start
+  },
+
+  ratingAndContent: {
+    flex: 1,
+    paddingRight: 8,
   },
 });
 

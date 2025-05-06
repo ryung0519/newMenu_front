@@ -17,8 +17,14 @@ import ReviewForm from '../components/review/ReviewForm';
 import {RootStackParamList} from '../navigation/MainStack';
 import {Ionicons} from '@expo/vector-icons';
 import {useImagePicker} from '../hooks/useImagePicker';
-
+import {useEffect} from 'react';
 type ReviewWriteRouteProp = RouteProp<RootStackParamList, 'ReviewWrite'>;
+
+interface ReviewFormErrors {
+  taste: boolean;
+  amount: boolean;
+  wouldVisitAgain: boolean;
+}
 
 const ReviewWriteScreen = () => {
   const navigation = useNavigation();
@@ -32,8 +38,14 @@ const ReviewWriteScreen = () => {
   const [wouldVisitAgain, setWouldVisitAgain] = useState('');
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
-  const [verified, setVerified] = useState(false);
   const [receiptVerified, setReceiptVerified] = useState(0);
+  const [pairedMenuId, setPairedMenuId] = useState<number | null>(null);
+  const [combinationContent, setCombinationContent] = useState('');
+  const [errors, setErrors] = useState<ReviewFormErrors>({
+    taste: false,
+    amount: false,
+    wouldVisitAgain: false,
+  });
 
   const {pickImage} = useImagePicker(
     brandName,
@@ -44,6 +56,23 @@ const ReviewWriteScreen = () => {
   );
 
   const handleSubmit = async () => {
+    const newErrors: ReviewFormErrors = {
+      taste: !taste,
+      amount: !amount,
+      wouldVisitAgain: !wouldVisitAgain,
+    };
+    setErrors(newErrors);
+
+    useEffect(() => {
+      setErrors({
+        taste: taste === '',
+        amount: amount === '',
+        wouldVisitAgain: wouldVisitAgain === '',
+      });
+    }, [taste, amount, wouldVisitAgain]);
+    const hasError = Object.values(newErrors).some(Boolean);
+    if (hasError) return;
+
     const userData = await getStoredUserData();
     if (!userData) {
       Alert.alert('로그인이 필요합니다.');
@@ -60,13 +89,15 @@ const ReviewWriteScreen = () => {
         amount,
         wouldVisitAgain,
         imageUrls,
-        receiptVerified: receiptVerified,
+        receiptVerified,
+        pairedMenuId: pairedMenuId ?? undefined,
+        combinationContent: combinationContent || undefined,
       });
 
       Alert.alert('리뷰가 등록되었습니다!');
       navigation.goBack();
     } catch (error) {
-      console.error('❌ 리뷰 등록 오류:', error);
+      console.error('\u274c 리뷰 등록 오류:', error);
       Alert.alert('리뷰 등록 중 오류 발생');
     }
   };
@@ -101,10 +132,14 @@ const ReviewWriteScreen = () => {
             onSubmit={handleSubmit}
             onPickImage={pickImage}
             verified={receiptVerified === 1}
+            pairedMenuId={pairedMenuId}
+            setPairedMenuId={setPairedMenuId}
+            combinationContent={combinationContent}
+            setCombinationContent={setCombinationContent}
+            errors={errors}
           />
         </ScrollView>
 
-        {/* 🔥 로딩 오버레이 */}
         {loading && (
           <View style={styles.loadingOverlay}>
             <ActivityIndicator size="large" color="#fff" />
