@@ -13,7 +13,11 @@ export const AuthProvider = ({children}) => {
     const loadUser = async () => {
       try {
         const storedUser = await AsyncStorage.getItem('userData');
-        console.log('✅ 저장된 유저 데이터:', storedUser); // 🔥 여기!
+        if (storedUser) {
+          const parsedUser = JSON.parse(storedUser);
+          console.log('👀 저장된 유저 ID:', parsedUser.userId); // 🔥 여기 추가
+          setUser(parsedUser);
+        }
 
         if (storedUser) setUser(JSON.parse(storedUser));
       } catch (e) {
