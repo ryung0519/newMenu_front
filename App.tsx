@@ -7,14 +7,15 @@ import {RootSiblingParent} from 'react-native-root-siblings';
 import PushTokenSender from './components/PushTokenSender';
 import * as Notifications from 'expo-notifications';
 
+// ✅ 푸시 알림 핸들러 설정 - 앱이 실행 중일 때 어떻게 알림을 표시할지 정의
+// ✅ 최근 SDK에서 구조가 바뀌면서, native notification 처리와 충돌이 날 수도 있음
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
-    shouldShowAlert: true, // 팝업 표시
-    shouldPlaySound: false, // 소리 없음
-    shouldSetBadge: false, // 아이콘 배지 없음
-    shouldShowBanner: false, // 상단 배너 표시
-    shouldShowList: false, // iOS 알림 센터 표시
-    shouldShowInForeground: true, // 앱 실행 중에도 표시
+    shouldShowBanner: true, // ✅ 배너만 표시
+    shouldShowList: false, // ❌ 알림 센터에 저장하지 않음
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+    shouldShowInForeground: true, // ✅ 앱 켜져 있어도 뜨게 함
   }),
 });
 

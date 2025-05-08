@@ -12,7 +12,7 @@
         "redirectUri": "https://iot7-435d1.firebaseapp.com/__/auth/handler"
       }
     },
-    "projectId": "iot7-newmenu",
+    "projectId": "c5da13a1-2edd-442d-8a64-f63cc8521182",
     "extra": {
       "apiKey": "AIzaSyCiorzdOWoeLPptWAV7xm56TmdN8lLqL4c",
       "authDomain": "iot7-435d1.firebaseapp.com",
