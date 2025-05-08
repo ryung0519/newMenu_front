@@ -62,7 +62,7 @@ const LocalMenuAlert = ({visible, setVisible, onHideToday, onNeverShow}) => {
           {/* ✅ 배경 이미지를 DB에서 받아온 이미지 주소로 표시 */}
           <Image
             source={{uri: menuInfo.imageUrl}}
-            style={GlobalStyles.modalBackgroundImage}
+            style={GlobalStyles.modalBannerImage}
           />
           {/* ✅ 닫기 버튼 */}
           <TouchableOpacity
@@ -70,7 +70,7 @@ const LocalMenuAlert = ({visible, setVisible, onHideToday, onNeverShow}) => {
             onPress={() => setVisible(false)}>
             <Ionicons name="close" size={24} color="black" />
           </TouchableOpacity>
-          {/* ✅ 지역 기반 신상 메뉴 알림 텍스트 */}
+          {/* ✅ 텍스트 */}
           <View style={GlobalStyles.modalTextContainer}>
             <Text style={GlobalStyles.alertModalTitle}>
               '{menuInfo.city}'에서만 먹을 수 있는 메뉴!
@@ -84,6 +84,11 @@ const LocalMenuAlert = ({visible, setVisible, onHideToday, onNeverShow}) => {
             </Text>
           </View>
 
+          <TouchableOpacity
+            style={GlobalStyles.primaryButton}
+            onPress={onHideToday}>
+            <Text style={GlobalStyles.primaryButtonText}>메뉴 보러 가기</Text>
+          </TouchableOpacity>
           {/* ✅ 사용자 선택 버튼 */}
           <View style={GlobalStyles.alertModalButtons}>
             <TouchableOpacity onPress={onHideToday}>
