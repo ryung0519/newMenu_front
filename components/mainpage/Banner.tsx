@@ -44,27 +44,20 @@ const Banner = () => {
     fetchBannerMenu();
   }, []);
   if (menus.length === 0) {
-    // return <ActivityIndicator size="large" color="#666" />;
     return (
       <View
         style={[
           GlobalStyles.banner,
           {justifyContent: 'center', backgroundColor: '#fff8de'},
         ]}>
-        {/* <Image
+        {/* 배너 기본 이미지 지정정 */}
+        <Image
           style={GlobalStyles.bannerImage}
-          source={require('../../asserts/images/logo.png')}
-        /> */}
+          source={require('../../asserts/images/logo_new.png')}
+        />
       </View>
     );
   }
-
-  // useEffect(() => {
-  //   fetch(`${API_URL}/banner`)
-  //     .then(res => res.json())
-  //     .then(data => setBannerItems(data))
-  //     .catch(err => console.error('베너 데이터 불러오기 실패:', err));
-  // }, []);
   return (
     <View style={GlobalStyles.wrapper}>
       <Carousel

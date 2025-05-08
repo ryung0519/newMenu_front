@@ -243,23 +243,39 @@ const GlobalStyles = StyleSheet.create({
     height: height * 0.5,
     resizeMode: 'cover',
   },
-  alertCloseButton: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
-  },
   closeIcon: {
-    width: 20,
-    height: 20,
+    position: 'absolute',
+    fontWeight: 'bold',
+    top: height * 0.02,
+    right: width * 0.04,
   },
   modalTextContainer: {
     position: 'absolute',
     bottom: 80,
     left: 16,
     right: 16,
+    backgroundColor: '#rgba(255, 255, 255, 0.85)',
+  },
+  alertModalOverlay: {
+    flex: 1,
+    justifyContent: 'center', // 세로 중앙
+    alignItems: 'center', // 가로 중앙
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // 어두운 배경 (선택)
+  },
+  alertModalBox: {
+    width: '80%', // 너비 조절
+    backgroundColor: 'white', // 기본 배경
+    borderRadius: 16,
+    padding: 20,
+    alignItems: 'center', // 내부 요소 가로 정렬
+    elevation: 10, // Android 그림자
+    shadowColor: '#000',
+    shadowOpacity: 0.2,
+    shadowOffset: {width: 0, height: 2},
+    shadowRadius: 10,
   },
   alertModalTitle: {
-    color: '#fff',
+    color: '#ffb24d',
     fontSize: 18,
     fontWeight: 'bold',
     textShadowColor: '#000',
@@ -277,13 +293,14 @@ const GlobalStyles = StyleSheet.create({
   alertModalButtons: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    paddingVertical: 16,
+    paddingVertical: height * 0.015,
     backgroundColor: '#fff',
   },
   alertModalButton: {
     color: '#333',
     fontSize: 14,
     fontWeight: 'bold',
+    marginHorizontal: width * 0.05,
   },
   slide: {
     flex: 1,
