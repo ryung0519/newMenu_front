@@ -11,6 +11,7 @@ import HomeScreen from '../screens/HomeScreen';
 import BrandMenuListScreen from '../screens/BrandMenuListScreen';
 import ReviewWriteScreen from '../screens/ReviewWriteScreen';
 import ReviewListScreen from '../screens/ReviewListScreen';
+import MyReviewListScreen from '../screens/MyReviewListScreen';
 /*이름(name)과 컴포넌트(component)를 연결해서 
 /*앱에서 화면 간 이동이 가능하게 만들어주는 파일 */
 /* Login = LoginSceen 이라 등록해놓으면 navigate할때 Login이라고만 명시해도됨! */
@@ -26,6 +27,8 @@ export type RootStackParamList = {
   Product: {menuId: number}; //Product page는 숫자를 받아야한다고 명시
   BrandMenuList: {brandName: string; businessId: number}; //brandmenuList page는 string받겠다 명시
   SearchResult: {results: any[]};
+  MyReviewList: undefined;
+  Home: undefined;
 
   //SearchResult: {results: any};
   ReviewWrite: {
@@ -68,6 +71,11 @@ const MainStack = () => {
         <Stack.Screen name="BrandMenuList" component={BrandMenuListScreen} />
         <Stack.Screen name="ReviewWrite" component={ReviewWriteScreen} />
         <Stack.Screen name="ReviewList" component={ReviewListScreen} />
+        <Stack.Screen
+          name="MyReviewList"
+          component={MyReviewListScreen}
+          options={{title: '내 리뷰'}}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   ) as any;
