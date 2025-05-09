@@ -48,7 +48,9 @@ const MyPage = () => {
 
         <View style={styles.separator} />
         <View style={styles.iconRow}>
-          <TouchableOpacity style={styles.iconButton}>
+          <TouchableOpacity
+            style={styles.iconButton}
+            onPress={() => navigation.navigate('SubscribedBrandList')}>
             <MaterialIcons name="subscriptions" size={30} color="#3366ff" />
             <Text style={styles.iconLabel}>브랜드 구독</Text>
           </TouchableOpacity>
