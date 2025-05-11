@@ -4,9 +4,7 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Image,
   ScrollView,
-  Dimensions,
 } from 'react-native';
 import {getStoredUserData} from '../services/auth';
 import {UserData} from '../types/UserData';
@@ -18,6 +16,7 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../navigation/MainStack';
+
 const MyPage = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -51,12 +50,8 @@ const MyPage = () => {
           <TouchableOpacity
             style={styles.iconButton}
             onPress={() => navigation.navigate('SubscribedBrandList')}>
-            <MaterialIcons name="subscriptions" size={30} color="#3366ff" />
-            <Text style={styles.iconLabel}>브랜드 구독</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.iconButton}>
-            <Ionicons name="heart" size={30} color="#3366ff" />
-            <Text style={styles.iconLabel}>찜 메뉴</Text>
+            <MaterialIcons name="favorite" size={30} color="#3366ff" />
+            <Text style={styles.iconLabel}>MY 찜</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.iconButton}
