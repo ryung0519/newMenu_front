@@ -1,5 +1,11 @@
 import React, {useState, useContext} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Dimensions,
+} from 'react-native';
 import {Alert} from 'react-native';
 import SearchBar from '../components/mainpage/SearchBar';
 import Banner from '../components/mainpage/Banner';
@@ -10,14 +16,18 @@ import {useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from '../types/navigation';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {AuthContext} from '../contexts/AuthContext';
+import LocalMenuAlert from '../components/local_menu/LocalMenuAlert';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
+
+const {height} = Dimensions.get('window');
 
 const HomeScreen = () => {
   const [selectedCategory, setSelectedCategory] =
     useState<string>('defaultCategory');
   const navigation = useNavigation(); // ✅ 페이지 이동용 navigation
   const {user, logout} = useContext(AuthContext); // ✅ 로그인 상태와 로그아웃 기능을 AuthContext에서 받아옴
+  const [alertModalVisible, setAlertModalVisible] = useState(true); //지역 메뉴 알림창 모델 관련 상태 변수
 
   // ✅ 로그아웃 버튼 눌렀을때 실행되는 함수
   const handleLogout = () => {
@@ -57,9 +67,15 @@ const HomeScreen = () => {
   };
 
   return (
-    // <ScrollView style={GlobalStyles.container}>
-
     <View style={GlobalStyles.container}>
+      {/* ✅ 지역 특별 메뉴 알림창 모델 */}
+      <LocalMenuAlert
+        visible={alertModalVisible}
+        setVisible={setAlertModalVisible}
+        onHideToday={() => setAlertModalVisible(false)}
+        onNeverShow={() => setAlertModalVisible(false)}
+      />
+
       {/* ✅ 로그인/로그아웃 버튼 - 검색창 위 오른쪽 정렬 */}
       <View
         style={{
@@ -98,7 +114,7 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   loginButton: {
     backgroundColor: '#8000FF',
-    paddingVertical: 8,
+    paddingVertical: 8, //height * 0.01
     paddingHorizontal: 16,
     borderRadius: 20,
   },

@@ -116,7 +116,7 @@ const CalendarScreen = () => {
         eventCellStyle={event => ({
           backgroundColor: event.color || '#9E9E9E',
           borderRadius: 6,
-          padding: 2,
+          padding: height * 0.0,
         })}
       />
 
