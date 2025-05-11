@@ -8,15 +8,21 @@ import {
   Dimensions,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {Ionicons} from '@expo/vector-icons';
 import {AuthContext} from '../contexts/AuthContext';
 import {API_URL} from '@env';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../navigation/MainStack';
 
 const {width} = Dimensions.get('window');
+type Navigation = NativeStackNavigationProp<RootStackParamList>;
 
 const MyFavoritesScreen = () => {
   const [activeTab, setActiveTab] = useState<'menu' | 'brand'>('menu');
   const [brands, setBrands] = useState<any[]>([]);
   const {user} = useContext(AuthContext);
+  const navigation = useNavigation<Navigation>();
 
   useEffect(() => {
     if (activeTab === 'brand') {
@@ -40,6 +46,11 @@ const MyFavoritesScreen = () => {
     <SafeAreaView style={styles.container}>
       {/* 헤더 */}
       <View style={styles.headerRow}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.backButton}>
+          <Ionicons name="arrow-back" size={24} color="black" />
+        </TouchableOpacity>
         <Text style={styles.headerTitle}>MY 찜</Text>
       </View>
 
@@ -90,8 +101,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   headerRow: {
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 8,
     paddingVertical: 16,
+    position: 'relative',
+  },
+  backButton: {
+    position: 'absolute',
+    left: 16,
+    padding: 4,
+    zIndex: 10,
   },
   headerTitle: {
     fontSize: 20,
