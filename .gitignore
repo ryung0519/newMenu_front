@@ -80,3 +80,5 @@ yarn-error.log
 
 dist/
  
+# dev client 자동 설치 방지
+expo-dev-client
