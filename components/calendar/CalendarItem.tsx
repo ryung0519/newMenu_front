@@ -44,9 +44,10 @@ const CalendarItem = ({item, menu, style, ...touchableOpacityProps}) => {
         {
           backgroundColor: menu.color,
           borderRadius: width * 0.017,
-          paddingVertical: height * 0.003,
+          paddingVertical: height * 0.004,
           paddingHorizontal: width * 0.007,
-          minHeight: height * 0.02,
+          // marginVertical: 0, // ✅ 간격 줄이기 (기존보다 더 작게)
+          minHeight: 0,
           justifyContent: 'center',
         },
         style,
@@ -55,7 +56,7 @@ const CalendarItem = ({item, menu, style, ...touchableOpacityProps}) => {
         numberOfLines={1}
         ellipsizeMode="clip"
         style={{
-          fontSize: 11,
+          fontSize: 11.5,
           fontWeight: '500',
           color: '#fff',
         }}>
