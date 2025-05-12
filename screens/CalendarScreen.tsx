@@ -83,6 +83,32 @@ const CalendarScreen = () => {
     ? events.filter(event => dayjs(event.start).isSame(selectedDate, 'day'))
     : [];
 
+  //////////////////////////////////////
+  const renderCustomEvent = (event: EventType) => {
+    return (
+      <View
+        style={{
+          backgroundColor: event.color,
+          borderRadius: 8,
+          paddingVertical: 6,
+          paddingHorizontal: 8,
+          minHeight: 28,
+          justifyContent: 'center',
+        }}>
+        <Text
+          numberOfLines={1}
+          style={{
+            fontSize: 13,
+            fontWeight: '600',
+            color: '#fff',
+          }}>
+          {event.title}
+        </Text>
+      </View>
+    );
+  };
+  //////////////////////////////////////
+
   return (
     <View style={GlobalStyles.container}>
       <View style={GlobalStyles.header}>
@@ -99,6 +125,7 @@ const CalendarScreen = () => {
         mode="month"
         weekStartsOn={0}
         date={currentDate}
+        renderEvent={renderCustomEvent} // ✅ 이 줄 추가
         onChangeDate={([startDate]) => {
           if (startDate && !dayjs(startDate).isSame(currentDate, 'day')) {
             updateCurrentDate(startDate);
