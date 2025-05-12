@@ -55,10 +55,6 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const MainStack = () => {
   return (
     <NavigationContainer>
-      {/* 캘린더 수정중 */}
-      {/* <Stack.Navigator id={undefined} initialRouteName="Calendar" screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Calendar" component={CalendarScreen} /> */}
-
       <Stack.Navigator
         id={undefined}
         initialRouteName="BottomNav"

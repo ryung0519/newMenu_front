@@ -20,6 +20,18 @@ export const categoryColors: Record<string, CategoryColor> = {
     backgroundColor: '#7b61ff',
     textColor: 'white',
   },
+  올리브영: {
+    backgroundColor: '#25b34b',
+    textColor: 'white',
+  },
+  음료: {
+    backgroundColor: '#6b9fcf',
+    textColor: 'white',
+  },
+  디저트: {
+    backgroundColor: '#c688db',
+    textColor: 'white',
+  },
   휴일: {
     backgroundColor: '#00ff0000', //투명색색
     textColor: 'red',

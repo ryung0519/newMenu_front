@@ -10,7 +10,7 @@ import CalendarDayModal from '../components/calendar/CalendarDayModal';
 import CalendarItemModel from '../components/calendar/CalendarItemModel';
 import CalendarItem from '../components/calendar/CalendarItem';
 
-const {height} = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 interface EventType {
   menuId: number;
@@ -83,31 +83,30 @@ const CalendarScreen = () => {
     ? events.filter(event => dayjs(event.start).isSame(selectedDate, 'day'))
     : [];
 
-  //////////////////////////////////////
-  const renderCustomEvent = (event: EventType) => {
-    return (
-      <View
-        style={{
-          backgroundColor: event.color,
-          borderRadius: 8,
-          paddingVertical: 6,
-          paddingHorizontal: 8,
-          minHeight: 28,
-          justifyContent: 'center',
-        }}>
-        <Text
-          numberOfLines={1}
-          style={{
-            fontSize: 13,
-            fontWeight: '600',
-            color: '#fff',
-          }}>
-          {event.title}
-        </Text>
-      </View>
-    );
-  };
-  //////////////////////////////////////
+  //캘린더 디자인 수정 관련 함수
+  // const renderCustomEvent = (event: EventType) => {
+  //   return (
+  //     <View
+  // style={{
+  //   backgroundColor: event.color,
+  //   borderRadius: width * 0.017,
+  //   paddingVertical: height * 0.003,
+  //   paddingHorizontal: width * 0.007,
+  //   minHeight: height * 0.02,
+  //   justifyContent: 'center',
+  //       }}>
+  //       <Text
+  //         numberOfLines={1}
+  // style={{
+  //   fontSize: 11,
+  //   fontWeight: '500',
+  //   color: '#fff',
+  //         }}>
+  //         {event.title}
+  //       </Text>
+  //     </View>
+  //   );
+  // };
 
   return (
     <View style={GlobalStyles.container}>
@@ -125,7 +124,10 @@ const CalendarScreen = () => {
         mode="month"
         weekStartsOn={0}
         date={currentDate}
-        renderEvent={renderCustomEvent} // ✅ 이 줄 추가
+        // renderEvent={renderCustomEvent} // ✅ 캘린더 디자인 적용
+        renderEvent={event => (
+          <CalendarItem item={event} menu={event} style={undefined} />
+        )}
         onChangeDate={([startDate]) => {
           if (startDate && !dayjs(startDate).isSame(currentDate, 'day')) {
             updateCurrentDate(startDate);
