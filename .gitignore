@@ -80,5 +80,9 @@ yarn-error.log
 
 dist/
  
-# dev client 자동 설치 방지
+# expo dev client 캐시 및 결과물 무시
+.expo/
+*.apk
+*.aab
+*.ipa
 expo-dev-client
