@@ -1,12 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
-  Image,
   ScrollView,
-  Dimensions,
+  Alert,
 } from 'react-native';
 import {getStoredUserData} from '../services/auth';
 import {UserData} from '../types/UserData';
@@ -15,22 +14,51 @@ import {
   MaterialIcons,
   MaterialCommunityIcons,
 } from '@expo/vector-icons';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../navigation/MainStack';
+import {AuthContext} from '../contexts/AuthContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const MyPage = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const [userData, setUserData] = useState<UserData | null>(null);
+  const {user, logout} = useContext(AuthContext);
 
-  useEffect(() => {
-    const loadUserData = async () => {
-      const data = await getStoredUserData();
-      setUserData(data);
-    };
-    loadUserData();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      const loadUserData = async () => {
+        const data = await getStoredUserData();
+        setUserData(data);
+      };
+      loadUserData();
+    }, []),
+  );
+
+  const handleLogout = () => {
+    Alert.alert(
+      '로그아웃',
+      '정말 로그아웃 하시겠습니까?',
+      [
+        {text: '취소', style: 'cancel'},
+        {
+          text: '로그아웃',
+          style: 'destructive',
+          onPress: async () => {
+            await AsyncStorage.removeItem('userData');
+            logout();
+            navigation.reset({
+              index: 0,
+              routes: [{name: 'Home'}],
+            });
+          },
+        },
+      ],
+      {cancelable: true},
+    );
+  };
 
   return (
     <View style={styles.screenWrapper}>
@@ -51,12 +79,8 @@ const MyPage = () => {
           <TouchableOpacity
             style={styles.iconButton}
             onPress={() => navigation.navigate('SubscribedBrandList')}>
-            <MaterialIcons name="subscriptions" size={30} color="#3366ff" />
-            <Text style={styles.iconLabel}>브랜드 구독</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.iconButton}>
-            <Ionicons name="heart" size={30} color="#3366ff" />
-            <Text style={styles.iconLabel}>찜 메뉴</Text>
+            <MaterialIcons name="favorite" size={30} color="#3366ff" />
+            <Text style={styles.iconLabel}>MY 찜</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.iconButton}
@@ -91,10 +115,20 @@ const MyPage = () => {
 
       {/* 고정 하단 버튼 */}
       <View style={styles.buttonGroup}>
-        <TouchableOpacity style={styles.actionButton}>
-          <Text style={styles.actionButtonText}>로그아웃</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.actionButton}>
+        {user ? (
+          <TouchableOpacity style={styles.actionButton} onPress={handleLogout}>
+            <Text style={styles.actionButtonText}>로그아웃</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={() => navigation.navigate('Login')}>
+            <Text style={styles.actionButtonText}>로그인</Text>
+          </TouchableOpacity>
+        )}
+        <TouchableOpacity
+          style={styles.actionButton}
+          onPress={() => navigation.navigate('UserEdit')}>
           <Text style={styles.actionButtonText}>내정보 수정</Text>
         </TouchableOpacity>
       </View>

@@ -22,6 +22,7 @@ import styles, {ITEM_WIDTH, SPACING} from '../styles/ProductDetailStyles';
 import {useContext} from 'react';
 import {AuthContext} from '../contexts/AuthContext';
 import Toast from 'react-native-root-toast';
+import {useFocusEffect} from '@react-navigation/native';
 
 const {width} = Dimensions.get('window');
 
@@ -45,23 +46,27 @@ const ProductDetailScreen = () => {
   const userMarkerRef = useRef<MapMarker | null>(null);
 
   //✅ 1. 화면진입시 구독여부에 따른 하트색깔 보여주는 함수
-  useEffect(() => {
-    if (!menuDetail || !user) return;
+  const checkIsLiked = async () => {
+    try {
+      const response = await fetch(
+        `${API_URL}/api/menu-subscribe/check?userId=${user.userId}&menuId=${menuId}`,
+      );
+      const result = await response.json();
+      setIsLiked(result);
+    } catch (error) {
+      console.error('구독 여부 확인 실패:', error);
+    }
+  };
 
-    const checkIsLiked = async () => {
-      try {
-        const response = await fetch(
-          `${API_URL}/api/menu-subscribe/check?userId=${user.userId}&menuId=${menuId}`,
-        );
-        const result = await response.json();
-        setIsLiked(result);
-      } catch (error) {
-        console.error('구독 여부 확인 실패:', error);
+  // ✅ 1-2. 화면 진입 시마다 상태 확인
+  useFocusEffect(
+    // 진입마다 구독 상태 다시 불러오기 위해 useFocusEffect 사용
+    React.useCallback(() => {
+      if (user && menuId) {
+        checkIsLiked();
       }
-    };
-
-    checkIsLiked();
-  }, [menuDetail, user]);
+    }, [user, menuId]),
+  );
 
   // ✅ 2. 하트 눌렀을때 구독 or 취소해주는 함수
   const toggleLike = async () => {
