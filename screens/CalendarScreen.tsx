@@ -93,47 +93,6 @@ const CalendarScreen = () => {
 
   return (
     <View style={GlobalStyles.container}>
-      {/* 📅 상단 연도/월 표시 헤더 */}
-      {/* <View style={GlobalStyles.header}>
-        <TouchableOpacity onPress={() => setIsMonthPickerVisible(true)}>
-          <Text style={GlobalStyles.title}>
-            {currentYear}년 {currentMonth + 1}월
-          </Text>
-        </TouchableOpacity>
-      </View> */}
-      {/*   ✅ react-native-bigcalendars로 구성한 캘린더  */}
-      {/* <Calendar
-        events={events}
-        height={height * 0.8}
-        mode="month"
-        weekStartsOn={0}
-        date={currentDate}
-        // renderEvent={renderCustomEvent} // ✅ 캘린더 디자인 적용
-        renderEvent={event => (
-          <CalendarItem item={event} menu={event} style={undefined} />
-        )}
-        onChangeDate={([startDate]) => {
-          if (startDate && !dayjs(startDate).isSame(currentDate, 'day')) {
-            updateCurrentDate(startDate);
-          }
-        }}
-        onPressCell={date => {
-          setSelectedDate(date);
-          setSelectedEvent(null);
-        }}
-        onPressEvent={(event: EventType) => {
-          setSelectedDate(event.start);
-          setSelectedEvent(null);
-          // setSelectedDate(null);
-        }}
-        eventCellStyle={event => ({
-          backgroundColor: event.color || '#9E9E9E',
-          borderRadius: 6,
-          padding: height * 0.0,
-        })}
-      /> */}
-
-      {/* ✅ react-native-calendars로 구성한 캘린더 */}
       <Calendar
         // 📍 현재 선택된 날짜 설정 (초기 날짜 또는 월 변경 시 반영)
         current={dayjs(currentDate).format('YYYY-MM-DD')}
@@ -143,29 +102,35 @@ const CalendarScreen = () => {
           setSelectedDate(dateObj);
           setSelectedEvent(null);
         }}
-        // 🎨 캘린더 전체 테마 스타일 설정
-        theme={{
-          textDayFontSize: 16,
-          textDayFontWeight: 'bold',
-          textSectionTitleColor: '#333',
-          todayTextColor: '#E91E63', // 오늘 날짜 강조 색상
-          selectedDayBackgroundColor: '#5A2EFE', // 선택된 날짜 배경
-          selectedDayTextColor: '#fff',
-        }}
-        // 🔧 날짜 셀(day)을 완전히 커스터마이징하는 함수
+        // 📅 상단 연도/월 표시 헤더
+        renderHeader={date => (
+          <TouchableOpacity onPress={() => setIsMonthPickerVisible(true)}>
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: 'bold',
+                color: '#333',
+                textAlign: 'center',
+                paddingVertical: 8,
+              }}>
+              {dayjs(date).format('YYYY년 MM월')}
+            </Text>
+          </TouchableOpacity>
+        )}
+        // 🔧 날짜 셀(day)을 커스터마이징 함수
         dayComponent={({date, state}) => {
           const eventsForDate = eventMap[date.dateString] || [];
           const previewEvents = eventsForDate.slice(0, 3);
           const isToday = dayjs().format('YYYY-MM-DD') === date.dateString;
 
-          // ✅ 배경색 조건 설정
+          // ✅ 배경색 조건 설정(날짜)
           const getBackgroundColor = () => {
             if (isToday) return '#e89802'; // 오늘 날짜 배경
-            return 'transparent'; // 일반 날짜 배경 없음
+            return 'transparent'; // 일반 날짜 배경 없음(투명)
           };
-          // ✅ 텍스트 색상 조건 설정
+          // ✅ 텍스트 색상 조건 설정(날짜)
           const getTextColor = () => {
-            if (isToday) return '#fff'; // 오늘 날짜 배경이 진하니까 글자는 흰색
+            if (isToday) return '#fff';
             if (state === 'disabled') return '#ccc';
             return '#000';
           };
@@ -178,7 +143,7 @@ const CalendarScreen = () => {
               }}
               style={{
                 width: width / 7,
-                height: height * 0.14,
+                height: height * 0.135, //day칸의 세로길이
                 alignItems: 'center',
                 justifyContent: 'flex-start',
               }}>
@@ -249,7 +214,6 @@ const CalendarScreen = () => {
         }}
         onClose={() => setIsMonthPickerVisible(false)}
       />
-
       <CalendarDayModal
         visible={!!selectedDate}
         date={selectedDate}
