@@ -1,7 +1,7 @@
 import {API_URL} from '@env';
 import React, {useEffect, useState} from 'react';
 import {View, Text, Dimensions, TouchableOpacity} from 'react-native';
-import {Calendar} from 'react-native-big-calendar';
+import {Calendar} from 'react-native-calendars';
 import dayjs from 'dayjs';
 import GlobalStyles from '../styles/GlobalStyles';
 import categoryColors from '../styles/categoryColors';
@@ -83,42 +83,26 @@ const CalendarScreen = () => {
     ? events.filter(event => dayjs(event.start).isSame(selectedDate, 'day'))
     : [];
 
-  //캘린더 디자인 수정 관련 함수
-  // const renderCustomEvent = (event: EventType) => {
-  //   return (
-  //     <View
-  // style={{
-  //   backgroundColor: event.color,
-  //   borderRadius: width * 0.017,
-  //   paddingVertical: height * 0.003,
-  //   paddingHorizontal: width * 0.007,
-  //   minHeight: height * 0.02,
-  //   justifyContent: 'center',
-  //       }}>
-  //       <Text
-  //         numberOfLines={1}
-  // style={{
-  //   fontSize: 11,
-  //   fontWeight: '500',
-  //   color: '#fff',
-  //         }}>
-  //         {event.title}
-  //       </Text>
-  //     </View>
-  //   );
-  // };
+  // 📦 날짜별 이벤트를 YYYY-MM-DD 형식으로 그룹화한 객체 생성
+  const eventMap = events.reduce((acc, event) => {
+    const dateKey = dayjs(event.start).format('YYYY-MM-DD');
+    if (!acc[dateKey]) acc[dateKey] = [];
+    acc[dateKey].push(event);
+    return acc;
+  }, {});
 
   return (
     <View style={GlobalStyles.container}>
-      <View style={GlobalStyles.header}>
+      {/* 📅 상단 연도/월 표시 헤더 */}
+      {/* <View style={GlobalStyles.header}>
         <TouchableOpacity onPress={() => setIsMonthPickerVisible(true)}>
           <Text style={GlobalStyles.title}>
             {currentYear}년 {currentMonth + 1}월
           </Text>
         </TouchableOpacity>
-      </View>
-
-      <Calendar
+      </View> */}
+      {/*   ✅ react-native-bigcalendars로 구성한 캘린더  */}
+      {/* <Calendar
         events={events}
         height={height * 0.8}
         mode="month"
@@ -147,8 +131,104 @@ const CalendarScreen = () => {
           borderRadius: 6,
           padding: height * 0.0,
         })}
-      />
+      /> */}
 
+      {/* ✅ react-native-calendars로 구성한 캘린더 */}
+      <Calendar
+        // 📍 현재 선택된 날짜 설정 (초기 날짜 또는 월 변경 시 반영)
+        current={dayjs(currentDate).format('YYYY-MM-DD')}
+        // 📌 날짜 클릭 시 호출되는 함수 → 날짜 선택 상태 업데이트
+        onDayPress={day => {
+          const dateObj = new Date(day.dateString);
+          setSelectedDate(dateObj);
+          setSelectedEvent(null);
+        }}
+        // 🎨 캘린더 전체 테마 스타일 설정
+        theme={{
+          textDayFontSize: 16,
+          textDayFontWeight: 'bold',
+          textSectionTitleColor: '#333',
+          todayTextColor: '#E91E63', // 오늘 날짜 강조 색상
+          selectedDayBackgroundColor: '#5A2EFE', // 선택된 날짜 배경
+          selectedDayTextColor: '#fff',
+        }}
+        // 🔧 날짜 셀(day)을 완전히 커스터마이징하는 함수
+        dayComponent={({date, state}) => {
+          const eventsForDate = eventMap[date.dateString] || [];
+          const previewEvents = eventsForDate.slice(0, 3);
+          const isToday = dayjs().format('YYYY-MM-DD') === date.dateString;
+
+          // ✅ 배경색 조건 설정
+          const getBackgroundColor = () => {
+            if (isToday) return '#e89802'; // 오늘 날짜 배경
+            return 'transparent'; // 일반 날짜 배경 없음
+          };
+          // ✅ 텍스트 색상 조건 설정
+          const getTextColor = () => {
+            if (isToday) return '#fff'; // 오늘 날짜 배경이 진하니까 글자는 흰색
+            if (state === 'disabled') return '#ccc';
+            return '#000';
+          };
+          return (
+            <TouchableOpacity
+              onPress={() => {
+                const dateObj = new Date(date.dateString);
+                setSelectedDate(dateObj);
+                setSelectedEvent(null);
+              }}
+              style={{
+                width: width / 7,
+                height: height * 0.14,
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+              }}>
+              {/* 🔘 날짜 숫자 (배경 강조 포함) */}
+              <View
+                style={{
+                  backgroundColor: getBackgroundColor(),
+                  borderRadius: 999,
+                  paddingHorizontal: 6,
+                  paddingVertical: 3,
+                }}>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontWeight: 'bold',
+                    color: getTextColor(),
+                  }}>
+                  {date.day}
+                </Text>
+              </View>
+
+              {/* 이벤트 미리보기 */}
+              {previewEvents.map((event, idx) => (
+                <Text
+                  key={idx}
+                  numberOfLines={1}
+                  style={{
+                    backgroundColor: event.color,
+                    color: '#fff',
+                    fontSize: 13,
+                    paddingHorizontal: 1.7,
+                    borderRadius: 4,
+                    marginTop: 1,
+                    overflow: 'hidden',
+                    width: width * 0.125,
+                  }}>
+                  {event.title}
+                </Text>
+              ))}
+
+              {/* +N more */}
+              {eventsForDate.length > 3 && (
+                <Text style={{fontSize: 11, color: '#888'}}>
+                  +{eventsForDate.length - 3} more
+                </Text>
+              )}
+            </TouchableOpacity>
+          );
+        }}
+      />
       <CalendarMonthSelect
         visible={isMonthPickerVisible}
         selectedYear={currentYear}
