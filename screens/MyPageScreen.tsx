@@ -70,10 +70,7 @@ const MyPage = () => {
             <Text style={styles.userName}>{userData.userName}</Text>
             <Text style={styles.email}>{userData.email}</Text>
           </>
-        ) : (
-          <Text style={styles.loading}>유저 정보를 불러오는 중...</Text>
-        )}
-
+        ) : null}
         <View style={styles.separator} />
         <View style={styles.iconRow}>
           <TouchableOpacity
@@ -129,6 +126,7 @@ const MyPage = () => {
         <TouchableOpacity
           style={styles.actionButton}
           onPress={() => navigation.navigate('UserEdit')}>
+          {/*수정중*/}
           <Text style={styles.actionButtonText}>내정보 수정</Text>
         </TouchableOpacity>
       </View>
