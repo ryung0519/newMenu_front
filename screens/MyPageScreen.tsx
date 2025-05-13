@@ -9,11 +9,7 @@ import {
 } from 'react-native';
 import {getStoredUserData} from '../services/auth';
 import {UserData} from '../types/UserData';
-import {
-  Ionicons,
-  MaterialIcons,
-  MaterialCommunityIcons,
-} from '@expo/vector-icons';
+import {MaterialIcons, MaterialCommunityIcons} from '@expo/vector-icons';
 import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../navigation/MainStack';
@@ -36,6 +32,20 @@ const MyPage = () => {
       loadUserData();
     }, []),
   );
+
+  const requireLogin = (targetScreen: keyof RootStackParamList) => {
+    if (!user) {
+      Alert.alert('로그인이 필요합니다.', '', [
+        {
+          text: '로그인',
+          onPress: () => navigation.navigate('Login'),
+        },
+        {text: '취소', style: 'cancel'},
+      ]);
+    } else {
+      navigation.navigate(targetScreen);
+    }
+  };
 
   const handleLogout = () => {
     Alert.alert(
@@ -71,24 +81,31 @@ const MyPage = () => {
             <Text style={styles.email}>{userData.email}</Text>
           </>
         ) : (
-          <Text style={styles.loading}>유저 정보를 불러오는 중...</Text>
+          <>
+            <Text style={styles.userName}>게스트</Text>
+            <Text style={styles.email}>로그인이 필요합니다</Text>
+          </>
         )}
 
         <View style={styles.separator} />
         <View style={styles.iconRow}>
           <TouchableOpacity
             style={styles.iconButton}
-            onPress={() => navigation.navigate('SubscribedBrandList')}>
+            onPress={() => requireLogin('SubscribedBrandList')}>
             <MaterialIcons name="favorite" size={30} color="#3366ff" />
             <Text style={styles.iconLabel}>MY 찜</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.iconButton}
-            onPress={() => navigation.navigate('MyReviewList')}>
+            onPress={() => requireLogin('MyReviewList')}>
             <MaterialIcons name="rate-review" size={30} color="#3366ff" />
             <Text style={styles.iconLabel}>내 리뷰</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.iconButton}>
+          <TouchableOpacity
+            style={styles.iconButton}
+            onPress={() => requireLogin('Home')}>
+            {' '}
+            {/* 알림은 임시로 Home */}
             <MaterialCommunityIcons
               name="bell-ring"
               size={30}
@@ -113,7 +130,7 @@ const MyPage = () => {
         <View style={{height: 100}} />
       </ScrollView>
 
-      {/* 고정 하단 버튼 */}
+      {/* 하단 고정 버튼 */}
       <View style={styles.buttonGroup}>
         {user ? (
           <TouchableOpacity style={styles.actionButton} onPress={handleLogout}>
@@ -126,11 +143,13 @@ const MyPage = () => {
             <Text style={styles.actionButtonText}>로그인</Text>
           </TouchableOpacity>
         )}
-        <TouchableOpacity
-          style={styles.actionButton}
-          onPress={() => navigation.navigate('UserEdit')}>
-          <Text style={styles.actionButtonText}>내정보 수정</Text>
-        </TouchableOpacity>
+        {user && (
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={() => navigation.navigate('UserEdit')}>
+            <Text style={styles.actionButtonText}>내정보 수정</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
@@ -178,10 +197,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#222',
     marginTop: 6,
-  },
-  loading: {
-    fontSize: 16,
-    color: '#999',
   },
   iconRow: {
     flexDirection: 'row',
