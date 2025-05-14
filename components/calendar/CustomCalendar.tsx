@@ -1,12 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Calendar} from 'react-native-calendars';
-import {
-  Dimensions,
-  Text,
-  TouchableOpacity,
-  View,
-  LayoutAnimation, //달 바뀔떄 자연스럽게 셀 크기 변경
-} from 'react-native';
+import {Dimensions, Text, TouchableOpacity, View} from 'react-native';
 import dayjs from 'dayjs';
 
 const {width, height} = Dimensions.get('window');
@@ -45,9 +39,9 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({
   onSelectEvent,
   openMonthPicker,
 }) => {
-  useEffect(() => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-  }, [currentDate]);
+  // useEffect(() => {
+  //   LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+  // }, [currentDate]);
 
   // ✅ 날짜별 이벤트를 YYYY-MM-DD 키로 그룹화
   const eventMap = events.reduce((acc, event) => {
@@ -72,7 +66,7 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({
     const newHeight = height * 0.115 * numberOfWeeks; // 한 줄 높이 * 줄 수
     const newDayHeight = newHeight / numberOfWeeks; // 전체 높이를 주 수로 나눔
 
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    // LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setDayCellHeight(newDayHeight);
   }, [currentDate]);
 
