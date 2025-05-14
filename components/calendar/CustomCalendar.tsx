@@ -6,20 +6,10 @@ import {
   TouchableOpacity,
   View,
   LayoutAnimation, //달 바뀔떄 자연스럽게 셀 크기 변경
-  Platform,
-  UIManager,
 } from 'react-native';
 import dayjs from 'dayjs';
 
 const {width, height} = Dimensions.get('window');
-
-// ✅ 안드로이드에서 달 바뀔떄 자연스럽게 셀 크기 변경
-if (
-  Platform.OS === 'android' &&
-  UIManager.setLayoutAnimationEnabledExperimental
-) {
-  UIManager.setLayoutAnimationEnabledExperimental(true);
-}
 
 // ✅ 이벤트 객체 타입 정의
 interface EventType {
@@ -202,7 +192,7 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({
                 let displayBrand = '';
 
                 if (brandLength <= 4) {
-                  // 3~4글자
+                  // 브랜드 이름 3~4글자
                   displayBrand =
                     count > 1 ? `${brand.slice(0, 2)} +${count - 1}` : brand;
                 } else {
