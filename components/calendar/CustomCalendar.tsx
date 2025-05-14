@@ -1,10 +1,25 @@
-// ✅ 커스텀 캘린더 컴포넌트
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Calendar} from 'react-native-calendars';
-import {Dimensions, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Dimensions,
+  Text,
+  TouchableOpacity,
+  View,
+  LayoutAnimation, //달 바뀔떄 자연스럽게 셀 크기 변경
+  Platform,
+  UIManager,
+} from 'react-native';
 import dayjs from 'dayjs';
 
 const {width, height} = Dimensions.get('window');
+
+// ✅ 안드로이드에서 달 바뀔떄 자연스럽게 셀 크기 변경
+if (
+  Platform.OS === 'android' &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
 // ✅ 이벤트 객체 타입 정의
 interface EventType {
@@ -40,6 +55,10 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({
   onSelectEvent,
   openMonthPicker,
 }) => {
+  useEffect(() => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+  }, [currentDate]);
+
   // ✅ 날짜별 이벤트를 YYYY-MM-DD 키로 그룹화
   const eventMap = events.reduce((acc, event) => {
     const dateKey = dayjs(event.start).format('YYYY-MM-DD');
@@ -58,7 +77,23 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({
   const totalCells = dayOfWeek + daysInMonth; // 빈 칸 포함한 셀 수
   const numberOfWeeks = Math.ceil(totalCells / 7); // 필요한 주 수 계산
   // ✅ 한 주의 날짜 셀 높이 계산 (전체 높이를 주 수로 나눔)
-  const dayCellHeight = (calendarHeight - height * 0.06) / numberOfWeeks;
+  const [dayCellHeight, setDayCellHeight] = useState(height * 0.1);
+  const [calHeight, setCalHeight] = useState(height * 0.7); // 초기 캘린더 전체 높이
+
+  useEffect(() => {
+    const startOfMonth = dayjs(currentDate).startOf('month');
+    const dayOfWeek = startOfMonth.day();
+    const daysInMonth = startOfMonth.daysInMonth();
+    const totalCells = dayOfWeek + daysInMonth;
+    const numberOfWeeks = Math.ceil(totalCells / 7);
+
+    const newHeight = height * 0.115 * numberOfWeeks; // 한 줄 높이 * 줄 수
+    const newDayHeight = newHeight / numberOfWeeks;
+
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    setCalHeight(newHeight);
+    setDayCellHeight(newDayHeight);
+  }, [currentDate]);
 
   return (
     <View
@@ -101,7 +136,7 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({
         )}
         // // ✅ 캘린더 전반적인 테마 설정
         theme={{
-          calendarBackground: '#fdf5e5', // 💡 핵심 포인트!
+          calendarBackground: '#fdf5e5', // 캘린더 색상
           textDayFontSize: height * 0.02,
           textDayFontWeight: 'bold',
           textSectionTitleColor: '#333',
