@@ -50,7 +50,7 @@ const CalendarScreen = () => {
         const mappedEvents = data.map(menu => ({
           menuId: menu.menuId,
           menuName: menu.menuName,
-          title: menu.menuName,
+          title: menu.brand,
           start: new Date(
             `${dayjs(menu.regDate).format('YYYY-MM-DD')}T10:00:00`,
           ),

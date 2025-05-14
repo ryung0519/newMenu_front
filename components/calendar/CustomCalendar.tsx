@@ -70,8 +70,7 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({
   // ✅ 전체 캘린더 높이 설정
   const calendarHeight = height * 0.7;
 
-  // ✅ 현재 달의 시작 요일과 일 수로 행 수 계산 (달의 주 수 계산)
-  const startOfMonth = dayjs(currentDate).startOf('month');
+  const startOfMonth = dayjs(currentDate).startOf('month'); // ✅ 현재 달의 시작 요일과 일 수로 행 수 계산 (달의 주 수 계산)
   const dayOfWeek = startOfMonth.day(); // // 시작 요일 (0: 일요일 ~ 6: 토요일)
   const daysInMonth = startOfMonth.daysInMonth(); // 해당 달의 총 날짜 수
   const totalCells = dayOfWeek + daysInMonth; // 빈 칸 포함한 셀 수
@@ -147,8 +146,16 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({
         // ✅ 날짜 셀 커스터마이징
         dayComponent={({date, state}) => {
           const eventsForDate = eventMap[date.dateString] || [];
-          const previewEvents = eventsForDate.slice(0, 3);
+          const previewEvents = eventsForDate.slice(0, 10); // 여유롭게 미리 보기 확보
           const isToday = dayjs().format('YYYY-MM-DD') === date.dateString;
+
+          // ✅ 브랜드 그룹화
+          const brandCountMap: {[brand: string]: number} = {};
+          previewEvents.forEach(event => {
+            brandCountMap[event.title] = (brandCountMap[event.title] || 0) + 1;
+          });
+          const uniqueBrands = Object.keys(brandCountMap);
+          const visibleBrands = uniqueBrands.slice(0, 3); // 최대 3개만 표시
 
           // ✅ 날짜 배경색 조건 (오늘 강조)
           const getBackgroundColor = () => {
@@ -193,28 +200,51 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({
                   {date.day}
                 </Text>
               </View>
-              {/* ✅ 일정 미리보기 최대 3개 표시 */}
-              {previewEvents.map((event, idx) => (
-                <Text
-                  key={idx}
-                  numberOfLines={1}
-                  style={{
-                    backgroundColor: event.color,
-                    color: '#fff',
-                    fontSize: height * 0.016,
-                    paddingHorizontal: width * 0.01,
-                    borderRadius: 4,
-                    marginTop: height * 0.001,
-                    overflow: 'hidden',
-                    width: width * 0.125,
-                  }}>
-                  {event.title}
-                </Text>
-              ))}
-              {/* ✅ 일정이 많을 경우 +N more 표시 */}
-              {eventsForDate.length > 3 && (
+
+              {/* ✅ 신메뉴 출시일 브랜드 그룹화 */}
+              {visibleBrands.map((brand, idx) => {
+                const matchedEvent = previewEvents.find(e => e.title === brand);
+                const count = brandCountMap[brand];
+                const brandLength = brand.length;
+
+                let displayBrand = '';
+
+                if (brandLength <= 4) {
+                  // 3~4글자
+                  displayBrand =
+                    count > 1 ? `${brand.slice(0, 2)} +${count - 1}` : brand;
+                } else {
+                  // 5글자 이상
+                  displayBrand =
+                    count > 1
+                      ? `${brand.slice(0, 2)} +${count - 1}`
+                      : brand.slice(0, 4);
+                }
+
+                return (
+                  <Text
+                    key={idx}
+                    numberOfLines={1}
+                    ellipsizeMode="clip"
+                    style={{
+                      backgroundColor: matchedEvent?.color || '#ccc',
+                      color: '#fff',
+                      fontSize: height * 0.0151,
+                      paddingHorizontal: width * 0.01,
+                      borderRadius: 4,
+                      marginTop: height * 0.001,
+                      // overflow: 'hidden',
+                      width: width * 0.125, //0.125
+                    }}>
+                    {displayBrand}
+                  </Text>
+                );
+              })}
+
+              {/* ✅ 일정이 많을 경우 +N more 표시 (브랜드 기준) */}
+              {uniqueBrands.length > 3 && (
                 <Text style={{fontSize: height * 0.014, color: '#888'}}>
-                  +{eventsForDate.length - 3} more
+                  +{uniqueBrands.length - 3} more
                 </Text>
               )}
             </TouchableOpacity>
