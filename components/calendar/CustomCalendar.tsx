@@ -81,6 +81,7 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({
         style={{
           backgroundColor: '#fdf5e5', //캘린더 배경색(월+요일)
         }}
+        key={currentDate.toString()} // ✅ 날짜 바뀔 때마다 강제 리렌더링
         // ✅ 현재 날짜 설정
         current={dayjs(currentDate).format('YYYY-MM-DD')}
         // ✅ 날짜 클릭 시 날짜 선택 상태 업데이트
