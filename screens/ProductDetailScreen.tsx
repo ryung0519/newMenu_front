@@ -334,9 +334,24 @@ const ProductDetailScreen = () => {
               {popularMenus.map((item, idx) => (
                 <TouchableOpacity
                   key={item.menuId}
-                  onPress={() =>
-                    navigation.navigate('Product', {menuId: item.menuId})
-                  }
+                  onPress={async () => {
+                    try {
+                      // ✅ 클릭 로그 백엔드로 전송
+                      const response = await fetch(
+                        `${API_URL}/click/log?menuId=${item.menuId}`,
+                        {
+                          method: 'POST',
+                        },
+                      );
+                      const result = await response.text();
+                      console.log('🔥  클릭 로그 전송 완료:', result);
+                    } catch (error) {
+                      console.error('❌ 인기상품 클릭 로그 전송 실패:', error);
+                    }
+
+                    // ✅ 상세 페이지로 이동
+                    navigation.navigate('Product', {menuId: item.menuId});
+                  }}
                   style={styles.card}>
                   <View style={styles.imageFrame}>
                     <Image

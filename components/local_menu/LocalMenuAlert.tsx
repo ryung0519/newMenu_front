@@ -25,8 +25,25 @@ const LocalMenuAlert = ({visible, setVisible, onHideToday, onNeverShow}) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList, 'Product'>>();
 
-  const onGoToMenuPage = () => {
+  const onGoToMenuPage = async () => {
     if (!menuInfo?.menuId) return;
+
+    {
+    }
+    // ✅ 클릭 로그를 백엔드로 전송 ✅
+    try {
+      const response = await fetch(
+        `${API_URL}/click/log?menuId=${menuInfo.menuId}`,
+        {
+          method: 'POST',
+        },
+      );
+      const result = await response.text();
+      console.log('🔥 지역추천 클릭 로그 응답:', result);
+    } catch (error) {
+      console.error('❌ 클릭 로그 전송 실패:', error);
+    }
+
     setVisible(false);
     navigation.navigate('Product', {menuId: menuInfo.menuId});
   };

@@ -86,9 +86,23 @@ const Banner = () => {
             <TouchableOpacity
               activeOpacity={0.9}
               style={[GlobalStyles.banner, {backgroundColor: bgColor}]}
-              onPress={() =>
-                navigation.navigate('Product', {menuId: item.menuId})
-              }>
+              onPress={async () => {
+                // ✅ 클릭 로그를 백엔드로 전송 ✅
+                try {
+                  const response = await fetch(
+                    `${API_URL}/click/log?menuId=${item.menuId}`,
+                    {
+                      method: 'POST',
+                    },
+                  );
+                  const result = await response.text();
+                  console.log('🔥 배너 클릭 로그 응답:', result);
+                } catch (error) {
+                  console.error('❌ 클릭 로그 전송 실패:', error);
+                }
+
+                navigation.navigate('Product', {menuId: item.menuId});
+              }}>
               {/* <View style={[GlobalStyles.banner, {backgroundColor: bgColor}]}
 > */}
               <View style={GlobalStyles.textBox}>
