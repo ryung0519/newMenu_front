@@ -156,11 +156,20 @@ const SearchResultScreen = () => {
           results.map((menu, idx) => (
             <TouchableOpacity
               key={menu.menuId || idx}
-              onPress={() =>
+              onPress={async () => {
+                try {
+                  await fetch(`${API_URL}/click/log?menuId=${menu.menuId}`, {
+                    method: 'POST',
+                  });
+                  console.log('✅ 클릭 로그 전송 완료:', menu.menuId);
+                } catch (error) {
+                  console.error('❌ 클릭 로그 실패:', error);
+                }
+
                 navigation.navigate('Product', {
                   menuId: menu.menuId,
-                })
-              }
+                });
+              }}
               style={{
                 marginBottom: 15,
                 backgroundColor: '#fff',
