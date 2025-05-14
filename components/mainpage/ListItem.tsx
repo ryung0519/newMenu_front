@@ -7,6 +7,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import GlobalStyles from '../../styles/GlobalStyles';
 import TextTicker from 'react-native-text-ticker';
 import {useEffect} from 'react';
+import {API_URL} from '@env';
 
 const {width} = Dimensions.get('window');
 
@@ -78,11 +79,27 @@ const ListItem: React.FC<ListItemProps> = ({menu}) => {
 
   return (
     <View style={GlobalStyles.card}>
-      {/* ✅ 메뉴 이미지 */}
       <TouchableOpacity
-        onPress={() =>
-          menu && navigation.navigate('Product', {menuId: menu.menuId})
-        }>
+        onPress={async () => {
+          if (!menu) return;
+
+          // ✅ 클릭 로그를 백엔드에 전송 ✅
+
+          try {
+            const response = await fetch(
+              `${API_URL}/click/log?menuId=${menu.menuId}`,
+              {
+                method: 'POST',
+              },
+            );
+            const result = await response.text();
+            console.log('🔥 이미지 클릭 로그 응답:', result);
+          } catch (error) {
+            console.error('❌ 이미지 클릭 로그 실패:', error);
+          }
+
+          navigation.navigate('Product', {menuId: menu.menuId});
+        }}>
         <View style={GlobalStyles.imageBox}>
           <Image
             source={{
@@ -92,12 +109,26 @@ const ListItem: React.FC<ListItemProps> = ({menu}) => {
           />
         </View>
       </TouchableOpacity>
-
-      {/* ✅ 메뉴 정보 */}
       <TouchableOpacity
-        onPress={() =>
-          menu && navigation.navigate('Product', {menuId: menu.menuId})
-        }>
+        onPress={async () => {
+          if (!menu) return;
+
+          try {
+            // ✅ 클릭 로그를 백엔드에 전송 ✅
+            const response = await fetch(
+              `${API_URL}/click/log?menuId=${menu.menuId}`,
+              {
+                method: 'POST',
+              },
+            );
+            const result = await response.text();
+            console.log('🔥 정보 클릭 로그 응답:', result);
+          } catch (error) {
+            console.error('❌ 정보 클릭 로그 실패:', error);
+          }
+
+          navigation.navigate('Product', {menuId: menu.menuId});
+        }}>
         <View style={GlobalStyles.infoBox}>
           {/* ✅ 메뉴명 + 별점 + 찜 */}
           <View
