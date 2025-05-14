@@ -70,27 +70,19 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({
   // ✅ 전체 캘린더 높이 설정
   const calendarHeight = height * 0.7;
 
-  const startOfMonth = dayjs(currentDate).startOf('month'); // ✅ 현재 달의 시작 요일과 일 수로 행 수 계산 (달의 주 수 계산)
-  const dayOfWeek = startOfMonth.day(); // // 시작 요일 (0: 일요일 ~ 6: 토요일)
-  const daysInMonth = startOfMonth.daysInMonth(); // 해당 달의 총 날짜 수
-  const totalCells = dayOfWeek + daysInMonth; // 빈 칸 포함한 셀 수
-  const numberOfWeeks = Math.ceil(totalCells / 7); // 필요한 주 수 계산
   // ✅ 한 주의 날짜 셀 높이 계산 (전체 높이를 주 수로 나눔)
   const [dayCellHeight, setDayCellHeight] = useState(height * 0.1);
-  const [calHeight, setCalHeight] = useState(height * 0.7); // 초기 캘린더 전체 높이
 
   useEffect(() => {
-    const startOfMonth = dayjs(currentDate).startOf('month');
-    const dayOfWeek = startOfMonth.day();
-    const daysInMonth = startOfMonth.daysInMonth();
-    const totalCells = dayOfWeek + daysInMonth;
-    const numberOfWeeks = Math.ceil(totalCells / 7);
-
+    const startOfMonth = dayjs(currentDate).startOf('month'); // ✅ 현재 달의 시작 요일과 일 수로 행 수 계산 (달의 주 수 계산)
+    const dayOfWeek = startOfMonth.day(); // // 시작 요일 (0: 일요일 ~ 6: 토요일)
+    const daysInMonth = startOfMonth.daysInMonth(); // 해당 달의 총 날짜 수
+    const totalCells = dayOfWeek + daysInMonth; // 빈 칸 포함한 셀 수
+    const numberOfWeeks = Math.ceil(totalCells / 7); // 필요한 주 수 계산
     const newHeight = height * 0.115 * numberOfWeeks; // 한 줄 높이 * 줄 수
-    const newDayHeight = newHeight / numberOfWeeks;
+    const newDayHeight = newHeight / numberOfWeeks; // 전체 높이를 주 수로 나눔
 
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    setCalHeight(newHeight);
     setDayCellHeight(newDayHeight);
   }, [currentDate]);
 
@@ -233,7 +225,6 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({
                       paddingHorizontal: width * 0.01,
                       borderRadius: 4,
                       marginTop: height * 0.001,
-                      // overflow: 'hidden',
                       width: width * 0.125, //0.125
                     }}>
                     {displayBrand}
