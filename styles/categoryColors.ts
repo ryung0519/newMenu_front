@@ -9,7 +9,7 @@ export const categoryColors: Record<string, CategoryColor> = {
     textColor: '#ffd3cf',
   },
   편의점: {
-    backgroundColor: '#6190ff',
+    backgroundColor: '#85b50b',
     textColor: '#000000',
   },
   한식: {
@@ -25,7 +25,7 @@ export const categoryColors: Record<string, CategoryColor> = {
     textColor: 'white',
   },
   음료: {
-    backgroundColor: '#6b9fcf',
+    backgroundColor: '#6190ff',
     textColor: 'white',
   },
   디저트: {
@@ -33,7 +33,7 @@ export const categoryColors: Record<string, CategoryColor> = {
     textColor: 'white',
   },
   휴일: {
-    backgroundColor: '#00ff0000', //투명색색
+    backgroundColor: '#00ff0000', //투명색
     textColor: 'red',
   },
   기본: {

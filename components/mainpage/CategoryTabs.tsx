@@ -103,7 +103,7 @@ const CategoryTabs: React.FC<CategoryTabsProps> = ({
             rippleColor="rgba(0, 0, 0, 0.2)"
             style={{
               backgroundColor:
-                selectedCategory === category ? '#6200EE' : '#E0E0E0',
+                selectedCategory === category ? '#f3761c' : '#faebcd',
               padding: width * 0.025,
               borderRadius: 10,
               marginRight: width * 0.02,

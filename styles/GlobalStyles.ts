@@ -5,7 +5,7 @@ const {width, height} = Dimensions.get('window');
 const GlobalStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5EFFF',
+    backgroundColor: '#fdf5e5',
     paddingTop: height * 0.05,
   },
   title: {
@@ -60,7 +60,7 @@ const GlobalStyles = StyleSheet.create({
   },
   sectionContainer: {
     // flex: 1,
-    backgroundColor: '#F5EFFF',
+    backgroundColor: '#fdf5e5',
     width: width,
     height: height * 0.06,
   },
