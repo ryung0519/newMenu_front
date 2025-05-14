@@ -61,7 +61,7 @@ const MyPage = () => {
             logout();
             navigation.reset({
               index: 0,
-              routes: [{name: 'Home'}],
+              routes: [{name: 'Main'}],
             });
           },
         },
@@ -103,9 +103,7 @@ const MyPage = () => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.iconButton}
-            onPress={() => requireLogin('Home')}>
-            {' '}
-            {/* 알림은 임시로 Home */}
+            onPress={() => requireLogin('Main')}>
             <MaterialCommunityIcons
               name="bell-ring"
               size={30}
