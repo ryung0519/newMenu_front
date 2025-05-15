@@ -31,6 +31,7 @@ export type RootStackParamList = {
   MyReviewList: undefined;
   Home: undefined;
   SubscribedBrandList: undefined;
+  Main: undefined;
 
   //SearchResult: {results: any};
   ReviewWrite: {
