@@ -65,7 +65,7 @@ const Banner = () => {
         {/* 배너 기본 이미지 지정 */}
         <Image
           style={GlobalStyles.bannerImage}
-          source={require('../../asserts/images/logo_new.png')}
+          source={require('../../assets/images/logo_new.png')}
         />
       </View>
     );
