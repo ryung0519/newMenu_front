@@ -95,7 +95,11 @@ const CategoryTabs: React.FC<CategoryTabsProps> = ({
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        style={{paddingVertical: width * 0.02, paddingLeft: width * 0.03}}>
+        style={{
+          paddingVertical: width * 0.02,
+          paddingLeft: width * 0.03,
+          paddingTop: height * 0.03, // 카테고리탭이랑 배너랑 띄우는 코드
+        }}>
         {categories.map((category, index) => (
           <TouchableRipple
             key={index}

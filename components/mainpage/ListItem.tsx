@@ -136,11 +136,11 @@ const ListItem: React.FC<ListItemProps> = ({menu}) => {
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'space-between',
-              width: '87%',
+              width: '86%',
             }}>
             {/* 메뉴명 */}
             <TextTicker
-              style={[GlobalStyles.name, {maxWidth: width * 0.5}]}
+              style={[GlobalStyles.name, {maxWidth: width * 0.39}]} //메뉴 프레임
               duration={5000}
               loop
               repeatSpacer={50}
@@ -148,7 +148,7 @@ const ListItem: React.FC<ListItemProps> = ({menu}) => {
               {menu ? `${menu.menuName}` : '메뉴없음'}{' '}
             </TextTicker>
 
-            {/* 별점 + 하트 */}
+            {/* 별점*/}
             <View
               style={{
                 flexDirection: 'row',
@@ -158,15 +158,6 @@ const ListItem: React.FC<ListItemProps> = ({menu}) => {
                 marginLeft: 10,
               }}>
               {renderStars(menu?.rating ?? 0)}
-
-              <TouchableOpacity onPress={() => setIsLiked(prev => !prev)}>
-                <Icon
-                  name={isLiked ? 'heart' : 'heart-o'}
-                  size={width * 0.05}
-                  color={isLiked ? 'red' : '#777'}
-                  style={{marginLeft: width * 0.015}}
-                />
-              </TouchableOpacity>
             </View>
           </View>
 
