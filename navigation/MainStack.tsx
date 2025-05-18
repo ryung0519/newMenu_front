@@ -14,6 +14,7 @@ import ReviewListScreen from '../screens/ReviewListScreen';
 import MyReviewListScreen from '../screens/MyReviewListScreen';
 import SubscribedBrandListScreen from '../screens/SubscribedBrandListScreen';
 import EditProfile from '../screens/EditProfile';
+import MyPage from '../screens/MyPageScreen';
 /*이름(name)과 컴포넌트(component)를 연결해서 
 /*앱에서 화면 간 이동이 가능하게 만들어주는 파일 */
 /* Login = LoginSceen 이라 등록해놓으면 navigate할때 Login이라고만 명시해도됨! */
@@ -34,6 +35,7 @@ export type RootStackParamList = {
   SubscribedBrandList: undefined;
   Main: undefined;
   EditProfile: undefined;
+  MyPage: {refresh?: boolean};
 
   //SearchResult: {results: any};
   ReviewWrite: {
@@ -82,6 +84,7 @@ const MainStack = () => {
           component={SubscribedBrandListScreen}
           options={{headerShown: false}}
         />
+        <Stack.Screen name="MyPage" component={MyPage} />
         <Stack.Screen
           name="EditProfile"
           component={EditProfile}

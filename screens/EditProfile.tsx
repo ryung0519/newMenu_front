@@ -9,12 +9,16 @@ import {
 } from 'react-native';
 import {getStoredUserData} from '../services/auth';
 import {UserData} from '../types/UserData';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {API_URL} from '@env';
 import {useNavigation} from '@react-navigation/native';
 import {Ionicons} from '@expo/vector-icons';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../navigation/MainStack';
 
 const EditProfile = () => {
-  const navigation = useNavigation();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [userId, setUserId] = useState('');
   const [preferredFood, setPreferredFood] = useState('');
   const [allergicFood, setAllergicFood] = useState('');
@@ -45,8 +49,22 @@ const EditProfile = () => {
       });
 
       if (response.ok) {
-        Alert.alert('✅ 수정 완료', '프로필이 성공적으로 수정되었습니다.');
-        navigation.goBack();
+        // ✅ AsyncStorage 업데이트
+        const existing = await getStoredUserData();
+        if (existing) {
+          const updated = {
+            ...existing,
+            preferredFood,
+            allergicFood,
+          };
+          await AsyncStorage.setItem('userData', JSON.stringify(updated));
+        }
+
+        // ✅ Alert 안전하게 호출 & 뒤로가기
+        setTimeout(() => {
+          Alert.alert('✅ 수정 완료', '프로필이 성공적으로 수정되었습니다.');
+          navigation.goBack(); // 또는 navigation.navigate('MyPage', {refresh: true});
+        }, 100);
       } else {
         const errorText = await response.text();
         Alert.alert('❌ 수정 실패', errorText);

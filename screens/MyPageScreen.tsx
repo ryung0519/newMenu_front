@@ -10,7 +10,12 @@ import {
 import {getStoredUserData} from '../services/auth';
 import {UserData} from '../types/UserData';
 import {MaterialIcons, MaterialCommunityIcons} from '@expo/vector-icons';
-import {useNavigation, useFocusEffect} from '@react-navigation/native';
+import {
+  useNavigation,
+  useFocusEffect,
+  useRoute,
+  RouteProp,
+} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../navigation/MainStack';
 import {AuthContext} from '../contexts/AuthContext';
@@ -24,6 +29,7 @@ const MyPage = () => {
   const [activeTab, setActiveTab] = useState<'shopping' | 'profile'>(
     'shopping',
   );
+  const route = useRoute<RouteProp<RootStackParamList, 'MyPage'>>();
 
   useFocusEffect(
     React.useCallback(() => {
@@ -31,8 +37,9 @@ const MyPage = () => {
         const data = await getStoredUserData();
         setUserData(data);
       };
-      loadUserData();
-    }, []),
+
+      loadUserData(); // 기본 로딩
+    }, [route?.params?.refresh]), // ✅ refresh 파라미터 변경 시 리렌더링
   );
 
   const requireLogin = (targetScreen: keyof RootStackParamList) => {
