@@ -154,9 +154,16 @@ const MyFavoritesScreen = () => {
             data={brands}
             keyExtractor={item => item.businessId.toString()}
             renderItem={({item}) => (
-              <View style={styles.brandItem}>
+              <TouchableOpacity
+                style={styles.brandItem}
+                onPress={() =>
+                  navigation.navigate('BrandMenuList', {
+                    brandName: item.brandName,
+                    businessId: item.businessId,
+                  })
+                }>
                 <Text style={styles.brandText}>{item.brandName}</Text>
-              </View>
+              </TouchableOpacity>
             )}
             ListEmptyComponent={
               <Text style={styles.empty}>구독한 브랜드가 없습니다.</Text>
@@ -194,8 +201,12 @@ const styles = StyleSheet.create({
   countText: {fontSize: 14, color: '#333'},
   countNumber: {fontWeight: 'bold', color: '#3366ff'},
   contentArea: {flex: 1, paddingHorizontal: 16},
-  brandItem: {paddingVertical: 16, borderBottomWidth: 1, borderColor: '#eee'},
-  brandText: {fontSize: 16},
+  brandItem: {
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderColor: '#eee',
+  },
+  brandText: {fontSize: 16, color: '#007AFF'},
   empty: {textAlign: 'center', color: '#999', marginTop: 50},
   menuCard: {
     flexDirection: 'row',
