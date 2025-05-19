@@ -13,9 +13,14 @@ import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../navigation/MainStack';
 
+// 1. 사용자의 검색어 입력만 처리
+// 2. 검색 버튼 또는 키보드 제출 시 `onSearch`를 호출해서 검색어 전달
+// 3. 포커스될 때 `onFocus`를 호출하여 부모(HomeScreen)가 급상승 키워드 UI를 띄울 수 있도록
+// 4. 급상승 키워드 UI 자체는 SearchBar에 없음 → HomeScreen이 담당
+
 const {width, height} = Dimensions.get('window');
 
-const SearchBar = ({onSearch, onFocus}) => {
+const SearchBar = ({onSearch, onFocus, onBlur}) => {
   const [input, setInput] = useState('');
   const inputRef = useRef(null);
   const navigation =
@@ -26,12 +31,13 @@ const SearchBar = ({onSearch, onFocus}) => {
     if (onSearch && input.trim() !== '') {
       onSearch(input);
       Keyboard.dismiss();
+      onBlur?.(); // ✅ 검색 후 오버레이 닫기
     }
   };
 
   return (
     <>
-      {/* ✅ 검색창 */}
+      {/* 검색창 */}
       <View
         style={{
           flexDirection: 'row',
@@ -47,8 +53,10 @@ const SearchBar = ({onSearch, onFocus}) => {
           zIndex: 1000,
           position: 'relative',
         }}>
+        {/* 메뉴 아이콘 */}
         <Icon name="menu" size={width * 0.06} color="#333" />
 
+        {/* 사용자 입력창 */}
         <TextInput
           ref={inputRef}
           placeholder="메뉴를 검색하세요"
@@ -56,7 +64,7 @@ const SearchBar = ({onSearch, onFocus}) => {
           onChangeText={setInput}
           onSubmitEditing={handleSearch}
           onFocus={() => {
-            onFocus?.();
+            onFocus?.(); // {/*부모(HomeScreen)의 급상승 키워드 표시*}
           }}
           style={{
             flex: 1,
@@ -66,6 +74,7 @@ const SearchBar = ({onSearch, onFocus}) => {
           }}
         />
 
+        {/*검색 아이콘 버튼 */}
         <TouchableOpacity
           onPress={() => {
             inputRef.current?.focus();
