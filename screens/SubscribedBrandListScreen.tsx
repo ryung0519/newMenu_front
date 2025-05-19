@@ -116,7 +116,11 @@ const MyFavoritesScreen = () => {
             data={menus}
             keyExtractor={item => item.menuId.toString()}
             renderItem={({item}) => (
-              <View style={styles.menuCard}>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('Product', {menuId: item.menuId})
+                }
+                style={styles.menuCard}>
                 <Image source={{uri: item.imageUrl}} style={styles.menuImage} />
                 <View style={styles.menuInfo}>
                   <Text style={styles.menuBrand}>
@@ -139,7 +143,7 @@ const MyFavoritesScreen = () => {
                     <Ionicons name="close-circle" size={24} color="#ff3333" />
                   </TouchableOpacity>
                 )}
-              </View>
+              </TouchableOpacity>
             )}
             ListEmptyComponent={
               <Text style={styles.empty}>찜한 메뉴가 없습니다.</Text>

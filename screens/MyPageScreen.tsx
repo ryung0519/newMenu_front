@@ -20,6 +20,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../navigation/MainStack';
 import {AuthContext} from '../contexts/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const MyPage = () => {
   const navigation =
@@ -75,7 +76,7 @@ const MyPage = () => {
   };
 
   return (
-    <View style={styles.screenWrapper}>
+    <SafeAreaView style={styles.screenWrapper}>
       {/* 탭 버튼 */}
       <View style={styles.tabRow}>
         <TouchableOpacity onPress={() => setActiveTab('shopping')}>
@@ -179,7 +180,7 @@ const MyPage = () => {
           </TouchableOpacity>
         )}
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
