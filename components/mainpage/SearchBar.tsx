@@ -11,7 +11,6 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {API_URL} from '@env';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../navigation/MainStack';
 
 // 1. 사용자의 검색어 입력만 처리
 // 2. 검색 버튼 또는 키보드 제출 시 `onSearch`를 호출해서 검색어 전달
@@ -21,7 +20,7 @@ import {RootStackParamList} from '../navigation/MainStack';
 
 const {width, height} = Dimensions.get('window');
 
-const SearchBar = ({onSearch, onFocus, onBlur}) => {
+const SearchBar = ({onSearch, onFocus, onBlur, showBackButton = false}) => {
   const [input, setInput] = useState('');
   const inputRef = useRef(null);
   const navigation =
@@ -55,8 +54,14 @@ const SearchBar = ({onSearch, onFocus, onBlur}) => {
           position: 'relative',
         }}>
         {/* 메뉴 아이콘 */}
-        <Icon name="menu" size={width * 0.06} color="#333" />
-
+        {/* 조건부로 뒤로가기 또는 메뉴 아이콘 */}
+        {showBackButton ? (
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Icon name="arrow-back" size={width * 0.06} color="#333" />
+          </TouchableOpacity>
+        ) : (
+          <Icon name="menu" size={width * 0.06} color="#333" />
+        )}
         {/* 사용자 입력창 */}
         <TextInput
           ref={inputRef}
@@ -69,7 +74,7 @@ const SearchBar = ({onSearch, onFocus, onBlur}) => {
           }}
           style={{
             flex: 1,
-            marginLeft: width * 0.02,
+            marginLeft: width * 0.03,
             paddingVertical: width * 0.02,
             fontSize: width * 0.04,
           }}

@@ -158,14 +158,15 @@ const SearchResultScreen = () => {
       {/* ✅ 1. 고정된 검색창 */}
       <View style={{paddingTop: 45}}>
         <SearchBar
+          showBackButton={true} // ✅ 뒤로가기 버튼 표시
           onSearch={handleSearch}
           onFocus={() => {
             setIsSearchFocused(true);
             fetchHotKeywords();
           }}
           onBlur={() => {
-            setIsSearchFocused(false); // 검색 완료되면 급상승 키워드 닫기
-            Keyboard.dismiss(); // 키보드도 닫기
+            setIsSearchFocused(false);
+            Keyboard.dismiss();
           }}
         />
       </View>
