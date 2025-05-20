@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -15,8 +15,6 @@ import CategoryTabs from '../components/mainpage/CategoryTabs';
 import GlobalStyles from '../styles/GlobalStyles';
 import {API_URL} from '@env';
 import {useNavigation} from '@react-navigation/native';
-import {RootStackParamList} from '../types/navigation';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import LocalMenuAlert from '../components/local_menu/LocalMenuAlert';
 
 // 1. SearchBar는 검색창 역할만 하고, onSearch와 onFocus만 props로 전달받음
@@ -26,7 +24,6 @@ import LocalMenuAlert from '../components/local_menu/LocalMenuAlert';
 //    - 검색창 위에 오버레이 UI 띄워서 hotKeywords 보여줌
 // 3. 키워드를 터치하면 검색 실행 + 오버레이 닫힘
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
 const {height} = Dimensions.get('window');
 
 const HomeScreen = () => {
@@ -37,18 +34,7 @@ const HomeScreen = () => {
   const [isSearchFocused, setIsSearchFocused] = useState(false); // 검색창 포커스 여부
   const [hotKeywords, setHotKeywords] = useState<string[]>([]); // 급상승 키워드 배열
 
-  // 🔥 급상승 키워드 백엔드 호출
-  const fetchHotKeywords = async () => {
-    try {
-      const response = await fetch(`${API_URL}/click/hot-keywords`);
-      const data = await response.json();
-      setHotKeywords(data.map((item: any) => item.menuName)); // 메뉴 이름만 추출
-    } catch (error) {
-      console.error('🔥 급상승 키워드 로딩 실패:', error);
-    }
-  };
-
-  // ✅ 검색 실행 함수
+  // ✅ 1. 검색 실행 함수
   const handleSearch = async (keyword: string) => {
     try {
       const response = await fetch(
@@ -59,6 +45,40 @@ const HomeScreen = () => {
       navigation.navigate('SearchResult', {results: data});
     } catch (error) {
       console.error('검색 중 오류 발생:', error);
+    }
+  };
+
+  // 🔥 2. 급상승 키워드 백엔드 호출
+  const fetchHotKeywords = async () => {
+    try {
+      const response = await fetch(`${API_URL}/click/hot-keywords`);
+      const data = await response.json();
+      setHotKeywords(data.map((item: any) => item.menuName)); // 메뉴 이름만 추출
+    } catch (error) {
+      console.error('🔥 급상승 키워드 로딩 실패:', error);
+    }
+  };
+
+  // 🔥 3.  급상승 키워드 클릭시 상세페이지 이동
+  const handleKeywordPress = async (keyword: string) => {
+    setIsSearchFocused(false); // 오버레이 닫기
+
+    try {
+      const response = await fetch(
+        `${API_URL}/menu/search?keyword=${encodeURIComponent(keyword)}`,
+      );
+      const data = await response.json();
+
+      const exactMatch = data.find((item: any) => item.menuName === keyword);
+
+      if (exactMatch) {
+        //@ts-ignore
+        navigation.navigate('Product', {menuId: exactMatch.menuId});
+      } else {
+        console.warn('정확히 일치하는 메뉴가 없습니다.');
+      }
+    } catch (error) {
+      console.error('검색 중 오류:', error);
     }
   };
 
@@ -79,6 +99,9 @@ const HomeScreen = () => {
           setIsSearchFocused(true);
           fetchHotKeywords();
         }}
+        onBlur={() => {
+          setIsSearchFocused(false);
+        }}
       />
 
       {/* ✅ 배너 + 카테고리 */}
@@ -88,24 +111,24 @@ const HomeScreen = () => {
         setSelectedCategory={setSelectedCategory}
       />
 
-      {/* ✅ 급상승 키워드 오버레이 UI */}
+      {/* ✅ 급상승 키워드 UI */}
       {isSearchFocused && (
         <TouchableWithoutFeedback
           onPress={() => {
-            setIsSearchFocused(false);
-            Keyboard.dismiss();
+            setIsSearchFocused(false); // 급상승 창 닫기
+            Keyboard.dismiss(); // 키보드 내리기
           }}>
           <View
             style={{
               position: 'absolute',
-              top: 0,
+              top: 120,
               left: 0,
               right: 0,
               bottom: 0,
               backgroundColor: '#fff',
               zIndex: 999,
               elevation: 5,
-              paddingTop: height * 0.12,
+              paddingTop: height * 0, // 검색창과 노란 배경 조정
               paddingHorizontal: 20,
             }}>
             <KeyboardAvoidingView>
@@ -115,18 +138,17 @@ const HomeScreen = () => {
                 🔥 급상승 검색어
               </Text>
               {/* 🔥 급상승 키워드 리스트 */}
-              {hotKeywords.map((keyword, index) => (
-                <TouchableOpacity
-                  key={index}
-                  onPress={() => {
-                    setIsSearchFocused(false); // UI 닫기
-                    handleSearch(keyword); // 해당 키워드로 검색 실행
-                  }}>
-                  <Text style={{fontSize: 15, paddingVertical: 6}}>
-                    {index + 1}. {keyword}
-                  </Text>
-                </TouchableOpacity>
-              ))}
+              {hotKeywords.map((keyword, index) => {
+                return (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => handleKeywordPress(keyword)}>
+                    <Text style={{fontSize: 15, paddingVertical: 6}}>
+                      {index + 1}. {keyword}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
             </KeyboardAvoidingView>
           </View>
         </TouchableWithoutFeedback>
@@ -134,19 +156,5 @@ const HomeScreen = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  loginButton: {
-    backgroundColor: '#8000FF',
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 20,
-  },
-  loginButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 14,
-  },
-});
 
 export default HomeScreen;

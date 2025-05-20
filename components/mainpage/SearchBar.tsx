@@ -16,7 +16,8 @@ import {RootStackParamList} from '../navigation/MainStack';
 // 1. 사용자의 검색어 입력만 처리
 // 2. 검색 버튼 또는 키보드 제출 시 `onSearch`를 호출해서 검색어 전달
 // 3. 포커스될 때 `onFocus`를 호출하여 부모(HomeScreen)가 급상승 키워드 UI를 띄울 수 있도록
-// 4. 급상승 키워드 UI 자체는 SearchBar에 없음 → HomeScreen이 담당
+// 4. SearchBar는 onFocus, onSearch만 담당
+// 5. 급상승 키워드 UI 자체는 HomeScreen이 담당
 
 const {width, height} = Dimensions.get('window');
 

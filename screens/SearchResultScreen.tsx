@@ -38,18 +38,7 @@ const SearchResultScreen = () => {
   const [isSearchFocused, setIsSearchFocused] = useState(false); // 🔍 검색창 포커스 여부
   const [hotKeywords, setHotKeywords] = useState<string[]>([]); // 🔥 급상승 키워드 목록
 
-  // 🔥 급상승 키워드 불러오기 함수
-  const fetchHotKeywords = async () => {
-    try {
-      const response = await fetch(`${API_URL}/click/hot-keywords`);
-      const data = await response.json();
-      setHotKeywords(data.map((item: any) => item.menuName));
-    } catch (error) {
-      console.error('🔥 급상승 키워드 로딩 실패:', error);
-    }
-  };
-
-  // ✅ 검색창에서 키워드검색시 실행되는 함수
+  // ✅ 검색 실행 함수
   const handleSearch = async (keyword: string) => {
     try {
       setSearchKeyword(keyword); // 현재 검색어 상태 저장
@@ -130,6 +119,40 @@ const SearchResultScreen = () => {
     setResults(filtered);
   };
 
+  //🔥  5. 급상승 키워드 백엔드 호출
+  const fetchHotKeywords = async () => {
+    try {
+      const response = await fetch(`${API_URL}/click/hot-keywords`);
+      const data = await response.json();
+      setHotKeywords(data.map((item: any) => item.menuName));
+    } catch (error) {
+      console.error('🔥 급상승 키워드 로딩 실패:', error);
+    }
+  };
+
+  // 🔥 6. 급상승 키워드 클릭시 상세페이지 이동 함수
+  const handleKeywordPress = async (keyword: string) => {
+    setIsSearchFocused(false); // 오버레이 닫기
+
+    try {
+      const response = await fetch(
+        `${API_URL}/menu/search?keyword=${encodeURIComponent(keyword)}`,
+      );
+      const data = await response.json();
+
+      const exactMatch = data.find((item: any) => item.menuName === keyword);
+
+      if (exactMatch) {
+        //@ts-ignore
+        navigation.navigate('Product', {menuId: exactMatch.menuId});
+      } else {
+        console.warn('정확히 일치하는 메뉴가 없습니다.');
+      }
+    } catch (error) {
+      console.error('검색 중 오류:', error);
+    }
+  };
+
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
       {/* ✅ 1. 고정된 검색창 */}
@@ -141,13 +164,14 @@ const SearchResultScreen = () => {
             fetchHotKeywords();
           }}
           onBlur={() => {
-            setIsSearchFocused(false); // 👈 검색 완료되면 급상승 키워드 닫기
-            Keyboard.dismiss(); // ⌨️ 키보드도 닫기
+            setIsSearchFocused(false); // 검색 완료되면 급상승 키워드 닫기
+            Keyboard.dismiss(); // 키보드도 닫기
           }}
         />
       </View>
 
-      {/* ✅ 2. 급상승 키워드 UI - 검색창 아래만 덮기 */}
+      {/* ✅ 2. 급상승 키워드 UI  */}
+      {/* 검색창에 포커스될 때(true일때)만 아래 UI가 보여짐 */}
       {isSearchFocused && (
         <TouchableWithoutFeedback
           onPress={() => {
@@ -157,7 +181,7 @@ const SearchResultScreen = () => {
           <View
             style={{
               position: 'absolute',
-              top: 95, // 🔥 검색창 높이 + padding 만큼 내려서 아래만 덮기
+              top: 97, // 🔥 검색창 높이 + padding 만큼 내려서 아래만 덮기(잊어버리지마)
               left: 0,
               right: 0,
               bottom: 0,
@@ -172,18 +196,17 @@ const SearchResultScreen = () => {
                 style={{fontWeight: 'bold', fontSize: 16, marginBottom: 10}}>
                 🔥 급상승 검색어
               </Text>
-              {hotKeywords.map((keyword, index) => (
-                <TouchableOpacity
-                  key={index}
-                  onPress={() => {
-                    setIsSearchFocused(false);
-                    handleSearch(keyword);
-                  }}>
-                  <Text style={{fontSize: 15, paddingVertical: 6}}>
-                    {index + 1}. {keyword}
-                  </Text>
-                </TouchableOpacity>
-              ))}
+              {hotKeywords.map((keyword, index) => {
+                return (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => handleKeywordPress(keyword)}>
+                    <Text style={{fontSize: 15, paddingVertical: 6}}>
+                      {index + 1}. {keyword}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
             </KeyboardAvoidingView>
           </View>
         </TouchableWithoutFeedback>
