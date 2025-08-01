@@ -1,5 +1,4 @@
 -en
----
 # Fresh Guys (싱싱한 녀석들)
 
 **Project Period:** 2025.03.07 ~ 2025.05.30 (2 months)  
@@ -23,19 +22,22 @@ A mobile service that introduces and recommends newly released menus based on us
   - **Backend:** Spring Boot
   - **Database:** Oracle DB
   - **Push Notifications:** Firebase
+
 <br>
 
 ## 🏗 System Architecture
 
 [System Architecture Image]
 
+<br>
 
 ## 📱 Screens Overview
 
 [Screen Images Here]
 
 <br>
-## 🔹 Main Features
+
+## 🔹 Main Features (Frontend)
 
 ### 1. User Features
 - **New Menu Calendar:** View upcoming menu launches in a calendar format
@@ -49,31 +51,21 @@ A mobile service that introduces and recommends newly released menus based on us
 - **User Reviews & Ratings:** Write and manage reviews for new menus
 - **Menu Search & Addition:** Search menus and allow addition of new menus
 
-
-
-### 2. Enterprise Features
-- **POS Integration:** Collect sales and menu data automatically
-- **POS Data Synchronization:** Enable auto-updates for menu analytics
-
-
-
-### 3. Admin Features
-- **Menu Trend Analysis:** Track and visualize popular menus
-- **Menu Ranking:** Provide real-time menu popularity rankings
 <br>
 
-## 🗂 Requirements Overview
+## 🗂 Requirements Overview (Frontend)
 
-- **Performance:** App load < 10s, POS sync < 5s  
-- **Security:** User data encryption, token-based POS authentication  
-- **Scalability:** Flexible category expansion, data mining support  
-- **UX:** Intuitive UI and battery-efficient GPS operation
+- **Performance:** App load < 10s  
+- **Security:** Token-based authentication via Firebase  
+- **UX:** Smooth navigation and battery-efficient GPS usage
+
 <br>
 
 ## 🏆 Awards & Recognition
 
 - **IoT Big Data Application Education Course Outcome Contest – Excellence Award**  
   - Sunmoon University, May 2025
+
 <br>
 
 ## 👤 My Contributions
@@ -84,17 +76,16 @@ A mobile service that introduces and recommends newly released menus based on us
 - Requirements specification, DB schema design
 
 <br><br>
--kr
----
 
+-kr
 # 싱싱한 녀석들 (Fresh Guys)
 
 **프로젝트 기간:** 2025.03.07 ~ 2025.05.30 (2개월)  
 **수상:** IoT Big Data Application 교육과정 성과 경진대회 우수상 (선문대학교, 2025.05)
 
 사용자 선호도와 지역 기반으로 신메뉴를 소개하고 추천하는 모바일 서비스
-<br>
 
+<br>
 
 ## 📌 프로젝트 개요
 
@@ -110,14 +101,14 @@ A mobile service that introduces and recommends newly released menus based on us
   - **백엔드:** Spring Boot
   - **DB:** Oracle DB
   - **푸시 알림:** Firebase
-<br>
 
+<br>
 
 ## 🏗 시스템 아키텍처
 
 [시스템 아키텍처 이미지]
 
-
+<br>
 
 ## 📱 화면 구성
 
@@ -125,7 +116,7 @@ A mobile service that introduces and recommends newly released menus based on us
 
 <br>
 
-## 🔹 주요 기능
+## 🔹 주요 기능 (프론트엔드)
 
 ### 1. 사용자 기능
 - **신메뉴 캘린더:** 달력 형식으로 출시 예정 메뉴 확인
@@ -139,32 +130,22 @@ A mobile service that introduces and recommends newly released menus based on us
 - **리뷰 및 평점:** 리뷰 작성, 수정 및 삭제 가능
 - **메뉴 검색 & 추가:** 메뉴 검색 및 신규 메뉴 등록
 
-### 2. 기업 기능
-- **POS 연동:** 판매 데이터 자동 수집
-- **POS 데이터 동기화:** 메뉴/판매 데이터 실시간 연동
-
-
-### 3. 관리자 기능
-- **신메뉴 트렌드 분석:** 판매량과 피드백 기반 메뉴 트렌드 분석
-- **메뉴 인기 순위:** 실시간 인기 순위 제공
-
 <br>
 
-## 🗂 요구사항 요약
+## 🗂 요구사항 요약 (프론트엔드)
 
-- **성능:** 앱 로딩 10초 이내, POS 동기화 5초 이내  
-- **보안:** 사용자 데이터 암호화, POS 연동 시 인증 토큰 사용  
-- **확장성:** 카테고리 확장 용이, 데이터 마이닝 지원  
-- **UX:** 직관적 UI, 최소 배터리 소모 GPS
+- **성능:** 앱 로딩 10초 이내  
+- **보안:** Firebase 기반 토큰 인증  
+- **UX:** 직관적 화면 전환, 배터리 효율적 GPS
+
 <br>
-
 
 ## 🏆 수상 내역
 
 - **IoT Big Data Application 교육과정 성과 경진대회 – 우수상**  
   - 선문대학교, 2025.05
-<br>
 
+<br>
 
 ## 👤 나의 기여
 
