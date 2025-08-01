@@ -7,6 +7,7 @@
 
 A mobile service that introduces and recommends newly released menus based on user preferences and regional availability.
 
+<br>
 
 ## 📌 Project Overview
 
@@ -22,7 +23,7 @@ A mobile service that introduces and recommends newly released menus based on us
   - **Backend:** Spring Boot
   - **Database:** Oracle DB
   - **Push Notifications:** Firebase
-
+<br>
 
 ## 🏗 System Architecture
 
@@ -33,7 +34,7 @@ A mobile service that introduces and recommends newly released menus based on us
 
 [Screen Images Here]
 
-
+<br>
 ## 🔹 Main Features
 
 ### 1. User Features
@@ -59,7 +60,7 @@ A mobile service that introduces and recommends newly released menus based on us
 ### 3. Admin Features
 - **Menu Trend Analysis:** Track and visualize popular menus
 - **Menu Ranking:** Provide real-time menu popularity rankings
-
+<br>
 
 ## 🗂 Requirements Overview
 
@@ -67,15 +68,13 @@ A mobile service that introduces and recommends newly released menus based on us
 - **Security:** User data encryption, token-based POS authentication  
 - **Scalability:** Flexible category expansion, data mining support  
 - **UX:** Intuitive UI and battery-efficient GPS operation
-
-
+<br>
 
 ## 🏆 Awards & Recognition
 
 - **IoT Big Data Application Education Course Outcome Contest – Excellence Award**  
   - Sunmoon University, May 2025
-
-
+<br>
 
 ## 👤 My Contributions
 
@@ -84,7 +83,7 @@ A mobile service that introduces and recommends newly released menus based on us
 - Calendar, GPS-based recommendation, subscription alerts
 - Requirements specification, DB schema design
 
-
+<br><br>
 -kr
 ---
 
@@ -94,7 +93,7 @@ A mobile service that introduces and recommends newly released menus based on us
 **수상:** IoT Big Data Application 교육과정 성과 경진대회 우수상 (선문대학교, 2025.05)
 
 사용자 선호도와 지역 기반으로 신메뉴를 소개하고 추천하는 모바일 서비스
-
+<br>
 
 
 ## 📌 프로젝트 개요
@@ -111,7 +110,7 @@ A mobile service that introduces and recommends newly released menus based on us
   - **백엔드:** Spring Boot
   - **DB:** Oracle DB
   - **푸시 알림:** Firebase
-
+<br>
 
 
 ## 🏗 시스템 아키텍처
@@ -123,7 +122,7 @@ A mobile service that introduces and recommends newly released menus based on us
 ## 📱 화면 구성
 
 [화면 구성 이미지]
-
+<br>
 
 
 ## 🔹 주요 기능
@@ -151,7 +150,7 @@ A mobile service that introduces and recommends newly released menus based on us
 ### 3. 관리자 기능
 - **신메뉴 트렌드 분석:** 판매량과 피드백 기반 메뉴 트렌드 분석
 - **메뉴 인기 순위:** 실시간 인기 순위 제공
-
+<br>
 
 
 ## 🗂 요구사항 요약
@@ -160,14 +159,14 @@ A mobile service that introduces and recommends newly released menus based on us
 - **보안:** 사용자 데이터 암호화, POS 연동 시 인증 토큰 사용  
 - **확장성:** 카테고리 확장 용이, 데이터 마이닝 지원  
 - **UX:** 직관적 UI, 최소 배터리 소모 GPS
-
+<br>
 
 
 ## 🏆 수상 내역
 
 - **IoT Big Data Application 교육과정 성과 경진대회 – 우수상**  
   - 선문대학교, 2025.05
-
+<br>
 
 
 ## 👤 나의 기여
