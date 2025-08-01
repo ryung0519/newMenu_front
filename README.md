@@ -1,147 +1,181 @@
-# 📱 New Menu App - Expo 프로젝트 실행 가이드
+-en-----------------------------------------------------
+# Fresh Guys (싱싱한 녀석들)
 
-이 프로젝트는 **Expo 기반의 React Native 앱**입니다.  
-로컬 환경에서 앱을 실행하기 위한 가이드를 아래 순서대로 따라주세요.
+**Project Period:** 2025.03.07 ~ 2025.05.30 (2 months)  
+**Award:** Excellence Award, IoT Big Data Application Education Course Outcome Contest (Sunmoon University, May 2025)
 
----
-
-## ✅ 0. 환경 설정정
-
-.env파일 생성 #개인 IP주소로 변경 (터미널에서 "ipconfig"로 확인)
-API_URL=http://"개인 IP주소":8080
-
-## ✅ 1. 의존성 설치
-
-먼저 프로젝트 디렉토리로 이동한 뒤 필요한 패키지를 설치합니다.
-
-```bash
-npm install
-```
+A mobile service that introduces and recommends newly released menus based on user preferences and regional availability.
 
 ---
 
-## 📱 2. Expo CLI 설치 (처음 한 번만)
+## 📌 Project Overview
 
-Expo CLI가 없다면 전역으로 설치해 주세요.
+- **Goal:** Provide a mobile platform for discovering and tracking new menu releases.
+- **Key Features:**
+  - Calendar interface for upcoming menu launches
+  - Location-based filtering to show menus available in the user's city
+  - Category-based notifications via Firebase & GPS
+  - Diet suitability filtering and personalized recommendations
 
-```bash
-npm install -g expo-cli
-```
-
----
-
-## 🚀 3. 앱 실행 (로컬 or 에뮬레이터, , 안드로이드의 경우 알람이 안뜰시, 3-2번으로 )
-
-```bash
-npx expo start
-```
-
-### 3-1. 웹, 안드로이드, iOS 중 원하는 플랫폼 실행
-
-- 터미널에 QR코드가 뜨면 Expo Go 앱으로 스캔하면 됩니다.
-- 또는 아래 키로 실행:
-  - `w`: 웹
-  - `a`: 안드로이드 에뮬레이터
-  - `i`: iOS 시뮬레이터 (macOS에서만 가능)
+- **Tech Stack:**
+  - **Frontend:** React Native (Expo)
+  - **Backend:** Spring Boot
+  - **Database:** Oracle DB
+  - **Push Notifications:** Firebase
 
 ---
 
-### 3-2. Expo, 안드로이드 알람관련 설정 (Expo SDK 53이후 버전)
+## 🏗 System Architecture
 
-- ㄱ. 빌드 명령어 입력
-
-```bash
-npx eas build --platform android --profile development
-```
-
-- ㄴ. URL 클릭 후 기기에 설치파일 설치 (URL 예시 : https://expo.dev/accounts/harami/projects/new_menu/builds/357d1a3f-79ec-4475-b5bf-8e9852ee0da6)
-- ㄷ. 코드 실행
-
-```bash
-npx expo start --dev-client -c
-```
-
-- ㄹ. QR코드 스캔으로 코드 실행
-
-## 📱 4. 안드로이드 에뮬레이터로 실행하려면
-
-Expo는 **안드로이드 스튜디오로 만든 에뮬레이터도 인식해서 실행할 수 있습니다.**
-
-### 4-1. 가상 디바이스 확인
-
-```bash
-emulator -list-avds
-```
-
-아래처럼 리스트가 나오면 OK:
-
-```
-Pixel_9_Pro
-Small_Phone_API_34
-```
-
-### 4-2. 에뮬레이터 실행
-
-```bash
-emulator -avd Pixel_9_Pro
-```
-
-> 이름은 위에서 확인한 가상 디바이스 명으로 입력하세요.
-
-### 4-3. 에뮬레이터 인식 확인
-
-```bash
-adb devices
-```
-
-정상적으로 아래처럼 나와야 합니다:
-
-```
-List of devices attached
-emulator-5554   device
-```
-
-### 4-4. 에뮬레이터가 안 뜰 경우
-
-```bash
-adb kill-server
-adb start-server
-```
-
-### 4-5. Expo에서 에뮬레이터 자동 실행하려면?
-
-에뮬레이터가 켜진 상태에서 다음 명령어를 입력하세요:
-
-```bash
-npx expo start --android
-```
-
-Expo가 자동으로 실행 중인 가상 디바이스에 앱을 설치하고 실행해줍니다.
+[System Architecture Image]
 
 ---
 
-## 📦 5. 앱 실행 확인
+## 📱 Screens Overview
 
-```bash
-npx expo start
-```
-
-에뮬레이터가 켜져 있으면 자동으로 앱이 빌드되어 실행됩니다.
+[Screen Images Here]
 
 ---
 
-## 📚 참고
+## 🔹 Main Features
 
-- 가상 디바이스 설정 방법 참고:  
-  [안드로이드 에뮬레이터 설정 가이드](https://chococookiee.tistory.com/50)
-- Expo 공식 문서: https://docs.expo.dev/
+### 1. User Features
+- **New Menu Calendar:** View upcoming menu launches in a calendar format
+- **Menu Details:** View details of each new menu item
+- **Brand & Food Filters:** Filter by favorite or restricted foods and specific brands
+- **Store Locations:** Locate stores selling the new menu
+- **Nearby Search:** Find stores nearby via GPS
+- **Menu Alerts:** Notify users of new menu releases (via subscriptions)
+- **Personalized Recommendations:** Suggest menus based on user preferences
+- **Food Combination & Diet Suitability:** Suggest food pairings and identify diet-friendly menus
+- **User Reviews & Ratings:** Write and manage reviews for new menus
+- **Menu Search & Addition:** Search menus and allow addition of new menus
 
 ---
 
-## 🛠️ 기술 스택
-
-- React Native (Expo)
-- JavaScript / TypeScript
-- Android Emulator or Expo Go
+### 2. Enterprise Features
+- **POS Integration:** Collect sales and menu data automatically
+- **POS Data Synchronization:** Enable auto-updates for menu analytics
 
 ---
+
+### 3. Admin Features
+- **Menu Trend Analysis:** Track and visualize popular menus
+- **Menu Ranking:** Provide real-time menu popularity rankings
+
+---
+
+## 🗂 Requirements Overview
+
+- **Performance:** App load < 10s, POS sync < 5s  
+- **Security:** User data encryption, token-based POS authentication  
+- **Scalability:** Flexible category expansion, data mining support  
+- **UX:** Intuitive UI and battery-efficient GPS operation
+
+---
+
+## 🏆 Awards & Recognition
+
+- **IoT Big Data Application Education Course Outcome Contest – Excellence Award**  
+  - Sunmoon University, May 2025
+
+---
+
+## 👤 My Contributions
+
+- Frontend & UI development (React Native)
+- Backend integration (Spring Boot, Oracle DB)
+- Calendar, GPS-based recommendation, subscription alerts
+- Requirements specification, DB schema design
+
+
+-kr--------------------------------------------------
+# 싱싱한 녀석들 (Fresh Guys)
+
+**프로젝트 기간:** 2025.03.07 ~ 2025.05.30 (2개월)  
+**수상:** IoT Big Data Application 교육과정 성과 경진대회 우수상 (선문대학교, 2025.05)
+
+사용자 선호도와 지역 기반으로 신메뉴를 소개하고 추천하는 모바일 서비스
+
+---
+
+## 📌 프로젝트 개요
+
+- **목표:** 신메뉴를 쉽게 확인하고 추적할 수 있는 모바일 플랫폼 제공
+- **주요 기능:**
+  - 캘린더 기반 신메뉴 출시 일정 확인
+  - 지역 기반 신메뉴 추천
+  - Firebase & GPS를 활용한 브랜드별 알림
+  - 다이어트 적합도 및 개인 맞춤 추천
+
+- **기술 스택:**
+  - **프론트엔드:** React Native (Expo)
+  - **백엔드:** Spring Boot
+  - **DB:** Oracle DB
+  - **푸시 알림:** Firebase
+
+---
+
+## 🏗 시스템 아키텍처
+
+[시스템 아키텍처 이미지]
+
+---
+
+## 📱 화면 구성
+
+[화면 구성 이미지]
+
+---
+
+## 🔹 주요 기능
+
+### 1. 사용자 기능
+- **신메뉴 캘린더:** 달력 형식으로 출시 예정 메뉴 확인
+- **메뉴 상세정보:** 각 메뉴의 상세 정보 제공
+- **브랜드/음식 필터:** 좋아하는 음식, 싫어하는 음식 및 특정 브랜드 필터링
+- **신메뉴 판매점 확인:** 신메뉴 판매 매장 위치 확인
+- **내 주변 판매점 검색:** GPS 기반 가까운 매장 검색
+- **신메뉴 알림:** 구독 설정 시 신메뉴 출시 알림
+- **개인 맞춤 추천:** 사용자 취향 기반 메뉴 추천
+- **음식 조합 & 다이어트 판별:** 음식 조합 추천, 다이어트 적합 메뉴 표시
+- **리뷰 및 평점:** 리뷰 작성, 수정 및 삭제 가능
+- **메뉴 검색 & 추가:** 메뉴 검색 및 신규 메뉴 등록
+
+---
+
+### 2. 기업 기능
+- **POS 연동:** 판매 데이터 자동 수집
+- **POS 데이터 동기화:** 메뉴/판매 데이터 실시간 연동
+
+---
+
+### 3. 관리자 기능
+- **신메뉴 트렌드 분석:** 판매량과 피드백 기반 메뉴 트렌드 분석
+- **메뉴 인기 순위:** 실시간 인기 순위 제공
+
+---
+
+## 🗂 요구사항 요약
+
+- **성능:** 앱 로딩 10초 이내, POS 동기화 5초 이내  
+- **보안:** 사용자 데이터 암호화, POS 연동 시 인증 토큰 사용  
+- **확장성:** 카테고리 확장 용이, 데이터 마이닝 지원  
+- **UX:** 직관적 UI, 최소 배터리 소모 GPS
+
+---
+
+## 🏆 수상 내역
+
+- **IoT Big Data Application 교육과정 성과 경진대회 – 우수상**  
+  - 선문대학교, 2025.05
+
+---
+
+## 👤 개인 기여
+
+- 프론트엔드 & UI 개발 (React Native)
+- 백엔드 연동 (Spring Boot, Oracle DB)
+- 캘린더, GPS 기반 추천, 알림 구독 기능 구현
+- 요구사항 명세서 및 DB 설계
+
