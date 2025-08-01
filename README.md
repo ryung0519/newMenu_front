@@ -122,8 +122,8 @@ A mobile service that introduces and recommends newly released menus based on us
 ## 📱 화면 구성
 
 [화면 구성 이미지]
-<br>
 
+<br>
 
 ## 🔹 주요 기능
 
@@ -139,19 +139,16 @@ A mobile service that introduces and recommends newly released menus based on us
 - **리뷰 및 평점:** 리뷰 작성, 수정 및 삭제 가능
 - **메뉴 검색 & 추가:** 메뉴 검색 및 신규 메뉴 등록
 
-
-
 ### 2. 기업 기능
 - **POS 연동:** 판매 데이터 자동 수집
 - **POS 데이터 동기화:** 메뉴/판매 데이터 실시간 연동
 
 
-
 ### 3. 관리자 기능
 - **신메뉴 트렌드 분석:** 판매량과 피드백 기반 메뉴 트렌드 분석
 - **메뉴 인기 순위:** 실시간 인기 순위 제공
-<br>
 
+<br>
 
 ## 🗂 요구사항 요약
 
